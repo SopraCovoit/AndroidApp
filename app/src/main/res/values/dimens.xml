@@ -20,6 +20,7 @@
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="drawer_size">320dp</dimen>
     <dimen name="user_pic_size">56dp</dimen>
-    <dimen name="drawer_margin">16dp</dimen>
+    <dimen name="drawer_horizontal_margin">16dp</dimen>
     <dimen name="separator">8dp</dimen>
+    <dimen name="drawer_vertical_margin">16dp</dimen>
 </resources>

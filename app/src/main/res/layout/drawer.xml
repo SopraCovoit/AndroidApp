@@ -24,10 +24,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="?colorPrimary"
-        android:paddingLeft="@dimen/drawer_margin"
-        android:paddingRight="@dimen/drawer_margin"
-        android:paddingTop="@dimen/drawer_margin"
-        android:paddingBottom="@dimen/drawer_margin">
+        android:paddingLeft="@dimen/drawer_horizontal_margin"
+        android:paddingRight="@dimen/drawer_horizontal_margin"
+        android:paddingTop="@dimen/drawer_vertical_margin"
+        android:paddingBottom="@dimen/drawer_vertical_margin">
         <wtf.sur.original.puissante.rapide.automobile.sopracovoit.utils.RoundedImageView
             android:id="@+id/IV_user"
             android:layout_width="@dimen/user_pic_size"
@@ -40,13 +40,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/drawer_name_example"
-            android:textColor="@color/primary_text_default_material_dark"/>
+            style="@style/AppTheme.Dark.Text.Important"/>
         <TextView
             android:id="@+id/TV_email"
             android:layout_below="@id/TV_username"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/drawer_mail_example"
-            android:textColor="@color/primary_text_default_material_dark"/>
+            style="@style/AppTheme.Dark.Text"/>
     </RelativeLayout>
 </LinearLayout>
