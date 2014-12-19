@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <!--
   ~ Copyright 2014 Jérémie Boutoille, Jules Cantegril, Hugo Djemaa, Mickael Goubin, David Livet
   ~
@@ -15,13 +16,7 @@
   -->
 
 <resources>
-
-    <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <!-- Customize your theme here. -->
-        <item name="colorPrimaryDark">@color/primary_dark</item>
-        <item name="colorPrimary">@color/primary</item>
-        <item name="colorAccent">@color/accent</item>
-    </style>
-
+    <color name="primary">#B21212</color>
+    <color name="primary_dark">#7F0100</color>
+    <color name="accent">#FFFC19</color>
 </resources>
