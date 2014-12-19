@@ -19,5 +19,7 @@
     <string name="app_name">SopraCovoit</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    <string name="drawer_name_example">Ernesto Exposito</string>
+    <string name="drawer_mail_example">eexposito@insa-toulouse.fr</string>
 
 </resources>
