@@ -16,6 +16,10 @@
 
 package wtf.sur.original.puissante.rapide.automobile.sopracovoit.model;
 
+import android.content.ContentValues;
+
+import wtf.sur.original.puissante.rapide.automobile.sopracovoit.data.CovoitContract;
+
 /**
  * User class
  */
@@ -85,11 +89,30 @@ public class User {
         this.home = home;
     }
 
+    public void setHome(double lat, double lon) {
+        this.home = new Location(lat, lon);
+    }
+
     public Workplace getWorkplace() {
         return workplace;
     }
 
     public void setWorkplace(Workplace workplace) {
         this.workplace = workplace;
+    }
+
+    public ContentValues getContentValues() {
+        ContentValues cv = new ContentValues();
+        cv.put(CovoitContract.UserEntry._ID, id);
+        cv.put(CovoitContract.UserEntry.COLUMN_NAME, name);
+        cv.put(CovoitContract.UserEntry.COLUMN_SURNAME, surname);
+        cv.put(CovoitContract.UserEntry.COLUMN_MAIL, mail);
+        cv.put(CovoitContract.UserEntry.COLUMN_PHONE, phone);
+        cv.put(CovoitContract.UserEntry.COLUMN_IS_DRIVE, isDriver ? 1 : 0);
+        cv.put(CovoitContract.UserEntry.COLUMN_HOME_LAT, home.getLatitude());
+        cv.put(CovoitContract.UserEntry.COLUMN_HOME_LAT, home.getLatitude());
+        if (workplace != null)
+            cv.put(CovoitContract.UserEntry.COLUMN_WORKPLACE_ID, workplace.getId());
+        return cv;
     }
 }
