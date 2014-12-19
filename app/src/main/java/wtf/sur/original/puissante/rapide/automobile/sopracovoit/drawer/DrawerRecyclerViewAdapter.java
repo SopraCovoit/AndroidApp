@@ -16,7 +16,9 @@
 
 package wtf.sur.original.puissante.rapide.automobile.sopracovoit.drawer;
 
+import android.content.DialogInterface;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,10 +31,13 @@ import wtf.sur.original.puissante.rapide.automobile.sopracovoit.R;
 /**
  * Created by MagicMicky on 19/12/2014.
  */
-public class DrawerRecyclerViewAdapter extends RecyclerView.Adapter<DrawerRecyclerViewAdapter.DrawerViewHolder> {
+public class DrawerRecyclerViewAdapter extends RecyclerView.Adapter<DrawerRecyclerViewAdapter.DrawerViewHolder> implements View.OnClickListener {
 
     private String[] mData;
-    public static class DrawerViewHolder extends RecyclerView.ViewHolder{
+    private OnChildClickedListener onChildClickedListener;
+
+    public static class DrawerViewHolder extends RecyclerView.ViewHolder {
+
 
         private final TextView textView;
 
@@ -40,18 +45,19 @@ public class DrawerRecyclerViewAdapter extends RecyclerView.Adapter<DrawerRecycl
             super(itemView);
             this.textView = (TextView) itemView;
         }
-    }
 
+    }
     public DrawerRecyclerViewAdapter(String[] data) {
         this.mData = data;
     }
 
-
     @Override
     public DrawerViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.drawer_recycler_single_item, parent, false);
+        v.setOnClickListener(this);
         return new DrawerViewHolder(v);
     }
+
 
     @Override
     public void onBindViewHolder(DrawerViewHolder holder, int position) {
@@ -59,9 +65,28 @@ public class DrawerRecyclerViewAdapter extends RecyclerView.Adapter<DrawerRecycl
 
     }
 
+
     @Override
     public int getItemCount() {
         return mData.length;
+    }
+
+    public OnChildClickedListener getOnChildClickedListener() {
+        return onChildClickedListener;
+    }
+
+    public void setOnChildClickedListener(OnChildClickedListener onChildClickedListener) {
+        this.onChildClickedListener = onChildClickedListener;
+    }
+
+    /**
+     * OnItemClick
+     * @param v the view clicked
+     */
+    @Override
+    public void onClick(View v) {
+        if(this.onChildClickedListener!=null)
+            this.onChildClickedListener.onItemClicked(v);
     }
 
 
