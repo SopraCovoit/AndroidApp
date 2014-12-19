@@ -16,6 +16,10 @@
 
 package wtf.sur.original.puissante.rapide.automobile.sopracovoit.model;
 
+import android.content.ContentValues;
+
+import wtf.sur.original.puissante.rapide.automobile.sopracovoit.data.CovoitContract;
+
 /**
  * Workplace class
  */
@@ -52,5 +56,14 @@ public class Workplace {
 
     public void setLocation(Location location) {
         this.location = location;
+    }
+
+    public ContentValues getContentValues() {
+        ContentValues cv = new ContentValues();
+        cv.put(CovoitContract.WorkplaceEntry._ID, id);
+        cv.put(CovoitContract.WorkplaceEntry.COLUMN_NAME, name);
+        cv.put(CovoitContract.WorkplaceEntry.COLUMN_LAT, location.getLatitude());
+        cv.put(CovoitContract.WorkplaceEntry.COLUMN_LON, location.getLongitude());
+        return cv;
     }
 }

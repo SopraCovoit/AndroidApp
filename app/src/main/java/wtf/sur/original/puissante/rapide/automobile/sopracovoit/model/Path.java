@@ -16,23 +16,33 @@
 
 package wtf.sur.original.puissante.rapide.automobile.sopracovoit.model;
 
+import android.content.ContentValues;
+
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+
+import wtf.sur.original.puissante.rapide.automobile.sopracovoit.data.CovoitContract;
 
 /**
  * Path class
  */
 public class Path {
-    public enum Direction {HOME, WP}
+    public static enum Direction {HOME, WP}
 
+    private int id;
     private Location location;
     private final Calendar calendar;
     private final Direction direction;
     private User user;
 
-    public Path(Direction direction) {
+    public Path(int id, Direction direction) {
+        this.id = id;
         this.direction = direction;
         this.calendar = new GregorianCalendar();
+    }
+
+    public int getId() {
+        return id;
     }
 
     public Location getLocation() {
@@ -41,6 +51,10 @@ public class Path {
 
     public void setLocation(Location location) {
         this.location = location;
+    }
+
+    public void setLocation(double lat, double lon) {
+        this.location = new Location(lat, lon);
     }
 
     public int getDepartureHour() {
@@ -66,5 +80,28 @@ public class Path {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public ContentValues getContentValues() {
+        ContentValues cv = new ContentValues();
+        cv.put(CovoitContract.PathEntry._ID, this.getId());
+        cv.put(CovoitContract.PathEntry.COLUMN_LAT, this.location.getLatitude());
+        cv.put(CovoitContract.PathEntry.COLUMN_LON, this.location.getLongitude());
+        cv.put(CovoitContract.PathEntry.COLUMN_DIRECTION, getDirectionString(this.getDirection()));
+        cv.put(CovoitContract.PathEntry.COLUMN_HOUR, this.getDepartureHour());
+        cv.put(CovoitContract.PathEntry.COLUMN_MIN, this.getDepartureMinute());
+        if (this.getUser() != null)
+            cv.put(CovoitContract.PathEntry.COLUMN_USER_ID, this.getUser().getId());
+        return cv;
+    }
+
+    public static String getDirectionString(Direction d) {
+        switch (d) {
+            default:
+            case HOME:
+                return "home";
+            case WP:
+                return "wp";
+        }
     }
 }
