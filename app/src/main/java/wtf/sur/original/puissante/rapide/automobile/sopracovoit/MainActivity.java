@@ -26,16 +26,19 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import wtf.sur.original.puissante.rapide.automobile.sopracovoit.drawer.DrawerManager;
+
 
 public class MainActivity extends BaseActivity {
 
     private DrawerLayout drawer_container;
+    private DrawerManager drawerManager;
 
     @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         this.drawer_container = (DrawerLayout) this.findViewById(R.id.drawer_container);
-
+        this.drawerManager = new DrawerManager(drawer_container,this);
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.fragment_container, new PlaceholderFragment())

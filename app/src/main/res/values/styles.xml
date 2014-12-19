@@ -39,4 +39,22 @@
         <item name="android:textSize">14sp</item>
     </style>
 
+    <style name="AppTheme.Light">
+        <item name="android:textColor">@android:color/primary_text_light</item>
+    </style>
+
+    <style name="AppTheme.Light.Text">
+        <item name="android:textSize">14sp</item>
+    </style>
+    <style name="AppTheme.Light.Text.Important">
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+    <style name="AppTheme.Light.Text.ListItem">
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:alpha">0.87</item>
+
+    </style>
+
 </resources>

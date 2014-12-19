@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <!--
   ~ Copyright 2014 Jérémie Boutoille, Jules Cantegril, Hugo Djemaa, Mickael Goubin, David Livet
   ~
@@ -14,15 +15,15 @@
   ~    limitations under the License.
   -->
 
-<resources>
-    <!-- Default screen margins, per the Android Design guidelines. -->
-    <dimen name="activity_horizontal_margin">16dp</dimen>
-    <dimen name="activity_vertical_margin">16dp</dimen>
-    <dimen name="drawer_size">320dp</dimen>
-    <dimen name="user_pic_size">56dp</dimen>
-    <dimen name="drawer_horizontal_margin">16dp</dimen>
-    <dimen name="separator">8dp</dimen>
-    <dimen name="drawer_vertical_margin">16dp</dimen>
-    <dimen name="drawer_list_item">48dp</dimen>
-    <dimen name="drawer_image_padding">16dp</dimen>
-</resources>
+<TextView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:gravity="center_vertical"
+    android:drawablePadding="@dimen/drawer_image_padding"
+    android:drawableLeft="@android:drawable/alert_dark_frame"
+    android:drawableStart="@android:drawable/alert_dark_frame"
+    android:layout_height="@dimen/drawer_list_item"
+    android:text="@string/drawer_item_example"
+    style="@style/AppTheme.Light.Text.ListItem"
+    />
