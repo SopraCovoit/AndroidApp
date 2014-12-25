@@ -31,6 +31,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <provider
+            android:authorities="wtf.sur.original.puissante.rapide.automobile.sopracovoit.app"
+            android:name=".data.CovoitProvider" />
     </application>
 
 </manifest>
