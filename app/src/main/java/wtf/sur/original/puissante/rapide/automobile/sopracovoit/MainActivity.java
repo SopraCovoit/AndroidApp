@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Jérémie Boutoille, Jules Cantegril, Hugo Djemaa, Mickael Goubin, David Livet
+ * Copyright 2015 Jérémie Boutoille, Jules Cantegril, Hugo Djemaa, Mickael Goubin, David Livet
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -16,6 +16,11 @@
 
 package wtf.sur.original.puissante.rapide.automobile.sopracovoit;
 
+import android.accounts.AccountManager;
+import android.accounts.AccountManagerCallback;
+import android.accounts.AccountManagerFuture;
+import android.accounts.AuthenticatorException;
+import android.accounts.OperationCanceledException;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
@@ -25,7 +30,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
+import java.io.IOException;
+
+import wtf.sur.original.puissante.rapide.automobile.sopracovoit.authenticator.AccountGeneral;
 import wtf.sur.original.puissante.rapide.automobile.sopracovoit.drawer.DrawerManager;
 
 
@@ -33,9 +42,12 @@ public class MainActivity extends BaseActivity {
 
     private DrawerLayout drawer_container;
     private DrawerManager drawerManager;
+    private AccountManager mAccountManager;
+    private String mAuthtoken;
 
     @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mAccountManager = AccountManager.get(this);
 
         this.drawer_container = (DrawerLayout) this.findViewById(R.id.drawer_container);
         this.drawerManager = new DrawerManager(drawer_container,this);
@@ -44,6 +56,31 @@ public class MainActivity extends BaseActivity {
                     .add(R.id.fragment_container, new PlaceholderFragment())
                     .commit();
         }
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        // Check account, get token or create new account
+        mAccountManager.getAuthTokenByFeatures(AccountGeneral.ACCOUNT_TYPE, AccountGeneral.AUTHTOKEN_TYPE, null, this, null, null,
+                new AccountManagerCallback<Bundle>() {
+                    @Override
+                    public void run(AccountManagerFuture<Bundle> future) {
+                        Bundle bnd = null;
+                        try {
+                            bnd = future.getResult();
+
+                            mAuthtoken = bnd.getString(AccountManager.KEY_AUTHTOKEN);
+
+                        } catch (OperationCanceledException | IOException | AuthenticatorException e) {
+                            e.printStackTrace();
+                            //TODO manage exception
+                        }
+
+                    }
+                }
+                , null);
     }
 
     @Override protected int getLayoutResource() {
