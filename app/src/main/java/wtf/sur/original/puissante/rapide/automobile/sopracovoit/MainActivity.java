@@ -43,7 +43,7 @@ public class MainActivity extends BaseActivity {
     private DrawerLayout drawer_container;
     private DrawerManager drawerManager;
     private AccountManager mAccountManager;
-    private String mAuthtoken;
+    private String mAuthtoken = null;
 
     @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

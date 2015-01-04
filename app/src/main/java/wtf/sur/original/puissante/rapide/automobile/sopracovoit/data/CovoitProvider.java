@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Jérémie Boutoille, Jules Cantegril, Hugo Djemaa, Mickael Goubin, David Livet
+ * Copyright 2015 Jérémie Boutoille, Jules Cantegril, Hugo Djemaa, Mickael Goubin, David Livet
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -17,10 +17,13 @@
 package wtf.sur.original.puissante.rapide.automobile.sopracovoit.data;
 
 import android.content.ContentProvider;
+import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.UriMatcher;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
+import android.support.annotation.NonNull;
 
 /**
  * Content Provider
@@ -32,6 +35,7 @@ public class CovoitProvider extends ContentProvider {
 
     private static final int WORKPLACE = 100;
     private static final int USER = 200;
+    private static final int USER_ID = 201;
     private static final int PATH = 300;
 
     private static UriMatcher buildUriMatcher() {
@@ -80,6 +84,19 @@ public class CovoitProvider extends ContentProvider {
                 );
                 break;
             }
+            // "user/*"
+            case USER_ID: {
+                retCursor = mOpenHelper.getReadableDatabase().query(
+                        CovoitContract.UserEntry.TABLE_NAME,
+                        projection,
+                        CovoitContract.UserEntry._ID + " = '" + ContentUris.parseId(uri) + "'",
+                        null,
+                        null,
+                        null,
+                        sortOrder
+                );
+                break;
+            }
             // "path"
             case PATH: {
                 retCursor = mOpenHelper.getReadableDatabase().query(
@@ -114,6 +131,8 @@ public class CovoitProvider extends ContentProvider {
                 return CovoitContract.PathEntry.CONTENT_TYPE;
             case USER:
                 return CovoitContract.UserEntry.CONTENT_TYPE;
+            case USER_ID:
+                return CovoitContract.UserEntry.CONTENT_ITEM_TYPE;
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
@@ -121,16 +140,120 @@ public class CovoitProvider extends ContentProvider {
 
     @Override
     public Uri insert(Uri uri, ContentValues values) {
-        return null;
+        final SQLiteDatabase db = mOpenHelper.getWritableDatabase();
+        final int match = sUriMatcher.match(uri);
+        Uri returnUri;
+        switch (match) {
+            case WORKPLACE: {
+                long _id = db.insert(CovoitContract.WorkplaceEntry.TABLE_NAME, null, values);
+                if (_id > 0)
+                    returnUri = CovoitContract.WorkplaceEntry.buildUri(_id);
+                else
+                    throw new android.database.SQLException("Failed to insert row into " + uri);
+                break;
+            }
+            case PATH: {
+                long _id = db.insert(CovoitContract.PathEntry.TABLE_NAME, null, values);
+                if (_id > 0)
+                    returnUri = CovoitContract.PathEntry.buildUri(_id);
+                else
+                    throw new android.database.SQLException("Failed to insert row into " + uri);
+                break;
+            }
+            case USER: {
+                long _id = db.insert(CovoitContract.UserEntry.TABLE_NAME, null, values);
+                if (_id > 0)
+                    returnUri = CovoitContract.UserEntry.buildUri(_id);
+                else
+                    throw new android.database.SQLException("Failed to insert row into " + uri);
+                break;
+            }
+            default:
+                throw new UnsupportedOperationException("Unknown uri: " + uri);
+        }
+        getContext().getContentResolver().notifyChange(uri, null);
+        return returnUri;
     }
 
     @Override
     public int delete(Uri uri, String selection, String[] selectionArgs) {
-        return 0;
+        final SQLiteDatabase db = mOpenHelper.getWritableDatabase();
+        final int match = sUriMatcher.match(uri);
+        int rowsDeleted;
+        switch (match) {
+            case WORKPLACE:
+                rowsDeleted = db.delete(
+                        CovoitContract.WorkplaceEntry.TABLE_NAME, selection, selectionArgs);
+                break;
+            case PATH:
+                rowsDeleted = db.delete(
+                        CovoitContract.PathEntry.TABLE_NAME, selection, selectionArgs);
+                break;
+            case USER:
+                rowsDeleted = db.delete(
+                        CovoitContract.UserEntry.TABLE_NAME, selection, selectionArgs);
+                break;
+            default:
+                throw new UnsupportedOperationException("Unknown uri: " + uri);
+        }
+        // Because a null deletes all rows
+        if (selection == null || rowsDeleted != 0) {
+            getContext().getContentResolver().notifyChange(uri, null);
+        }
+        return rowsDeleted;
     }
 
     @Override
     public int update(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
-        return 0;
+        final SQLiteDatabase db = mOpenHelper.getWritableDatabase();
+        final int match = sUriMatcher.match(uri);
+        int rowsUpdated;
+
+        switch (match) {
+            case WORKPLACE:
+                rowsUpdated = db.update(CovoitContract.WorkplaceEntry.TABLE_NAME, values, selection,
+                        selectionArgs);
+                break;
+            case PATH:
+                rowsUpdated = db.update(CovoitContract.PathEntry.TABLE_NAME, values, selection,
+                        selectionArgs);
+                break;
+            case USER:
+                rowsUpdated = db.update(CovoitContract.UserEntry.TABLE_NAME, values, selection,
+                        selectionArgs);
+                break;
+            default:
+                throw new UnsupportedOperationException("Unknown uri: " + uri);
+        }
+        if (rowsUpdated != 0) {
+            getContext().getContentResolver().notifyChange(uri, null);
+        }
+        return rowsUpdated;
+    }
+
+    @Override
+    public int bulkInsert(Uri uri, @NonNull ContentValues[] values) {
+        final SQLiteDatabase db = mOpenHelper.getWritableDatabase();
+        final int match = sUriMatcher.match(uri);
+        switch (match) {
+            case WORKPLACE:
+                db.beginTransaction();
+                int returnCount = 0;
+                try {
+                    for (ContentValues value : values) {
+                        long _id = db.insert(CovoitContract.WorkplaceEntry.TABLE_NAME, null, value);
+                        if (_id != -1) {
+                            returnCount++;
+                        }
+                    }
+                    db.setTransactionSuccessful();
+                } finally {
+                    db.endTransaction();
+                }
+                getContext().getContentResolver().notifyChange(uri, null);
+                return returnCount;
+            default:
+                return super.bulkInsert(uri, values);
+        }
     }
 }

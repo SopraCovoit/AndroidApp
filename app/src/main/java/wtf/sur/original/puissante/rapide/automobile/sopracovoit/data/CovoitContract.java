@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Jérémie Boutoille, Jules Cantegril, Hugo Djemaa, Mickael Goubin, David Livet
+ * Copyright 2015 Jérémie Boutoille, Jules Cantegril, Hugo Djemaa, Mickael Goubin, David Livet
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -47,7 +47,7 @@ public class CovoitContract {
         public static final String COLUMN_LAT = "latitude";
         public static final String COLUMN_LON = "longitude";
 
-        public static Uri buildLocationUri(long id) {
+        public static Uri buildUri(long id) {
             return ContentUris.withAppendedId(CONTENT_URI, id);
         }
     }
@@ -72,7 +72,7 @@ public class CovoitContract {
         public static final String COLUMN_HOME_LON = "home_lon";
         public static final String COLUMN_WORKPLACE_ID = "workplace_id";
 
-        public static Uri buildLocationUri(long id) {
+        public static Uri buildUri(long id) {
             return ContentUris.withAppendedId(CONTENT_URI, id);
         }
     }
@@ -94,7 +94,7 @@ public class CovoitContract {
         public static final String COLUMN_DIRECTION = "direction";
         public static final String COLUMN_USER_ID = "user_id";
 
-        public static Uri buildLocationUri(long id) {
+        public static Uri buildUri(long id) {
             return ContentUris.withAppendedId(CONTENT_URI, id);
         }
     }
