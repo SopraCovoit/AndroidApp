@@ -14,13 +14,10 @@
   ~    limitations under the License.
   -->
 
-<resources>
-    <string name="app_name">SopraCovoit</string>
-    <string name="hello_world">Hello world!</string>
-    <string name="action_settings">Settings</string>
-    <string name="drawer_name_example">Ernesto Exposito</string>
-    <string name="drawer_mail_example">eexposito@insa-toulouse.fr</string>
-    <string name="drawer_item_example">Go somewhere</string>
-    <string name="provider_name">Toto</string>
-
-</resources>
+<sync-adapter xmlns:android="http://schemas.android.com/apk/res/android"
+    android:contentAuthority="wtf.sur.original.puissante.rapide.automobile.sopracovoit.app"
+    android:accountType="wtf.sur.original.puissante.rapide.automobile.sopracovoit.sync"
+    android:userVisible="true"
+    android:supportsUploading="false"
+    android:allowParallelSyncs="false"
+    android:isAlwaysSyncable="false" />
