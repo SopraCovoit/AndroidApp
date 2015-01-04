@@ -20,7 +20,7 @@ public class AccountGeneral {
     /**
      * Account type id
      */
-    public static final String ACCOUNT_TYPE = "wtf.sur.original.puissante.rapide.automobile.sopracovoit.authenticator";
+    public static final String ACCOUNT_TYPE = "wtf.sur.original.puissante.rapide.automobile.sopracovoit.sync";
 
     public static final String AUTHTOKEN_TYPE = "Authtoken";
     public static final String AUTHTOKEN_TYPE_LABEL = "Authenticator token";
