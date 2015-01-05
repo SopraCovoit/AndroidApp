@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  ~ Copyright 2014 Jérémie Boutoille, Jules Cantegril, Hugo Djemaa, Mickael Goubin, David Livet
+  ~ Copyright 2015 Jérémie Boutoille, Jules Cantegril, Hugo Djemaa, Mickael Goubin, David Livet
   ~
   ~    Licensed under the Apache License, Version 2.0 (the "License");
   ~    you may not use this file except in compliance with the License.
@@ -15,12 +15,7 @@
   ~    limitations under the License.
   -->
 
-<resources>
-    <color name="primary">#B21212</color>
-    <color name="primary_dark">#7F0100</color>
-    <color name="accent">#FFFC19</color>
-    <color name="accent_pressed">#E6FFFC19</color>
-    <color name="accent_focus">#66FFFC19</color>
-    <color name="accent_disabeld">#1AFFFC19</color>
-    <color name="white">#FFFFFF</color>
-</resources>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_enabled="false" android:alpha="0.5" android:color="@color/accent"/>
+    <item android:color="@color/accent"/>
+</selector>

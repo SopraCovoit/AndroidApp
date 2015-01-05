@@ -22,5 +22,9 @@
     <string name="drawer_mail_example">eexposito@insa-toulouse.fr</string>
     <string name="drawer_item_example">Go somewhere</string>
     <string name="provider_name">Toto</string>
+    <string name="email_hint">Email address</string>
+    <string name="password_hint">Password</string>
+    <string name="btn_singin">Sign in</string>
+    <string name="btn_newuser">New user?</string>
 
 </resources>

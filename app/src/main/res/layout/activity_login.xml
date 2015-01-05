@@ -18,41 +18,49 @@
     android:orientation="vertical"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:paddingLeft="17dp"
-    android:paddingRight="17dp">
-
+    android:background="@drawable/lego_bg">
+    <include layout="@layout/toolbar"/>
     <EditText
         android:id="@+id/accountName"
+        android:layout_marginLeft="@dimen/material_act_horizontal_padding"
+        android:layout_marginRight="@dimen/material_act_horizontal_padding"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:hint="Email address"
+        android:layout_marginTop="@dimen/material_double_separator"
+        android:hint="@string/email_hint"
         android:inputType="textEmailAddress"
-        android:padding="10dp" />
+        android:padding="@dimen/material_minimal_separator"
+        style="@style/AppTheme.Dark.EditText"/>
 
     <EditText
         android:id="@+id/accountPassword"
+        android:layout_marginLeft="@dimen/material_act_horizontal_padding"
+        android:layout_marginRight="@dimen/material_act_horizontal_padding"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="@dimen/material_minimal_separator"
         android:inputType="textPassword"
-        android:hint="Password"
-        android:padding="10dp" />
+        android:hint="@string/password_hint"
+        style="@style/AppTheme.Dark.EditText"
+        android:padding="@dimen/material_minimal_separator" />
 
     <Button
         android:id="@+id/submit"
+        android:layout_marginLeft="@dimen/material_act_horizontal_padding"
+        android:layout_marginRight="@dimen/material_act_horizontal_padding"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:text="Sign in"
-        android:padding="10dp" />
+        android:layout_marginTop="@dimen/material_minimal_separator"
+        android:text="@string/btn_singin"/>
 
     <TextView
         android:id="@+id/signUp"
+        android:layout_marginLeft="@dimen/material_act_horizontal_padding"
+        android:layout_marginRight="@dimen/material_act_horizontal_padding"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/incremental_1"
         android:gravity="center"
-        android:text="New user?"
-        android:padding="10dp" />
+        android:text="@string/btn_newuser"
+        style="@style/AppTheme.Dark.Text"/>
 
 </LinearLayout>
