@@ -28,6 +28,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import wtf.sur.original.puissante.rapide.automobile.sopracovoit.R;
+import wtf.sur.original.puissante.rapide.automobile.sopracovoit.sync.PathSyncAdapter;
 
 public class AuthenticatorActivity extends AccountAuthenticatorActivity {
     public final static String ARG_ACCOUNT_TYPE = "ACCOUNT_TYPE";
@@ -71,13 +72,12 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity {
         findViewById(R.id.signUp).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Since there can only be one AuthenticatorActivity, we call the sign up activity, get his results,
-                // and return them in setAccountAuthenticatorResult(). See finishLogin().
-                //Intent signup = new Intent(getBaseContext(), SignUpActivity.class);
-                //signup.putExtras(getIntent().getExtras());
-                //startActivityForResult(signup, REQ_SIGNUP);
+                Intent signup = new Intent(getBaseContext(), RegisterActivity.class);
+                signup.putExtras(getIntent().getExtras());
+                startActivityForResult(signup, REQ_SIGNUP);
             }
         });
+        PathSyncAdapter.syncImmediately(this);
     }
 
     @Override
