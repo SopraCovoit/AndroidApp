@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Jérémie Boutoille, Jules Cantegril, Hugo Djemaa, Mickael Goubin, David Livet
+ * Copyright 2015 Jérémie Boutoille, Jules Cantegril, Hugo Djemaa, Mickael Goubin, David Livet
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -16,20 +16,52 @@
 
 package wtf.sur.original.puissante.rapide.automobile.sopracovoit.data;
 
+import android.content.ContentUris;
+import android.net.Uri;
 import android.provider.BaseColumns;
 
 /**
  * CovoitContract class
  */
 public class CovoitContract {
+
+    public static final String CONTENT_AUTHORITY = "wtf.sur.original.puissante.rapide.automobile.sopracovoit.app";
+    public static final Uri BASE_CONTENT_URI = Uri.parse("content://" + CONTENT_AUTHORITY);
+
+    public static final String PATH_WORKPLACE = "workplace";
+    public static final String PATH_USER = "user";
+    public static final String PATH_PATH = "path";
+
+
     public static final class WorkplaceEntry implements BaseColumns {
+        public static final Uri CONTENT_URI =
+                BASE_CONTENT_URI.buildUpon().appendPath(PATH_WORKPLACE).build();
+
+        public static final String CONTENT_TYPE =
+                "vnd.android.cursor.dir/" + CONTENT_AUTHORITY + "/" + PATH_WORKPLACE;
+        public static final String CONTENT_ITEM_TYPE =
+                "vnd.android.cursor.item/" + CONTENT_AUTHORITY + "/" + PATH_WORKPLACE;
+
         public static final String TABLE_NAME = "workplace";
         public static final String COLUMN_NAME = "name";
         public static final String COLUMN_LAT = "latitude";
         public static final String COLUMN_LON = "longitude";
+
+        public static Uri buildUri(long id) {
+            return ContentUris.withAppendedId(CONTENT_URI, id);
+        }
     }
 
     public static final class UserEntry implements BaseColumns {
+
+        public static final Uri CONTENT_URI =
+                BASE_CONTENT_URI.buildUpon().appendPath(PATH_USER).build();
+
+        public static final String CONTENT_TYPE =
+                "vnd.android.cursor.dir/" + CONTENT_AUTHORITY + "/" + PATH_USER;
+        public static final String CONTENT_ITEM_TYPE =
+                "vnd.android.cursor.item/" + CONTENT_AUTHORITY + "/" + PATH_USER;
+
         public static final String TABLE_NAME = "user";
         public static final String COLUMN_NAME = "name";
         public static final String COLUMN_SURNAME = "surname";
@@ -39,9 +71,21 @@ public class CovoitContract {
         public static final String COLUMN_HOME_LAT = "home_lat";
         public static final String COLUMN_HOME_LON = "home_lon";
         public static final String COLUMN_WORKPLACE_ID = "workplace_id";
+
+        public static Uri buildUri(long id) {
+            return ContentUris.withAppendedId(CONTENT_URI, id);
+        }
     }
 
     public static final class PathEntry implements BaseColumns {
+        public static final Uri CONTENT_URI =
+                BASE_CONTENT_URI.buildUpon().appendPath(PATH_PATH).build();
+
+        public static final String CONTENT_TYPE =
+                "vnd.android.cursor.dir/" + CONTENT_AUTHORITY + "/" + PATH_PATH;
+        public static final String CONTENT_ITEM_TYPE =
+                "vnd.android.cursor.item/" + CONTENT_AUTHORITY + "/" + PATH_PATH;
+
         public static final String TABLE_NAME = "path";
         public static final String COLUMN_HOUR = "hour";
         public static final String COLUMN_MIN = "min";
@@ -49,5 +93,9 @@ public class CovoitContract {
         public static final String COLUMN_LON = "lon";
         public static final String COLUMN_DIRECTION = "direction";
         public static final String COLUMN_USER_ID = "user_id";
+
+        public static Uri buildUri(long id) {
+            return ContentUris.withAppendedId(CONTENT_URI, id);
+        }
     }
 }
