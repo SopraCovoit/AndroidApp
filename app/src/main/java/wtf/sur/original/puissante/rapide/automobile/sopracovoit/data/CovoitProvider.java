@@ -21,6 +21,7 @@ import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.UriMatcher;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteConstraintException;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.support.annotation.NonNull;
@@ -237,19 +238,20 @@ public class CovoitProvider extends ContentProvider {
         final int match = sUriMatcher.match(uri);
         switch (match) {
             case WORKPLACE:
-                db.beginTransaction();
                 int returnCount = 0;
-                try {
                     for (ContentValues value : values) {
-                        long _id = db.insert(CovoitContract.WorkplaceEntry.TABLE_NAME, null, value);
-                        if (_id != -1) {
-                            returnCount++;
+                        try {
+                            long _id = db.insertOrThrow(CovoitContract.WorkplaceEntry.TABLE_NAME, null, value);
+                            if (_id != -1) {
+                                returnCount++;
+                            }
+                        } catch (SQLiteConstraintException e) {
+                            long _id = db.update(CovoitContract.WorkplaceEntry.TABLE_NAME, value, CovoitContract.WorkplaceEntry._ID + " = " + value.getAsInteger(CovoitContract.WorkplaceEntry._ID), null);
+                            if (_id != -1) {
+                                returnCount++;
+                            }
                         }
                     }
-                    db.setTransactionSuccessful();
-                } finally {
-                    db.endTransaction();
-                }
                 getContext().getContentResolver().notifyChange(uri, null);
                 return returnCount;
             default:
