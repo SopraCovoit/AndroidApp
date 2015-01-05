@@ -29,6 +29,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import wtf.sur.original.puissante.rapide.automobile.sopracovoit.R;
+import wtf.sur.original.puissante.rapide.automobile.sopracovoit.sync.FetchWorkplaceTask;
 import wtf.sur.original.puissante.rapide.automobile.sopracovoit.sync.PathSyncAdapter;
 
 public class AuthenticatorActivity extends BaseAuthenticatorActivity {
@@ -78,7 +79,7 @@ public class AuthenticatorActivity extends BaseAuthenticatorActivity {
                 startActivityForResult(signup, REQ_SIGNUP);
             }
         });
-        PathSyncAdapter.syncImmediately(this);
+        (new FetchWorkplaceTask(this)).execute();
     }
 
     @Override

@@ -17,8 +17,18 @@
 package wtf.sur.original.puissante.rapide.automobile.sopracovoit.sync;
 
 
+import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.os.AsyncTask;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import wtf.sur.original.puissante.rapide.automobile.sopracovoit.data.CovoitContract;
+import wtf.sur.original.puissante.rapide.automobile.sopracovoit.model.Location;
+import wtf.sur.original.puissante.rapide.automobile.sopracovoit.model.Workplace;
 
 public class FetchWorkplaceTask extends AsyncTask<String, Void, Void> {
 
@@ -30,6 +40,27 @@ public class FetchWorkplaceTask extends AsyncTask<String, Void, Void> {
 
     @Override
     protected Void doInBackground(String... params) {
+        // TODO get with retrofit
+        List<ContentValues> workplaces = new ArrayList<>();
+        Workplace w = new Workplace(1);
+        w.setName("Toto");
+        w.setLocation(new Location(2.3, 23.4));
+        workplaces.add(w.getContentValues());
+        w = new Workplace(2);
+        w.setName("Tata");
+        w.setLocation(new Location(2.3, 23.4));
+        workplaces.add(w.getContentValues());
+        w = new Workplace(3);
+        w.setName("Tutu");
+        w.setLocation(new Location(2.3, 23.4));
+        workplaces.add(w.getContentValues());
+        w = new Workplace(4);
+        w.setName("Dtc");
+        w.setLocation(new Location(2.3, 23.4));
+        workplaces.add(w.getContentValues());
+
+
+        mContext.getContentResolver().bulkInsert(CovoitContract.WorkplaceEntry.CONTENT_URI, workplaces.toArray(new ContentValues[workplaces.size()]));
 
         return null;
     }

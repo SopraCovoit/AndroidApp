@@ -59,7 +59,7 @@ public class RegisterActivity extends BaseActivity implements LoaderManager.Load
 
         mWorkplaceSpinner = (Spinner) findViewById(R.id.sopralist);
         mWorkplaceSpinner.setEnabled(false);
-        mWorkplaceAdapter = new SimpleCursorAdapter(this, R.id.sopralist, null, new String[]{CovoitContract.WorkplaceEntry.COLUMN_NAME}, new int[]{android.R.id.text1}, 0);
+        mWorkplaceAdapter = new SimpleCursorAdapter(this, android.R.layout.simple_spinner_item, null, new String[]{CovoitContract.WorkplaceEntry.COLUMN_NAME}, new int[]{android.R.id.text1}, 0);
         mWorkplaceSpinner.setAdapter(mWorkplaceAdapter);
     }
 
