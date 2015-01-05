@@ -26,5 +26,17 @@
     <string name="password_hint">Password</string>
     <string name="btn_singin">Sign in</string>
     <string name="btn_newuser">New user?</string>
+    <string name="hint_name">Nom</string>
+    <string name="hint_surname">Prénom</string>
+    <string name="hint_mail">Mail</string>
+    <string name="hint_password">Mot de passe</string>
+    <string name="hint_phone">Téléphone</string>
+    <string name="driver_title">Conducteur</string>
+    <string name="switch_driver_name">Conducteur</string>
+    <string name="Path_title">Trajet</string>
+    <string name="city_hint">Ville</string>
+    <string name="departure_hint">Aller</string>
+    <string name="return_hint">Retour</string>
+    <string name="ok">Ok</string>
 
 </resources>

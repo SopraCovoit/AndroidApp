@@ -31,8 +31,9 @@
         <item name="android:colorButtonNormal">@color/sopra_accent_ripple</item>
     </style>
 
-    <style name="ButtonSopra" parent="android:style/Widget.Material.Light.Button">
+    <style name="ButtonSopra" parent="android:style/Widget.Material.Button">
         <item name="android:elevation">1dp</item>
+        <item name="android:textColor">@android:color/primary_text_dark</item>
         <item name="android:minWidth">88dip</item>
         <item name="android:height">36dp</item>
         <item name="android:translationZ">1dp</item>

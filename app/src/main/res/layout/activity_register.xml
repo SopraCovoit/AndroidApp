@@ -18,110 +18,128 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-
-
-    <EditText
-        android:layout_width="match_parent"
+    <include layout="@layout/toolbar"/>
+    <ScrollView
         android:layout_height="wrap_content"
-        android:inputType="textPersonName"
-        android:ems="10"
-        android:id="@+id/name"
-        android:hint="Nom" />
-
-    <EditText
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:inputType="textPersonName"
-        android:ems="10"
-        android:id="@+id/surname"
-        android:hint="Prénom" />
 
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:inputType="textEmailAddress"
-        android:ems="10"
-        android:id="@+id/email"
-        android:hint="Mail" />
-
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:inputType="textPassword"
-        android:ems="10"
-        android:id="@+id/password"
-        android:hint="Mot de passe" />
-
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:inputType="phone"
-        android:ems="10"
-        android:id="@+id/phone"
-        android:hint="Téléphone" />
-
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <TextView
-            android:layout_width="wrap_content"
+       >
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="Conducteur"
-            android:id="@+id/textView2"
-            android:layout_weight="1" />
+            android:orientation="vertical"
+            android:layout_marginLeft="@dimen/material_act_horizontal_padding"
+            android:layout_marginRight="@dimen/material_act_horizontal_padding"
+            android:layout_marginTop="@dimen/material_minimal_separator"
+            android:layout_marginBottom="@dimen/material_minimal_separator">
+            <EditText
+                android:id="@+id/name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textPersonName"
+                android:layout_marginTop="@dimen/material_minimal_separator"
+                android:hint="@string/hint_name" />
 
-        <ToggleButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Conducteur"
-            android:id="@+id/driver"
-            android:checked="false" />
+            <EditText
+                android:id="@+id/surname"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/material_minimal_separator"
+                android:inputType="textPersonName"
+                android:hint="@string/hint_surname" />
 
-    </LinearLayout>
+            <EditText
+                android:id="@+id/email"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/material_minimal_separator"
+                android:inputType="textEmailAddress"
+                android:hint="@string/hint_mail" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Trajet"
-        android:id="@+id/textView" />
+            <EditText
+                android:id="@+id/password"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/material_minimal_separator"
+                android:inputType="textPassword"
+                android:hint="@string/hint_password" />
 
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:inputType="textPostalAddress"
-        android:ems="10"
-        android:id="@+id/city"
-        android:hint="Ville" />
+            <EditText
+                android:id="@+id/phone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/material_minimal_separator"
+                android:inputType="phone"
+                android:hint="@string/hint_phone" />
 
-    <Spinner
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/sopralist"
-        android:spinnerMode="dropdown" />
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/material_minimal_separator"
+                >
 
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:inputType="time"
-        android:ems="10"
-        android:id="@+id/departure_hour"
-        android:hint="Aller" />
+                <TextView
+                    android:id="@+id/textView2"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="@string/driver_title"
+                    android:layout_weight="1" />
 
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:inputType="time"
-        android:ems="10"
-        android:id="@+id/return_hour"
-        android:hint="Retour" />
+                <android.support.v7.widget.SwitchCompat
+                    android:id="@+id/driver"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="false" />
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Ok"
-        android:id="@+id/button" />
+            </LinearLayout>
 
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/material_minimal_separator"
+                android:text="@string/Path_title"
+                />
+
+            <EditText
+                android:id="@+id/city"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/material_minimal_separator"
+                android:inputType="textPostalAddress"
+                android:hint="@string/city_hint" />
+
+            <Spinner
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/material_minimal_separator"
+
+                android:id="@+id/sopralist"
+                android:spinnerMode="dropdown" />
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/material_minimal_separator"
+                android:inputType="time"
+                android:id="@+id/departure_hour"
+                android:hint="@string/departure_hint" />
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/material_minimal_separator"
+                android:inputType="time"
+                android:id="@+id/return_hour"
+                android:hint="@string/return_hint" />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/ok"
+                android:id="@+id/button" />
+        </LinearLayout>
+    </ScrollView>
 </LinearLayout>

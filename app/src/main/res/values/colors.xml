@@ -18,9 +18,9 @@
 <resources>
     <color name="primary">#B21212</color>
     <color name="primary_dark">#7F0100</color>
-    <color name="accent">#FFFC19</color>
-    <color name="accent_pressed">#E6FFFC19</color>
-    <color name="accent_focus">#66FFFC19</color>
-    <color name="accent_disabeld">#1AFFFC19</color>
+    <color name="accent">#7C4DFF</color>
+    <color name="accent_pressed">#E67C4DFF</color>
+    <color name="accent_focus">#667C4DFF</color>
+    <color name="accent_disabeld">#1A7C4DFF</color>
     <color name="white">#FFFFFF</color>
 </resources>

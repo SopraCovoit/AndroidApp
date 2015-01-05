@@ -31,10 +31,11 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import wtf.sur.original.puissante.rapide.automobile.sopracovoit.BaseActivity;
 import wtf.sur.original.puissante.rapide.automobile.sopracovoit.R;
 import wtf.sur.original.puissante.rapide.automobile.sopracovoit.data.CovoitContract;
 
-public class RegisterActivity extends Activity implements LoaderManager.LoaderCallbacks<Cursor> {
+public class RegisterActivity extends BaseActivity implements LoaderManager.LoaderCallbacks<Cursor> {
     private String mAccountType;
     private static final int WORKPLACE_LOADER = 0;
     private SimpleCursorAdapter mWorkplaceAdapter;
@@ -48,7 +49,6 @@ public class RegisterActivity extends Activity implements LoaderManager.LoaderCa
 
         mAccountType = getIntent().getStringExtra(AuthenticatorActivity.ARG_ACCOUNT_TYPE);
 
-        setContentView(R.layout.activity_register);
 
         findViewById(R.id.button).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -61,6 +61,11 @@ public class RegisterActivity extends Activity implements LoaderManager.LoaderCa
         mWorkplaceSpinner.setEnabled(false);
         mWorkplaceAdapter = new SimpleCursorAdapter(this, R.id.sopralist, null, new String[]{CovoitContract.WorkplaceEntry.COLUMN_NAME}, new int[]{android.R.id.text1}, 0);
         mWorkplaceSpinner.setAdapter(mWorkplaceAdapter);
+    }
+
+    @Override
+    protected int getLayoutResource() {
+        return R.layout.activity_register;
     }
 
     private void createAccount() {
