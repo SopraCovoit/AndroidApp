@@ -22,86 +22,96 @@
     <ScrollView
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
-
        >
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:layout_marginLeft="@dimen/material_act_horizontal_padding"
-            android:layout_marginRight="@dimen/material_act_horizontal_padding"
+            android:layout_marginLeft="@dimen/material_minimal_separator"
+            android:layout_marginRight="@dimen/material_minimal_separator"
             android:layout_marginTop="@dimen/material_minimal_separator"
             android:layout_marginBottom="@dimen/material_minimal_separator">
-            <EditText
-                android:id="@+id/name"
+            <android.support.v7.widget.CardView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="textPersonName"
-                android:layout_marginTop="@dimen/material_minimal_separator"
-                android:hint="@string/hint_name" />
+                android:layout_height="wrap_content">
 
-            <EditText
-                android:id="@+id/surname"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/material_minimal_separator"
-                android:inputType="textPersonName"
-                android:hint="@string/hint_surname" />
-
-            <EditText
-                android:id="@+id/email"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/material_minimal_separator"
-                android:inputType="textEmailAddress"
-                android:hint="@string/hint_mail" />
-
-            <EditText
-                android:id="@+id/password"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/material_minimal_separator"
-                android:inputType="textPassword"
-                android:hint="@string/hint_password" />
-
-            <EditText
-                android:id="@+id/phone"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/material_minimal_separator"
-                android:inputType="phone"
-                android:hint="@string/hint_phone" />
-
-            <LinearLayout
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/material_minimal_separator"
-                >
-
-                <TextView
-                    android:id="@+id/textView2"
-                    android:layout_width="0dp"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:text="@string/driver_title"
-                    android:layout_weight="1" />
+                    android:orientation="vertical"
+                    android:layout_marginTop="@dimen/material_minimal_separator"
+                    android:layout_marginBottom="@dimen/material_minimal_separator"
+                    android:layout_marginLeft="@dimen/material_double_separator"
+                    android:layout_marginRight="@dimen/material_double_separator">
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/incremental_1"
+                        android:gravity="center_vertical"
+                        android:text="@string/title_info"
+                        style="@style/AppTheme.CardTitle"
+                        />
+                    <EditText
+                        android:id="@+id/name"
+                        android:layout_marginTop="@dimen/material_minimal_separator"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="textPersonName"
+                        android:hint="@string/hint_name" />
 
-                <android.support.v7.widget.SwitchCompat
-                    android:id="@+id/driver"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:checked="false" />
+                    <EditText
+                        android:id="@+id/surname"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/material_minimal_separator"
+                        android:inputType="textPersonName"
+                        android:hint="@string/hint_surname" />
 
-            </LinearLayout>
+                    <EditText
+                        android:id="@+id/email"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/material_minimal_separator"
+                        android:inputType="textEmailAddress"
+                        android:hint="@string/hint_mail" />
 
+                    <EditText
+                        android:id="@+id/password"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/material_minimal_separator"
+                        android:inputType="textPassword"
+                        android:hint="@string/hint_password" />
+
+                    <EditText
+                        android:id="@+id/phone"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/material_minimal_separator"
+                        android:inputType="phone"
+                        android:hint="@string/hint_phone" />
+                </LinearLayout>
+            </android.support.v7.widget.CardView>
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/material_minimal_separator"
+            >
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/material_minimal_separator"
+            android:layout_marginBottom="@dimen/material_minimal_separator"
+            android:layout_marginLeft="@dimen/material_double_separator"
+            android:layout_marginRight="@dimen/material_double_separator"
+            android:orientation="vertical">
             <TextView
-                android:id="@+id/textView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/material_minimal_separator"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/incremental_1"
+                android:gravity="center_vertical"
                 android:text="@string/Path_title"
+                style="@style/AppTheme.CardTitle"
                 />
+
 
             <EditText
                 android:id="@+id/city"
@@ -134,7 +144,31 @@
                 android:inputType="time"
                 android:id="@+id/return_hour"
                 android:hint="@string/return_hint" />
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/incremental_1"
+                android:gravity="center"
+                android:layout_marginTop="@dimen/material_minimal_separator"
+                >
 
+                <TextView
+                    android:id="@+id/textView2"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="@string/driver_title"
+                    android:layout_weight="1" />
+
+                <android.support.v7.widget.SwitchCompat
+                    android:id="@+id/driver"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="false" />
+
+            </LinearLayout>
+        </LinearLayout>
+        </android.support.v7.widget.CardView>
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

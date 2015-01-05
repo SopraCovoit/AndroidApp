@@ -34,6 +34,10 @@
     <style name="AppTheme.Dark">
         <item name="android:textColor">@android:color/primary_text_dark</item>
     </style>
+    <style name="AppTheme.CardTitle">
+        <item name="android:textColor">@color/accent</item>
+        <item name="android:textSize">24sp</item>
+    </style>
     <style name="AppTheme.Dark.EditText">
         <item name="android:textColorHint">?android:textColorHintInverse</item>
     </style>

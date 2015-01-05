@@ -25,6 +25,7 @@ import android.content.Loader;
 import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.SimpleCursorAdapter;
 import android.widget.Spinner;
@@ -133,6 +134,18 @@ public class RegisterActivity extends BaseActivity implements LoaderManager.Load
         } else {
             mWorkplaceSpinner.setEnabled(false);
         }
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        switch(item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                return true;
+            default:
+                //TODO
+        }
+        return super.onContextItemSelected(item);
     }
 
     @Override

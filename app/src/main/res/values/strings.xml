@@ -38,5 +38,5 @@
     <string name="departure_hint">Aller</string>
     <string name="return_hint">Retour</string>
     <string name="ok">Ok</string>
-
+    <string name="title_info">Informations</string>
 </resources>
