@@ -137,7 +137,7 @@ public class RegisterActivity extends BaseActivity implements LoaderManager.Load
     }
 
     @Override
-    public boolean onContextItemSelected(MenuItem item) {
+    public boolean onOptionsItemSelected(MenuItem item) {
         switch(item.getItemId()) {
             case android.R.id.home:
                 finish();
