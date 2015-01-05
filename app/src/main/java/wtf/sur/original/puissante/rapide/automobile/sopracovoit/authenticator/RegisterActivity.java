@@ -18,6 +18,120 @@ package wtf.sur.original.puissante.rapide.automobile.sopracovoit.authenticator;
 
 
 import android.app.Activity;
+import android.app.LoaderManager;
+import android.content.CursorLoader;
+import android.content.Intent;
+import android.content.Loader;
+import android.database.Cursor;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.SimpleCursorAdapter;
+import android.widget.Spinner;
+import android.widget.TextView;
+import android.widget.Toast;
 
-public class RegisterActivity extends Activity {
+import wtf.sur.original.puissante.rapide.automobile.sopracovoit.R;
+import wtf.sur.original.puissante.rapide.automobile.sopracovoit.data.CovoitContract;
+
+public class RegisterActivity extends Activity implements LoaderManager.LoaderCallbacks<Cursor> {
+    private String mAccountType;
+    private static final int WORKPLACE_LOADER = 0;
+    private SimpleCursorAdapter mWorkplaceAdapter;
+    private Spinner mWorkplaceSpinner;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        getLoaderManager().initLoader(WORKPLACE_LOADER, null, this);
+
+        mAccountType = getIntent().getStringExtra(AuthenticatorActivity.ARG_ACCOUNT_TYPE);
+
+        setContentView(R.layout.activity_register);
+
+        findViewById(R.id.button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                createAccount();
+            }
+        });
+
+        mWorkplaceSpinner = (Spinner) findViewById(R.id.sopralist);
+        mWorkplaceSpinner.setEnabled(false);
+        mWorkplaceAdapter = new SimpleCursorAdapter(this, R.id.sopralist, null, new String[]{CovoitContract.WorkplaceEntry.COLUMN_NAME}, new int[]{android.R.id.text1}, 0);
+        mWorkplaceSpinner.setAdapter(mWorkplaceAdapter);
+    }
+
+    private void createAccount() {
+
+        new AsyncTask<String, Void, Intent>() {
+
+            String name = ((TextView) findViewById(R.id.name)).getText().toString().trim();
+
+            @Override
+            protected Intent doInBackground(String... params) {
+
+                String authtoken = null;
+                Bundle data = new Bundle();
+                try {
+                    /*authtoken = AccountGeneral.sServerAuthenticate.userSignUp(name, accountName, accountPassword, AccountGeneral.AUTHTOKEN_TYPE);
+
+                    data.putString(AccountManager.KEY_ACCOUNT_NAME, accountName);
+                    data.putString(AccountManager.KEY_ACCOUNT_TYPE, mAccountType);
+                    data.putString(AccountManager.KEY_AUTHTOKEN, authtoken);
+                    data.putString(AuthenticatorActivity.PARAM_USER_PASS, accountPassword);*/
+                } catch (Exception e) {
+                    data.putString(AuthenticatorActivity.KEY_ERROR_MESSAGE, e.getMessage());
+                }
+
+                final Intent res = new Intent();
+                res.putExtras(data);
+                return res;
+            }
+
+            @Override
+            protected void onPostExecute(Intent intent) {
+                if (intent.hasExtra(AuthenticatorActivity.KEY_ERROR_MESSAGE)) {
+                    Toast.makeText(getBaseContext(), intent.getStringExtra(AuthenticatorActivity.KEY_ERROR_MESSAGE), Toast.LENGTH_SHORT).show();
+                } else {
+                    setResult(RESULT_OK, intent);
+                    finish();
+                }
+            }
+        }.execute();
+    }
+
+    @Override
+    public void onBackPressed() {
+        setResult(RESULT_CANCELED);
+        super.onBackPressed();
+    }
+
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        return new CursorLoader(
+                this,
+                CovoitContract.WorkplaceEntry.CONTENT_URI,
+                null,
+                null,
+                null,
+                CovoitContract.WorkplaceEntry.COLUMN_NAME + " ASC"
+        );
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        mWorkplaceAdapter.swapCursor(data);
+        if (data.getCount() > 0) {
+            mWorkplaceSpinner.setEnabled(true);
+        } else {
+            mWorkplaceSpinner.setEnabled(false);
+        }
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+        mWorkplaceAdapter.swapCursor(null);
+    }
 }

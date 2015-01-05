@@ -43,9 +43,13 @@
         <activity
             android:name=".authenticator.AuthenticatorActivity"
             android:label="Log in" />
+        <activity
+            android:name=".authenticator.RegisterActivity"
+            android:label="Register" />
 
         <provider
             android:exported="false"
+            android:syncable="true"
             android:label="@string/provider_name"
             android:authorities="wtf.sur.original.puissante.rapide.automobile.sopracovoit.app"
             android:name=".data.CovoitProvider" />

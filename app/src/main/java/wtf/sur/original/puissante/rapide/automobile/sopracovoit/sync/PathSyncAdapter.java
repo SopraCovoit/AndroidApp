@@ -20,10 +20,14 @@ package wtf.sur.original.puissante.rapide.automobile.sopracovoit.sync;
 import android.accounts.Account;
 import android.content.AbstractThreadedSyncAdapter;
 import android.content.ContentProviderClient;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.SyncResult;
 import android.os.Bundle;
 import android.util.Log;
+
+import wtf.sur.original.puissante.rapide.automobile.sopracovoit.R;
+import wtf.sur.original.puissante.rapide.automobile.sopracovoit.authenticator.AccountGeneral;
 
 public class PathSyncAdapter extends AbstractThreadedSyncAdapter {
 
@@ -36,5 +40,12 @@ public class PathSyncAdapter extends AbstractThreadedSyncAdapter {
     @Override
     public void onPerformSync(Account account, Bundle extras, String authority, ContentProviderClient provider, SyncResult syncResult) {
         Log.d(TAG, "onPerformSync");
+    }
+
+    public static void syncImmediately(Context context) {
+        Bundle bundle = new Bundle();
+        bundle.putBoolean(ContentResolver.SYNC_EXTRAS_EXPEDITED, true);
+        bundle.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);
+        ContentResolver.requestSync(null, AccountGeneral.ACCOUNT_TYPE, bundle);
     }
 }
