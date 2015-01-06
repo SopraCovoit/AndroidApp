@@ -25,6 +25,8 @@ import android.content.Loader;
 import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.SimpleCursorAdapter;
@@ -45,18 +47,10 @@ public class RegisterActivity extends BaseActivity implements LoaderManager.Load
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_close);
         getLoaderManager().initLoader(WORKPLACE_LOADER, null, this);
 
         mAccountType = getIntent().getStringExtra(AuthenticatorActivity.ARG_ACCOUNT_TYPE);
-
-
-        findViewById(R.id.button).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                createAccount();
-            }
-        });
 
         mWorkplaceSpinner = (Spinner) findViewById(R.id.sopralist);
         mWorkplaceSpinner.setEnabled(false);
@@ -137,10 +131,20 @@ public class RegisterActivity extends BaseActivity implements LoaderManager.Load
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_registration,menu);
+        return true;
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch(item.getItemId()) {
             case android.R.id.home:
                 finish();
+                return true;
+            case R.id.action_register:
+                createAccount();
                 return true;
             default:
                 //TODO

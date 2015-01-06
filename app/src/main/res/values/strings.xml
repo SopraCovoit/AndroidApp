@@ -39,4 +39,5 @@
     <string name="return_hint">Retour</string>
     <string name="ok">Ok</string>
     <string name="title_info">Informations</string>
+    <string name="action_register">Register</string>
 </resources>
