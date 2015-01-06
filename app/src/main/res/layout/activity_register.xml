@@ -124,27 +124,27 @@
                 android:hint="@string/city_hint" />
 
             <Spinner
+                android:id="@+id/sopralist"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="@dimen/incremental_1"
                 android:layout_marginTop="@dimen/material_minimal_separator"
 
-                android:id="@+id/sopralist"
                 android:spinnerMode="dropdown" />
 
             <EditText
+                android:id="@+id/departure_hour"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/material_minimal_separator"
                 android:inputType="time"
-                android:id="@+id/departure_hour"
                 android:hint="@string/departure_hint" />
 
             <EditText
+                android:id="@+id/return_hour"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/material_minimal_separator"
                 android:inputType="time"
-                android:id="@+id/return_hour"
                 android:hint="@string/return_hint" />
             <LinearLayout
                 android:orientation="horizontal"
@@ -155,7 +155,7 @@
                 >
 
                 <TextView
-                    android:id="@+id/textView2"
+                    android:id="@+id/driver_title"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:textAppearance="?android:attr/textAppearanceMedium"
