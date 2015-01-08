@@ -19,6 +19,7 @@ package wtf.sur.original.puissante.rapide.automobile.sopracovoit.covoit;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -36,10 +37,11 @@ import wtf.sur.original.puissante.rapide.automobile.sopracovoit.model.User;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class CovoitFragment extends Fragment {
+public class CovoitFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
 
 
     private CovoitUsersRecyclerViewAdapter covoitAdapter;
+    private SwipeRefreshLayout swipeLayout;
 
     public CovoitFragment() {
         // Required empty public constructor
@@ -49,8 +51,9 @@ public class CovoitFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.fragment_covoit,container,false);
-        RecyclerView recyclerView = (RecyclerView) root.findViewById(R.id.recycler_view);
+        this.swipeLayout = (SwipeRefreshLayout) inflater.inflate(R.layout.fragment_covoit,container,false);
+        swipeLayout.setOnRefreshListener(this);
+        RecyclerView recyclerView = (RecyclerView) swipeLayout.findViewById(R.id.recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         this.covoitAdapter = new CovoitUsersRecyclerViewAdapter();
         recyclerView.setAdapter(covoitAdapter);
@@ -68,7 +71,7 @@ public class CovoitFragment extends Fragment {
         user.setMail("mailtest");
         users.add(user);
         this.updateRecyclerView(users);
-        return root;
+        return swipeLayout;
     }
 
 
@@ -76,4 +79,9 @@ public class CovoitFragment extends Fragment {
         this.covoitAdapter.setUsers(userList);
     }
 
+    @Override
+    public void onRefresh() {
+        //TODO
+//        this.swipeLayout.setRefreshing(false);
+    }
 }
