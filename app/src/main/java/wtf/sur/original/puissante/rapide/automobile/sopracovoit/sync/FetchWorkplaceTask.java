@@ -53,7 +53,7 @@ public class FetchWorkplaceTask extends AsyncTask<String, Void, Void> {
             cv[i] = w.getContentValues();
             i++;
         }
-
+        mContext.getContentResolver().delete(CovoitContract.WorkplaceEntry.CONTENT_URI, null, null);
         mContext.getContentResolver().bulkInsert(CovoitContract.WorkplaceEntry.CONTENT_URI, cv);
 
         return null;

@@ -240,16 +240,9 @@ public class CovoitProvider extends ContentProvider {
             case WORKPLACE:
                 int returnCount = 0;
                     for (ContentValues value : values) {
-                        try {
-                            long _id = db.insertOrThrow(CovoitContract.WorkplaceEntry.TABLE_NAME, null, value);
-                            if (_id != -1) {
-                                returnCount++;
-                            }
-                        } catch (SQLiteConstraintException e) {
-                            long _id = db.update(CovoitContract.WorkplaceEntry.TABLE_NAME, value, CovoitContract.WorkplaceEntry._ID + " = " + value.getAsInteger(CovoitContract.WorkplaceEntry._ID), null);
-                            if (_id != -1) {
-                                returnCount++;
-                            }
+                        long _id = db.insert(CovoitContract.WorkplaceEntry.TABLE_NAME, null, value);
+                        if (_id != -1) {
+                            returnCount++;
                         }
                     }
                 getContext().getContentResolver().notifyChange(uri, null);
