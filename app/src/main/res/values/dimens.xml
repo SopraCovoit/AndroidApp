@@ -21,4 +21,7 @@
     <dimen name="user_pic_size">56dp</dimen>
     <dimen name="separator">8dp</dimen>
     <dimen name="material_act_horizontal_padding">16dp</dimen>
+    <dimen name="material_header_height">48dp</dimen>
+    <dimen name="material_list_two_item_text_padding">20dp</dimen>
+    <dimen name="material_list_text_margin">72dp</dimen>
 </resources>

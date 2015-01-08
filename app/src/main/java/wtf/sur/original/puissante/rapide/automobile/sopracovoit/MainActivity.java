@@ -30,11 +30,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import java.io.IOException;
 
 import wtf.sur.original.puissante.rapide.automobile.sopracovoit.authenticator.AccountGeneral;
+import wtf.sur.original.puissante.rapide.automobile.sopracovoit.covoit.CovoitFragment;
 import wtf.sur.original.puissante.rapide.automobile.sopracovoit.drawer.DrawerManager;
 
 
@@ -53,7 +53,7 @@ public class MainActivity extends BaseActivity {
         this.drawerManager = new DrawerManager(drawer_container,this);
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.fragment_container, new PlaceholderFragment())
+                    .add(R.id.fragment_container, new CovoitFragment())
                     .commit();
         }
     }
