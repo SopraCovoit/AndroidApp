@@ -68,8 +68,6 @@ public class CovoitContract {
         public static final String COLUMN_MAIL = "mail";
         public static final String COLUMN_PHONE = "phone";
         public static final String COLUMN_IS_DRIVE = "is_driver";
-        public static final String COLUMN_HOME_LAT = "home_lat";
-        public static final String COLUMN_HOME_LON = "home_lon";
         public static final String COLUMN_WORKPLACE_ID = "workplace_id";
 
         public static Uri buildUri(long id) {

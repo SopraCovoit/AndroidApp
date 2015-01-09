@@ -17,14 +17,50 @@
 package wtf.sur.original.puissante.rapide.automobile.sopracovoit.authenticator;
 
 
+import android.content.Context;
+import android.database.Cursor;
+
+import retrofit.RestAdapter;
+import wtf.sur.original.puissante.rapide.automobile.sopracovoit.data.CovoitContract;
+import wtf.sur.original.puissante.rapide.automobile.sopracovoit.model.User;
+import wtf.sur.original.puissante.rapide.automobile.sopracovoit.sync.CovoitServerService;
+
 public class ServerAuthenticate {
     public String userSignUp(String name, String email, String pass) {
         //TODO make request from server
         return "token";
     }
 
-    public String userSignIn(String name, String email, String pass) {
-        //TODO make request from server
-        return "taken";
+    public User userSignIn(Context context, String email, String pass) {
+        RestAdapter restAdapter = new RestAdapter.Builder()
+                .setEndpoint("http://etud.insa-toulouse.fr/~livet")
+                .build();
+
+        CovoitServerService service = restAdapter.create(CovoitServerService.class);
+        User u = service.connexion();
+
+        assert (u.getWorkplace() != null);
+
+        // Check if workplace exists
+        Cursor c = context.getContentResolver().query(CovoitContract.WorkplaceEntry.buildUri(u.getWorkplace().getId()), null, null, null, null);
+        if (c.getCount() == 0) {
+            context.getContentResolver().insert(CovoitContract.WorkplaceEntry.CONTENT_URI, u.getWorkplace().getContentValues());
+        } else {
+            context.getContentResolver().update(CovoitContract.WorkplaceEntry.CONTENT_URI,
+                    u.getWorkplace().getContentValues(),
+                    CovoitContract.WorkplaceEntry._ID + " = " + u.getWorkplace().getId(), null);
+        }
+
+        // Check if user exists
+        c = context.getContentResolver().query(CovoitContract.UserEntry.buildUri(u.getId()), null, null, null, null);
+        if (c.getCount() == 0) {
+            context.getContentResolver().insert(CovoitContract.UserEntry.CONTENT_URI, u.getContentValues());
+        } else {
+            context.getContentResolver().update(CovoitContract.UserEntry.CONTENT_URI,
+                    u.getContentValues(),
+                    CovoitContract.UserEntry._ID + " = " + u.getId(), null);
+        }
+
+        return u;
     }
 }

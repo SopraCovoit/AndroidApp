@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Jérémie Boutoille, Jules Cantegril, Hugo Djemaa, Mickael Goubin, David Livet
+ * Copyright 2015 Jérémie Boutoille, Jules Cantegril, Hugo Djemaa, Mickael Goubin, David Livet
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -23,6 +23,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.widget.TextView;
 
 import wtf.sur.original.puissante.rapide.automobile.sopracovoit.R;
 
@@ -37,6 +38,9 @@ public class DrawerManager implements OnChildClickedListener {
     private final RecyclerView.LayoutManager mLayoutManager;
     private final DrawerRecyclerViewAdapter mAdapter;
     private static final String[] strings = {"Recherche de copains","Modification trajets", "Modification compte"};
+    private final TextView mName;
+    private final TextView mMail;
+
     public DrawerManager(DrawerLayout drawerLayout, Context context) {
         this.mContext = context;
         this.drawerLayout = drawerLayout;
@@ -48,6 +52,9 @@ public class DrawerManager implements OnChildClickedListener {
         recyclerView.setHasFixedSize(true);
         recyclerView.setAdapter(mAdapter);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
+
+        mName = (TextView) drawerLayout.findViewById(R.id.TV_username);
+        mMail = (TextView) drawerLayout.findViewById(R.id.TV_email);
     }
 
     @Override
@@ -55,5 +62,10 @@ public class DrawerManager implements OnChildClickedListener {
         int position = this.recyclerView.getChildPosition(v);
         Log.d("Tag", "Clicked on position "+ position);
 
+    }
+
+    public void refreshUser(String name, String surname, String mail) {
+        mName.setText(surname + " " + name);
+        mMail.setText(mail);
     }
 }

@@ -21,29 +21,35 @@ import android.accounts.AccountManagerCallback;
 import android.accounts.AccountManagerFuture;
 import android.accounts.AuthenticatorException;
 import android.accounts.OperationCanceledException;
+import android.app.LoaderManager;
+import android.content.CursorLoader;
+import android.content.Loader;
+import android.database.Cursor;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import java.io.IOException;
 
 import wtf.sur.original.puissante.rapide.automobile.sopracovoit.authenticator.AccountGeneral;
-import wtf.sur.original.puissante.rapide.automobile.sopracovoit.covoit.CovoitFragment;
+import wtf.sur.original.puissante.rapide.automobile.sopracovoit.data.CovoitContract;
 import wtf.sur.original.puissante.rapide.automobile.sopracovoit.drawer.DrawerManager;
 
 
-public class MainActivity extends BaseActivity {
+public class MainActivity extends BaseActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
     private DrawerLayout drawer_container;
     private DrawerManager drawerManager;
     private AccountManager mAccountManager;
-    private String mAuthtoken = null;
+    private static final int CURRENT_USER_LOADER = 1;
 
     @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,26 +59,17 @@ public class MainActivity extends BaseActivity {
         this.drawerManager = new DrawerManager(drawer_container,this);
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.fragment_container, new CovoitFragment())
+                    .add(R.id.fragment_container, new PlaceholderFragment())
                     .commit();
         }
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-
         // Check account, get token or create new account
         mAccountManager.getAuthTokenByFeatures(AccountGeneral.ACCOUNT_TYPE, AccountGeneral.AUTHTOKEN_TYPE, null, this, null, null,
                 new AccountManagerCallback<Bundle>() {
                     @Override
                     public void run(AccountManagerFuture<Bundle> future) {
-                        Bundle bnd = null;
                         try {
-                            bnd = future.getResult();
-
-                            mAuthtoken = bnd.getString(AccountManager.KEY_AUTHTOKEN);
-
+                            Log.d("Toto", "mAccountManager ok init loader");
+                            getLoaderManager().initLoader(MainActivity.CURRENT_USER_LOADER, future.getResult(), MainActivity.this);
                         } catch (OperationCanceledException | IOException | AuthenticatorException e) {
                             e.printStackTrace();
                             //TODO manage exception
@@ -81,6 +78,20 @@ public class MainActivity extends BaseActivity {
                     }
                 }
                 , null);
+
+        this.drawer_container = (DrawerLayout) this.findViewById(R.id.drawer_container);
+        this.drawerManager = new DrawerManager(drawer_container, this);
+        if (savedInstanceState == null) {
+            getSupportFragmentManager().beginTransaction()
+                    .add(R.id.fragment_container, new PlaceholderFragment())
+                    .commit();
+        }
+    }
+
+
+    @Override
+    protected void onStart() {
+        super.onStart();
     }
 
     @Override protected int getLayoutResource() {
@@ -106,6 +117,35 @@ public class MainActivity extends BaseActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        Log.d("Toto", "Loader create");
+        return new CursorLoader(
+                this,
+                CovoitContract.UserEntry.CONTENT_URI,
+                null,
+                CovoitContract.UserEntry.COLUMN_MAIL + " = '" + args.getString(AccountManager.KEY_ACCOUNT_NAME) + "'",
+                null,
+                null
+        );
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        Log.d("Toto", "Loader finish count =" + data.getCount());
+        if (data.moveToFirst()) {
+            String name = data.getString(data.getColumnIndex(CovoitContract.UserEntry.COLUMN_NAME));
+            String surname = data.getString(data.getColumnIndex(CovoitContract.UserEntry.COLUMN_SURNAME));
+            String mail = data.getString(data.getColumnIndex(CovoitContract.UserEntry.COLUMN_MAIL));
+            drawerManager.refreshUser(name, surname, mail);
+        }
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+        drawerManager.refreshUser("", "", "");
     }
 
     /**
