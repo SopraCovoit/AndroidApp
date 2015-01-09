@@ -40,6 +40,7 @@ import android.widget.Toast;
 import java.io.IOException;
 
 import wtf.sur.original.puissante.rapide.automobile.sopracovoit.authenticator.AccountGeneral;
+import wtf.sur.original.puissante.rapide.automobile.sopracovoit.covoit.CovoitFragment;
 import wtf.sur.original.puissante.rapide.automobile.sopracovoit.data.CovoitContract;
 import wtf.sur.original.puissante.rapide.automobile.sopracovoit.drawer.DrawerManager;
 
@@ -57,11 +58,6 @@ public class MainActivity extends BaseActivity implements LoaderManager.LoaderCa
 
         this.drawer_container = (DrawerLayout) this.findViewById(R.id.drawer_container);
         this.drawerManager = new DrawerManager(drawer_container,this);
-        if (savedInstanceState == null) {
-            getSupportFragmentManager().beginTransaction()
-                    .add(R.id.fragment_container, new PlaceholderFragment())
-                    .commit();
-        }
         // Check account, get token or create new account
         mAccountManager.getAuthTokenByFeatures(AccountGeneral.ACCOUNT_TYPE, AccountGeneral.AUTHTOKEN_TYPE, null, this, null, null,
                 new AccountManagerCallback<Bundle>() {
@@ -83,7 +79,7 @@ public class MainActivity extends BaseActivity implements LoaderManager.LoaderCa
         this.drawerManager = new DrawerManager(drawer_container, this);
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.fragment_container, new PlaceholderFragment())
+                    .add(R.id.fragment_container, new CovoitFragment())
                     .commit();
         }
     }
