@@ -27,6 +27,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import wtf.sur.original.puissante.rapide.automobile.sopracovoit.R;
+import wtf.sur.original.puissante.rapide.automobile.sopracovoit.model.Path;
 import wtf.sur.original.puissante.rapide.automobile.sopracovoit.model.User;
 
 /**
@@ -35,32 +36,34 @@ import wtf.sur.original.puissante.rapide.automobile.sopracovoit.model.User;
 public class CovoitUsersRecyclerViewAdapter extends RecyclerView.Adapter {
     private static int HEADER_TYPE=1;
     private static int DATA_TYPE =2;
-    private List<User> mUsers;
+    private List<Path> mPaths;
 
     public static class CovoitViewHolder extends RecyclerView.ViewHolder {
 
 
         private final TextView userName;
         private final TextView userMessage;
+        private final TextView distance;
         private final ImageView userImage;
 
         public CovoitViewHolder(View itemView) {
             super(itemView);
             this.userImage = (ImageView) itemView.findViewById(R.id.IV_driver_icon);
             this.userName = (TextView) itemView.findViewById(R.id.TV_people_name);
-            userMessage = (TextView) itemView.findViewById(R.id.TV_people_desc);
+            userMessage = (TextView) itemView.findViewById(R.id.TV_path_time);
+            this.distance = (TextView) itemView.findViewById(R.id.TV_distance);
         }
 
     }
     public CovoitUsersRecyclerViewAdapter() {
-        this(new ArrayList<User>());
+        this(new ArrayList<Path>());
     }
-    public CovoitUsersRecyclerViewAdapter(List<User> users) {
-        this.mUsers =users;
+    public CovoitUsersRecyclerViewAdapter(List<Path> paths) {
+        this.mPaths =paths;
     }
 
-    public void setUsers(List<User> users) {
-        this.mUsers=users;
+    public void setPaths(List<Path> paths) {
+        this.mPaths =paths;
     }
 
     @Override
@@ -84,20 +87,23 @@ public class CovoitUsersRecyclerViewAdapter extends RecyclerView.Adapter {
     public void onBindViewHolder(RecyclerView.ViewHolder h, int position) {
         if(position>0) {
             CovoitViewHolder holder = (CovoitViewHolder) h;
-            User user = this.mUsers.get(position-1);
+            Path path = this.mPaths.get(position-1);
+            User user  = path.getUser();
+
             if(user.isDriver()) {
                 holder.userImage.setImageResource(R.drawable.ic_car_black);
             } else {
                 holder.userImage.setImageResource(R.drawable.ic_walk_black);
             }
             holder.userName.setText(user.getName());
-            holder.userMessage.setText(user.getMail() + " - " + user.getPhone());
+            holder.userMessage.setText(holder.userMessage.getContext().getString(R.string.time, path.getDepartureHour(), path.getDepartureMinute()));
+            holder.distance.setText(holder.distance.getContext().getString(R.string.distance, path.getDistance() + ""));
         }
     }
 
     @Override
     public int getItemCount() {
-        return mUsers.size()+1;
+        return mPaths.size()+1;
     }
 
     private class HeaderViewHolder extends RecyclerView.ViewHolder {

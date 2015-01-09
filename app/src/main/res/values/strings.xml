@@ -43,5 +43,7 @@
     <string name="action_register">Register</string>
     <string name="title_around">Around you</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="distance">%1$s m</string>
+    <string name="time">Leaving around %1$s:%2$s</string>
 
 </resources>

@@ -27,6 +27,8 @@ import wtf.sur.original.puissante.rapide.automobile.sopracovoit.data.CovoitContr
  * Path class
  */
 public class Path {
+
+
     public static enum Direction {HOME, WP}
 
     private int id;
@@ -34,6 +36,7 @@ public class Path {
     private final Calendar calendar;
     private final Direction direction;
     private User user;
+    private int distance;
 
     public Path(int id, Direction direction) {
         this.id = id;
@@ -82,6 +85,13 @@ public class Path {
         this.user = user;
     }
 
+    public int getDistance() {
+        return distance;
+    }
+
+    public void setDistance(int distance) {
+        this.distance = distance;
+    }
     public ContentValues getContentValues() {
         ContentValues cv = new ContentValues();
         cv.put(CovoitContract.PathEntry._ID, this.getId());
@@ -94,6 +104,7 @@ public class Path {
             cv.put(CovoitContract.PathEntry.COLUMN_USER_ID, this.getUser().getId());
         return cv;
     }
+
 
     public static String getDirectionString(Direction d) {
         switch (d) {

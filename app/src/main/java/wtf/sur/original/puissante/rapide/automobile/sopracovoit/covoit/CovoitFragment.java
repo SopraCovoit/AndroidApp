@@ -18,6 +18,7 @@ package wtf.sur.original.puissante.rapide.automobile.sopracovoit.covoit;
 
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -25,12 +26,12 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import wtf.sur.original.puissante.rapide.automobile.sopracovoit.R;
+import wtf.sur.original.puissante.rapide.automobile.sopracovoit.model.Path;
 import wtf.sur.original.puissante.rapide.automobile.sopracovoit.model.User;
 
 
@@ -57,31 +58,56 @@ public class CovoitFragment extends Fragment implements SwipeRefreshLayout.OnRef
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         this.covoitAdapter = new CovoitUsersRecyclerViewAdapter();
         recyclerView.setAdapter(covoitAdapter);
-        List<User> users = new ArrayList<User> ();
-        User user = new User(1);
-        user.setDriver(false);
-        user.setName("Valerie Daras");
-        user.setPhone("0612345678");
-        user.setMail("valerie@dar.as");
-        users.add(user);
-        user = new User(2);
-        user.setDriver(true);
-        user.setName("Test");
-        user.setPhone("phonetest");
-        user.setMail("mailtest");
-        users.add(user);
-        this.updateRecyclerView(users);
+
+        this.updateRecyclerView(testData());
         return swipeLayout;
     }
 
 
-    void updateRecyclerView(List<User> userList) {
-        this.covoitAdapter.setUsers(userList);
+    void updateRecyclerView(List<Path> paths) {
+        this.covoitAdapter.setPaths(paths);
     }
 
     @Override
     public void onRefresh() {
         //TODO
 //        this.swipeLayout.setRefreshing(false);
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                swipeLayout.setRefreshing(false);
+            }
+        }, 5000);
+    }
+
+
+    public List<Path> testData() {
+        List<Path> paths = new ArrayList<>();
+        User user = new User(1);
+        user.setDriver(false);
+        user.setName("Mme Djemaa");
+        user.setPhone("0612345678");
+        user.setMail("djemaa@fac.ile");
+        Path path = new Path(1, Path.Direction.HOME);
+        path.setDepartureTime(10,50);
+        path.setLocation(10, 10);
+        path.setUser(user);
+        path.setDistance(100);
+        paths.add(path);
+
+        user = new User(2);
+        user.setDriver(true);
+        user.setName("Test");
+        user.setPhone("phonetest");
+        user.setMail("mailtest");
+        path = new Path(2, Path.Direction.HOME);
+        path.setDepartureTime(11, 20);
+        path.setLocation(20, 20);
+        path.setUser(user);
+        path.setDistance(150);
+
+        paths.add(path);
+
+        return paths;
     }
 }

@@ -26,7 +26,6 @@
                 android:clickable="true"
                 android:focusable="true"
                 android:background="@drawable/gray_over_white_ripple">
-    <!-- pas bonne taille d'icone + margin 72dp-->
     <ImageView
         android:id="@+id/IV_driver_icon"
         android:layout_width="36dp"
@@ -37,6 +36,7 @@
         tools:src="@drawable/ic_walk_black"
 
         android:tint="@color/accent"/>
+
     <TextView
         android:id="@+id/TV_people_name"
         android:layout_width="match_parent"
@@ -46,18 +46,31 @@
         android:paddingTop="@dimen/material_double_separator"
         tools:text="Valerie Daras"
         style="@style/TextAppearance.AppCompat.Body2"/>
-
     <TextView
-        android:id="@+id/TV_people_desc"
+        android:id="@+id/TV_distance"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        tools:text="50m"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginLeft="@dimen/material_double_separator"
+        android:layout_marginStart="@dimen/material_double_separator"
+        android:layout_alignBaseline="@+id/TV_path_time"
+        style="@style/TextAppearance.AppCompat.Caption"
+        />
+    <TextView
+        android:id="@+id/TV_path_time"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/material_list_text_margin"
         android:layout_marginStart="@dimen/material_list_text_margin"
+        android:layout_toLeftOf="@id/TV_distance"
+        android:layout_toStartOf="@id/TV_distance"
         android:paddingBottom="@dimen/material_double_separator"
 
         android:layout_below="@id/TV_people_name"
         android:ellipsize="end"
         android:singleLine="true"
-        tools:text="Ponctualité obligé, je n'accepte pas les retard, surtout de bon matin tarace"
+        tools:text="Depart vers 10h00"
         style="@style/TextAppearance.AppCompat.Body1"/>
 </RelativeLayout>
