@@ -19,6 +19,7 @@ package wtf.sur.original.puissante.rapide.automobile.sopracovoit.authenticator;
 import android.accounts.Account;
 import android.accounts.AccountAuthenticatorActivity;
 import android.accounts.AccountManager;
+import android.content.ContentResolver;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -161,6 +162,8 @@ public class AuthenticatorActivity extends BaseAuthenticatorActivity {
             Log.d(TAG, "> finishLogin > setPassword");
             mAccountManager.setPassword(account, accountPassword);
         }
+
+        ContentResolver.setSyncAutomatically(account, "wtf.sur.original.puissante.rapide.automobile.sopracovoit.app", true);
 
         setAccountAuthenticatorResult(intent.getExtras());
         setResult(RESULT_OK, intent);
