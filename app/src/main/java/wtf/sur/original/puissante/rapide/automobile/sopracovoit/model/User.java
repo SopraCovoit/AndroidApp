@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Jérémie Boutoille, Jules Cantegril, Hugo Djemaa, Mickael Goubin, David Livet
+ * Copyright 2015 Jérémie Boutoille, Jules Cantegril, Hugo Djemaa, Mickael Goubin, David Livet
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -18,6 +18,8 @@ package wtf.sur.original.puissante.rapide.automobile.sopracovoit.model;
 
 import android.content.ContentValues;
 
+import com.google.gson.Gson;
+
 import wtf.sur.original.puissante.rapide.automobile.sopracovoit.data.CovoitContract;
 
 /**
@@ -30,8 +32,9 @@ public class User {
     private String mail;
     private String phone;
     private boolean isDriver;
-    private Location home;
+
     private Workplace workplace;
+    private String token;
 
     public User(int id) {
         this.id = id;
@@ -81,24 +84,20 @@ public class User {
         this.isDriver = isDriver;
     }
 
-    public Location getHome() {
-        return home;
-    }
-
-    public void setHome(Location home) {
-        this.home = home;
-    }
-
-    public void setHome(double lat, double lon) {
-        this.home = new Location(lat, lon);
-    }
-
     public Workplace getWorkplace() {
         return workplace;
     }
 
     public void setWorkplace(Workplace workplace) {
         this.workplace = workplace;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
     }
 
     public ContentValues getContentValues() {
@@ -109,8 +108,6 @@ public class User {
         cv.put(CovoitContract.UserEntry.COLUMN_MAIL, mail);
         cv.put(CovoitContract.UserEntry.COLUMN_PHONE, phone);
         cv.put(CovoitContract.UserEntry.COLUMN_IS_DRIVE, isDriver ? 1 : 0);
-        cv.put(CovoitContract.UserEntry.COLUMN_HOME_LAT, home.getLatitude());
-        cv.put(CovoitContract.UserEntry.COLUMN_HOME_LAT, home.getLatitude());
         if (workplace != null)
             cv.put(CovoitContract.UserEntry.COLUMN_WORKPLACE_ID, workplace.getId());
         return cv;

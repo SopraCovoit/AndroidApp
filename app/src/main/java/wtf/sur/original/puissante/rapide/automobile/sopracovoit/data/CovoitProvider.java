@@ -35,6 +35,7 @@ public class CovoitProvider extends ContentProvider {
     private CovoitDbHelper mOpenHelper;
 
     private static final int WORKPLACE = 100;
+    private static final int WORKPLACE_ID = 101;
     private static final int USER = 200;
     private static final int USER_ID = 201;
     private static final int PATH = 300;
@@ -44,8 +45,10 @@ public class CovoitProvider extends ContentProvider {
         final String authority = CovoitContract.CONTENT_AUTHORITY;
 
         matcher.addURI(authority, CovoitContract.PATH_WORKPLACE, WORKPLACE);
+        matcher.addURI(authority, CovoitContract.PATH_WORKPLACE + "/#", WORKPLACE_ID);
         matcher.addURI(authority, CovoitContract.PATH_PATH, PATH);
         matcher.addURI(authority, CovoitContract.PATH_USER, USER);
+        matcher.addURI(authority, CovoitContract.PATH_USER + "/#", USER_ID);
         return matcher;
     }
 
@@ -72,6 +75,19 @@ public class CovoitProvider extends ContentProvider {
                 );
                 break;
             }
+            // "workplace/#"
+            case WORKPLACE_ID: {
+                retCursor = mOpenHelper.getReadableDatabase().query(
+                        CovoitContract.WorkplaceEntry.TABLE_NAME,
+                        projection,
+                        CovoitContract.WorkplaceEntry._ID + " = '" + ContentUris.parseId(uri) + "'",
+                        null,
+                        null,
+                        null,
+                        sortOrder
+                );
+                break;
+            }
             // "user"
             case USER: {
                 retCursor = mOpenHelper.getReadableDatabase().query(
@@ -85,7 +101,7 @@ public class CovoitProvider extends ContentProvider {
                 );
                 break;
             }
-            // "user/*"
+            // "user/#"
             case USER_ID: {
                 retCursor = mOpenHelper.getReadableDatabase().query(
                         CovoitContract.UserEntry.TABLE_NAME,

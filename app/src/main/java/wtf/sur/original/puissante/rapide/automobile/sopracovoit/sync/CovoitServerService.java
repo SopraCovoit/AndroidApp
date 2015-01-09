@@ -20,9 +20,13 @@ package wtf.sur.original.puissante.rapide.automobile.sopracovoit.sync;
 import java.util.List;
 
 import retrofit.http.GET;
+import wtf.sur.original.puissante.rapide.automobile.sopracovoit.model.User;
 import wtf.sur.original.puissante.rapide.automobile.sopracovoit.model.Workplace;
 
 public interface CovoitServerService {
     @GET("/workplace.json")
     List<Workplace> listWorkplaces();
+
+    @GET("/connexion.json")
+    User connexion();
 }

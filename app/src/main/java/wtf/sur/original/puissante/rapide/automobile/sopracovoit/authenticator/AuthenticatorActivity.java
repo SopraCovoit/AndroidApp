@@ -29,6 +29,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import wtf.sur.original.puissante.rapide.automobile.sopracovoit.R;
+import wtf.sur.original.puissante.rapide.automobile.sopracovoit.model.User;
 import wtf.sur.original.puissante.rapide.automobile.sopracovoit.sync.FetchWorkplaceTask;
 import wtf.sur.original.puissante.rapide.automobile.sopracovoit.sync.PathSyncAdapter;
 
@@ -109,18 +110,19 @@ public class AuthenticatorActivity extends BaseAuthenticatorActivity {
             @Override
             protected Intent doInBackground(String... params) {
 
-                String authtoken = null;
+                User currentUser = null;
                 Bundle data = new Bundle();
                 try {
-                    authtoken = AccountGeneral.sServerAuthenticate.userSignIn(userName, userPass, mAuthTokenType);
+                    currentUser = AccountGeneral.sServerAuthenticate.userSignIn(AuthenticatorActivity.this, userPass, mAuthTokenType);
 
-                    data.putString(AccountManager.KEY_ACCOUNT_NAME, userName);
+                    data.putString(AccountManager.KEY_ACCOUNT_NAME, currentUser.getMail());
                     data.putString(AccountManager.KEY_ACCOUNT_TYPE, accountType);
-                    data.putString(AccountManager.KEY_AUTHTOKEN, authtoken);
+                    data.putString(AccountManager.KEY_AUTHTOKEN, currentUser.getToken());
                     data.putString(PARAM_USER_PASS, userPass);
 
                 } catch (Exception e) {
                     data.putString(KEY_ERROR_MESSAGE, e.getMessage());
+                    e.printStackTrace();
                 }
 
                 final Intent res = new Intent();

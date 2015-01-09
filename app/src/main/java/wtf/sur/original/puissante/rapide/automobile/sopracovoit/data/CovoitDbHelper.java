@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Jérémie Boutoille, Jules Cantegril, Hugo Djemaa, Mickael Goubin, David Livet
+ * Copyright 2015 Jérémie Boutoille, Jules Cantegril, Hugo Djemaa, Mickael Goubin, David Livet
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -28,7 +28,7 @@ import wtf.sur.original.puissante.rapide.automobile.sopracovoit.model.Workplace;
  */
 public class CovoitDbHelper extends SQLiteOpenHelper {
 
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 3;
 
     public static final String DATABASE_NAME = "covoit.db";
 
@@ -51,10 +51,9 @@ public class CovoitDbHelper extends SQLiteOpenHelper {
                 UserEntry.COLUMN_MAIL + " TEXT NOT NULL, " +
                 UserEntry.COLUMN_IS_DRIVE + " BOOLEAN, " +
                 UserEntry.COLUMN_PHONE + " TEXT, " +
-                UserEntry.COLUMN_HOME_LAT + " REAL, " +
-                UserEntry.COLUMN_HOME_LON + " REAL, " +
                 UserEntry.COLUMN_WORKPLACE_ID + " INTEGER NOT NULL, " +
-                " FOREIGN KEY (" + UserEntry.COLUMN_WORKPLACE_ID + ") REFERENCES " + WorkplaceEntry.TABLE_NAME + " (" + WorkplaceEntry._ID + "));";
+                " FOREIGN KEY (" + UserEntry.COLUMN_WORKPLACE_ID + ") REFERENCES " + WorkplaceEntry.TABLE_NAME + " (" + WorkplaceEntry._ID + ")," +
+                " UNIQUE (" + UserEntry.COLUMN_MAIL + ") ON CONFLICT REPLACE);";
 
         final String SQL_CREATE_PATH_TABLE = "CREATE TABLE " + PathEntry.TABLE_NAME + " (" +
                 PathEntry._ID + " INTEGER PRIMARY KEY, " +
