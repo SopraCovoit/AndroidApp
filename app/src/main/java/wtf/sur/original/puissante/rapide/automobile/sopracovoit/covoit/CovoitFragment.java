@@ -20,12 +20,12 @@ package wtf.sur.original.puissante.rapide.automobile.sopracovoit.covoit;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewPager;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,6 +33,7 @@ import java.util.List;
 import wtf.sur.original.puissante.rapide.automobile.sopracovoit.R;
 import wtf.sur.original.puissante.rapide.automobile.sopracovoit.model.Path;
 import wtf.sur.original.puissante.rapide.automobile.sopracovoit.model.User;
+import wtf.sur.original.puissante.rapide.automobile.sopracovoit.utils.SlidingTabLayout;
 
 
 /**
@@ -41,8 +42,10 @@ import wtf.sur.original.puissante.rapide.automobile.sopracovoit.model.User;
 public class CovoitFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
 
 
-    private CovoitUsersRecyclerViewAdapter covoitAdapter;
-    private SwipeRefreshLayout swipeLayout;
+    private LinearLayout rootView;
+    private SlidingTabLayout mSlidingTabLayout;
+    private ViewPager mPager;
+    private ChildNavigationAdapter mPagerAdapter;
 
     public CovoitFragment() {
         // Required empty public constructor
@@ -52,30 +55,57 @@ public class CovoitFragment extends Fragment implements SwipeRefreshLayout.OnRef
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        this.swipeLayout = (SwipeRefreshLayout) inflater.inflate(R.layout.fragment_covoit,container,false);
-        swipeLayout.setOnRefreshListener(this);
-        RecyclerView recyclerView = (RecyclerView) swipeLayout.findViewById(R.id.recycler_view);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        this.covoitAdapter = new CovoitUsersRecyclerViewAdapter();
-        recyclerView.setAdapter(covoitAdapter);
+        this.rootView = (LinearLayout) inflater.inflate(R.layout.fragment_covoit,container,false);
+//        rootView.setOnRefreshListener(this);
+        mPager = (ViewPager) rootView.findViewById(R.id.pager);
+        this.mPagerAdapter = new ChildNavigationAdapter(getChildFragmentManager(),getActivity());
+        mPager.setAdapter(mPagerAdapter);
+        this.setupTabs(rootView);
+        return rootView;
+    }
+    private void setupTabs(View rootLayout) {
+        mSlidingTabLayout = (SlidingTabLayout) rootLayout.findViewById(R.id.sliding_tabs);
+        mSlidingTabLayout.setSelectedIndicatorColors(this.getResources().getColor(R.color.accent));
+        mSlidingTabLayout.setDistributeEvenly(true);
 
-        this.updateRecyclerView(testData());
-        return swipeLayout;
+        mSlidingTabLayout.setViewPager(mPager);
+        mSlidingTabLayout.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int i, float v, int i2) {
+            }
+
+            @Override
+            public void onPageSelected(int i) {
+                /*for(int i=0; i <mPagerAdapter.getCount();i++){
+                    // Skip current item
+                    if (i == mPager.getCurrentItem()) {
+                        continue;
+                    }
+
+                    // Skip destroyed or not created item
+                    Fragment f = mPagerAdapter.getItemAt(i);
+                    if (f == null) {
+                        continue;
+                    }
+                }*/
+
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int i) {
+            }
+        });
     }
 
-
-    void updateRecyclerView(List<Path> paths) {
-        this.covoitAdapter.setPaths(paths);
-    }
 
     @Override
     public void onRefresh() {
         //TODO
-//        this.swipeLayout.setRefreshing(false);
+//        this.rootView.setRefreshing(false);
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                swipeLayout.setRefreshing(false);
+//                rootView.setRefreshing(false);
             }
         }, 5000);
     }
@@ -110,4 +140,6 @@ public class CovoitFragment extends Fragment implements SwipeRefreshLayout.OnRef
 
         return paths;
     }
+
+
 }

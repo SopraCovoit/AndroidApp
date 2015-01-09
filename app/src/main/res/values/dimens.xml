@@ -24,4 +24,6 @@
     <dimen name="material_header_height">48dp</dimen>
     <dimen name="material_list_two_item_text_padding">20dp</dimen>
     <dimen name="material_list_text_margin">72dp</dimen>
+    <dimen name="tab_height">48dp</dimen>
+
 </resources>
