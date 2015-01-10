@@ -20,24 +20,32 @@ import android.content.ContentValues;
 
 import com.google.gson.Gson;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import wtf.sur.original.puissante.rapide.automobile.sopracovoit.data.CovoitContract;
 
 /**
  * User class
  */
 public class User {
-    private final int id;
+    private int id;
     private String name;
     private String surname;
     private String mail;
     private String phone;
     private boolean isDriver;
+    private String password;
 
     private Workplace workplace;
     private String token;
+    private List<Path> path = new ArrayList<>();
 
     public User(int id) {
         this.id = id;
+    }
+
+    public User() {
     }
 
     public int getId() {
@@ -111,5 +119,21 @@ public class User {
         if (workplace != null)
             cv.put(CovoitContract.UserEntry.COLUMN_WORKPLACE_ID, workplace.getId());
         return cv;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public List<Path> getPath() {
+        return path;
+    }
+
+    public void addPath(Path path) {
+        this.path.add(path);
     }
 }

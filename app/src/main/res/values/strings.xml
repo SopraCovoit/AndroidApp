@@ -13,7 +13,7 @@
   ~    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
   ~    See the License for the specific language governing permissions and
   ~    limitations under the License.
--->
+  -->
 <resources>
 
     <string name="app_name">SopraCovoit</string>
@@ -40,7 +40,7 @@
     <string name="return_hint">Retour</string>
     <string name="ok">Ok</string>
     <string name="title_info">Informations</string>
-    <string name="action_register">Register</string>
+    <string name="action_register">OK</string>
     <string name="title_around">Around you</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="distance">%1$s m</string>

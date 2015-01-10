@@ -19,7 +19,10 @@ package wtf.sur.original.puissante.rapide.automobile.sopracovoit.sync;
 
 import java.util.List;
 
+import retrofit.Callback;
+import retrofit.http.Body;
 import retrofit.http.GET;
+import retrofit.http.POST;
 import wtf.sur.original.puissante.rapide.automobile.sopracovoit.model.User;
 import wtf.sur.original.puissante.rapide.automobile.sopracovoit.model.Workplace;
 
@@ -29,4 +32,7 @@ public interface CovoitServerService {
 
     @GET("/connexion.json")
     User connexion();
+
+    @POST("/newuser.php")
+    User createUser(@Body User user);
 }

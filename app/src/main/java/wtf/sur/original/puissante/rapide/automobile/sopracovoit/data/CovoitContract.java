@@ -91,6 +91,7 @@ public class CovoitContract {
         public static final String COLUMN_LON = "lon";
         public static final String COLUMN_DIRECTION = "direction";
         public static final String COLUMN_USER_ID = "user_id";
+        public static final String COLUMN_WORKPLACE_ID = "workplace_id";
 
         public static Uri buildUri(long id) {
             return ContentUris.withAppendedId(CONTENT_URI, id);

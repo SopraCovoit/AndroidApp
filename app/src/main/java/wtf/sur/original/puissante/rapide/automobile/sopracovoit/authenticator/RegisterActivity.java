@@ -17,28 +17,52 @@
 package wtf.sur.original.puissante.rapide.automobile.sopracovoit.authenticator;
 
 
+import android.accounts.AccountManager;
 import android.app.Activity;
 import android.app.LoaderManager;
 import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
+import android.location.Address;
+import android.location.Geocoder;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v7.widget.SwitchCompat;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.AutoCompleteTextView;
+import android.widget.EditText;
 import android.widget.SimpleCursorAdapter;
 import android.widget.Spinner;
+import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.IOException;
+import java.net.PasswordAuthentication;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.List;
+
+import retrofit.RestAdapter;
 import wtf.sur.original.puissante.rapide.automobile.sopracovoit.BaseActivity;
 import wtf.sur.original.puissante.rapide.automobile.sopracovoit.R;
 import wtf.sur.original.puissante.rapide.automobile.sopracovoit.data.CovoitContract;
+import wtf.sur.original.puissante.rapide.automobile.sopracovoit.model.Path;
+import wtf.sur.original.puissante.rapide.automobile.sopracovoit.model.User;
+import wtf.sur.original.puissante.rapide.automobile.sopracovoit.model.Workplace;
+import wtf.sur.original.puissante.rapide.automobile.sopracovoit.sync.CovoitServerService;
+import wtf.sur.original.puissante.rapide.automobile.sopracovoit.utils.PasswordHash;
+import wtf.sur.original.puissante.rapide.automobile.sopracovoit.utils.PlacesAutoCompleteAdapter;
 
-public class RegisterActivity extends BaseActivity implements LoaderManager.LoaderCallbacks<Cursor> {
+public class RegisterActivity extends BaseActivity implements LoaderManager.LoaderCallbacks<Cursor>, AdapterView.OnItemClickListener {
     private String mAccountType;
     private static final int WORKPLACE_LOADER = 0;
     private SimpleCursorAdapter mWorkplaceAdapter;
@@ -56,6 +80,11 @@ public class RegisterActivity extends BaseActivity implements LoaderManager.Load
         mWorkplaceSpinner.setEnabled(false);
         mWorkplaceAdapter = new SimpleCursorAdapter(this, R.layout.simple_text_view, null, new String[]{CovoitContract.WorkplaceEntry.COLUMN_NAME}, new int[]{R.id.textView}, 0);
         mWorkplaceSpinner.setAdapter(mWorkplaceAdapter);
+
+        AutoCompleteTextView autoCompView = (AutoCompleteTextView) findViewById(R.id.city);
+        autoCompView.setAdapter(new PlacesAutoCompleteAdapter(this, R.layout.list_item));
+        autoCompView.setOnItemClickListener(this);
+
     }
 
     @Override
@@ -68,19 +97,96 @@ public class RegisterActivity extends BaseActivity implements LoaderManager.Load
         new AsyncTask<String, Void, Intent>() {
 
             String name = ((TextView) findViewById(R.id.name)).getText().toString().trim();
+            String surname = ((TextView) findViewById(R.id.surname)).getText().toString().trim();
+            String mail = ((TextView) findViewById(R.id.email)).getText().toString().trim();
+            String pass = PasswordHash.getHashSHA1(((TextView) findViewById(R.id.password)).getText().toString().trim());
+            String phone = ((TextView) findViewById(R.id.phone)).getText().toString().trim();
+            String city = ((TextView) findViewById(R.id.city)).getText().toString().trim();
+            String departureHour = ((EditText) findViewById(R.id.departure_hour)).getText().toString().trim();
+            String returnHour = ((EditText) findViewById(R.id.return_hour)).getText().toString().trim();
+            Boolean driver = ((SwitchCompat) findViewById(R.id.driver)).isChecked();
+            final String accountType = getIntent().getStringExtra(AuthenticatorActivity.ARG_ACCOUNT_TYPE);
 
             @Override
             protected Intent doInBackground(String... params) {
+                SimpleDateFormat df = new SimpleDateFormat("HH:mm");
+                Calendar calendar = Calendar.getInstance();
+                Geocoder geocoder = new Geocoder(RegisterActivity.this);
 
-                String authtoken = null;
+                User register = new User();
+                register.setName(name);
+                register.setSurname(surname);
+                register.setMail(mail);
+                register.setPassword(pass);
+                register.setPhone(phone);
+                register.setDriver(driver);
+
+                Path path1 = new Path(Path.Direction.HOME);
+                Cursor c = (Cursor) mWorkplaceSpinner.getSelectedItem();
+                path1.setWorkplace(new Workplace(c.getInt(c.getColumnIndex(CovoitContract.WorkplaceEntry._ID))));
+                try {
+                    Date d = df.parse(departureHour);
+                    calendar.setTime(d);
+                    path1.setDepartureTime(calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE));
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                try {
+                    List<Address> list = geocoder.getFromLocationName(city, 1);
+                    Address address = list.get(0);
+                    path1.setLocation(address.getLatitude(), address.getLongitude());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                Path path2 = new Path(Path.Direction.WP);
+                path2.setWorkplace(path1.getWorkplace());
+                path2.setLocation(path1.getLocation());
+                try {
+                    Date d = df.parse(returnHour);
+                    calendar.setTime(d);
+                    path2.setDepartureTime(calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE));
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+
+                register.addPath(path1);
+                register.addPath(path2);
+
                 Bundle data = new Bundle();
                 try {
-                    /*authtoken = AccountGeneral.sServerAuthenticate.userSignUp(name, accountName, accountPassword, AccountGeneral.AUTHTOKEN_TYPE);
+                    RestAdapter restAdapter = new RestAdapter.Builder()
+                            .setEndpoint("http://etud.insa-toulouse.fr/~livet")
+                            .build();
 
-                    data.putString(AccountManager.KEY_ACCOUNT_NAME, accountName);
-                    data.putString(AccountManager.KEY_ACCOUNT_TYPE, mAccountType);
-                    data.putString(AccountManager.KEY_AUTHTOKEN, authtoken);
-                    data.putString(AuthenticatorActivity.PARAM_USER_PASS, accountPassword);*/
+                    CovoitServerService service = restAdapter.create(CovoitServerService.class);
+
+                    User newUser = service.createUser(register);
+
+                    // Check if workplace exists
+                    c = getContentResolver().query(CovoitContract.WorkplaceEntry.buildUri(newUser.getWorkplace().getId()), null, null, null, null);
+                    if (c.getCount() == 0) {
+                        getContentResolver().insert(CovoitContract.WorkplaceEntry.CONTENT_URI, newUser.getWorkplace().getContentValues());
+                    } else {
+                        getContentResolver().update(CovoitContract.WorkplaceEntry.CONTENT_URI,
+                                newUser.getWorkplace().getContentValues(),
+                                CovoitContract.WorkplaceEntry._ID + " = " + newUser.getWorkplace().getId(), null);
+                    }
+
+                    // Check if user exists
+                    c = getContentResolver().query(CovoitContract.UserEntry.buildUri(newUser.getId()), null, null, null, null);
+                    if (c.getCount() == 0) {
+                        getContentResolver().insert(CovoitContract.UserEntry.CONTENT_URI, newUser.getContentValues());
+                    } else {
+                        getContentResolver().update(CovoitContract.UserEntry.CONTENT_URI,
+                                newUser.getContentValues(),
+                                CovoitContract.UserEntry._ID + " = " + newUser.getId(), null);
+                    }
+
+                    data.putString(AccountManager.KEY_ACCOUNT_NAME, newUser.getMail());
+                    data.putString(AccountManager.KEY_ACCOUNT_TYPE, accountType);
+                    data.putString(AccountManager.KEY_AUTHTOKEN, newUser.getToken());
+                    data.putString(AuthenticatorActivity.PARAM_USER_PASS, newUser.getPassword());
                 } catch (Exception e) {
                     data.putString(AuthenticatorActivity.KEY_ERROR_MESSAGE, e.getMessage());
                 }
@@ -155,5 +261,11 @@ public class RegisterActivity extends BaseActivity implements LoaderManager.Load
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
         mWorkplaceAdapter.swapCursor(null);
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        String str = (String) parent.getItemAtPosition(position);
+        Toast.makeText(this, str, Toast.LENGTH_SHORT).show();
     }
 }

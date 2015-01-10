@@ -20,16 +20,15 @@ package wtf.sur.original.puissante.rapide.automobile.sopracovoit.authenticator;
 import android.content.Context;
 import android.database.Cursor;
 
+import retrofit.Callback;
 import retrofit.RestAdapter;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
 import wtf.sur.original.puissante.rapide.automobile.sopracovoit.data.CovoitContract;
 import wtf.sur.original.puissante.rapide.automobile.sopracovoit.model.User;
 import wtf.sur.original.puissante.rapide.automobile.sopracovoit.sync.CovoitServerService;
 
 public class ServerAuthenticate {
-    public String userSignUp(String name, String email, String pass) {
-        //TODO make request from server
-        return "token";
-    }
 
     public User userSignIn(Context context, String email, String pass) {
         RestAdapter restAdapter = new RestAdapter.Builder()

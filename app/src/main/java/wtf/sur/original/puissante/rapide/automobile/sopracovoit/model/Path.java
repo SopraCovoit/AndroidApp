@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Jérémie Boutoille, Jules Cantegril, Hugo Djemaa, Mickael Goubin, David Livet
+ * Copyright 2015 Jérémie Boutoille, Jules Cantegril, Hugo Djemaa, Mickael Goubin, David Livet
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -18,6 +18,10 @@ package wtf.sur.original.puissante.rapide.automobile.sopracovoit.model;
 
 import android.content.ContentValues;
 
+import com.google.gson.Gson;
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
@@ -27,21 +31,23 @@ import wtf.sur.original.puissante.rapide.automobile.sopracovoit.data.CovoitContr
  * Path class
  */
 public class Path {
-
-
     public static enum Direction {HOME, WP}
 
     private int id;
     private Location location;
-    private final Calendar calendar;
     private final Direction direction;
     private User user;
     private int distance;
+    private Workplace workplace;
+    private int hour, minute;
 
     public Path(int id, Direction direction) {
+        this(direction);
         this.id = id;
+    }
+
+    public Path(Direction direction) {
         this.direction = direction;
-        this.calendar = new GregorianCalendar();
     }
 
     public int getId() {
@@ -60,17 +66,18 @@ public class Path {
         this.location = new Location(lat, lon);
     }
 
+
     public int getDepartureHour() {
-        return calendar.get(Calendar.HOUR);
+        return hour;
     }
 
     public int getDepartureMinute() {
-        return calendar.get(Calendar.MINUTE);
+        return minute;
     }
 
-    public void setDepartureTime(int hour, int min) {
-        this.calendar.set(Calendar.HOUR, hour);
-        this.calendar.set(Calendar.MINUTE, min);
+    public void setDepartureTime(int hour, int minute) {
+        this.hour = hour;
+        this.minute = minute;
     }
 
     public Direction getDirection() {
@@ -92,6 +99,16 @@ public class Path {
     public void setDistance(int distance) {
         this.distance = distance;
     }
+
+
+    public Workplace getWorkplace() {
+        return workplace;
+    }
+
+    public void setWorkplace(Workplace workplace) {
+        this.workplace = workplace;
+    }
+
     public ContentValues getContentValues() {
         ContentValues cv = new ContentValues();
         cv.put(CovoitContract.PathEntry._ID, this.getId());
@@ -102,6 +119,8 @@ public class Path {
         cv.put(CovoitContract.PathEntry.COLUMN_MIN, this.getDepartureMinute());
         if (this.getUser() != null)
             cv.put(CovoitContract.PathEntry.COLUMN_USER_ID, this.getUser().getId());
+        if (this.getWorkplace() != null)
+            cv.put(CovoitContract.PathEntry.COLUMN_WORKPLACE_ID, this.getWorkplace().getId());
         return cv;
     }
 
