@@ -17,11 +17,21 @@
 package wtf.sur.original.puissante.rapide.automobile.sopracovoit.covoit;
 
 
+import android.accounts.Account;
+import android.accounts.AccountManager;
+import android.accounts.AccountManagerCallback;
+import android.accounts.AccountManagerFuture;
+import android.content.BroadcastReceiver;
+import android.content.ContentResolver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,9 +40,12 @@ import android.widget.LinearLayout;
 import java.util.ArrayList;
 import java.util.List;
 
+import wtf.sur.original.puissante.rapide.automobile.sopracovoit.MainActivity;
 import wtf.sur.original.puissante.rapide.automobile.sopracovoit.R;
+import wtf.sur.original.puissante.rapide.automobile.sopracovoit.authenticator.AccountGeneral;
 import wtf.sur.original.puissante.rapide.automobile.sopracovoit.model.Path;
 import wtf.sur.original.puissante.rapide.automobile.sopracovoit.model.User;
+import wtf.sur.original.puissante.rapide.automobile.sopracovoit.sync.PathSyncAdapter;
 import wtf.sur.original.puissante.rapide.automobile.sopracovoit.utils.SlidingTabLayout;
 
 
@@ -42,6 +55,7 @@ import wtf.sur.original.puissante.rapide.automobile.sopracovoit.utils.SlidingTab
 public class CovoitFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
 
 
+    public static final String SYNC_FINISHED = "sync_finished";
     private LinearLayout rootView;
     private SlidingTabLayout mSlidingTabLayout;
     private ViewPager mPager;
@@ -51,6 +65,17 @@ public class CovoitFragment extends Fragment implements SwipeRefreshLayout.OnRef
         // Required empty public constructor
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        getActivity().registerReceiver(syncFinishedReceiver, new IntentFilter(SYNC_FINISHED));
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        getActivity().unregisterReceiver(syncFinishedReceiver);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -100,16 +125,25 @@ public class CovoitFragment extends Fragment implements SwipeRefreshLayout.OnRef
 
     @Override
     public void onRefresh() {
-        //TODO
-//        this.rootView.setRefreshing(false);
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-//                rootView.setRefreshing(false);
-            }
-        }, 5000);
+        Log.d("Sync", "Begin");
+        Account a = ((MainActivity) getActivity()).getConnectedAccount();
+        if (a != null) {
+            Bundle bundle = new Bundle();
+            bundle.putBoolean(ContentResolver.SYNC_EXTRAS_EXPEDITED, true);
+            bundle.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);
+            ContentResolver.requestSync(a, AccountGeneral.ACCOUNT_TYPE, bundle);
+        }
     }
 
+    private BroadcastReceiver syncFinishedReceiver = new BroadcastReceiver() {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            //TODO sync finished
+            //CovoitFragment.this.rootView.setRefreshing(false);
+            Log.d("Sync", "Finished");
+        }
+    };
 
     public List<Path> testData() {
         List<Path> paths = new ArrayList<>();

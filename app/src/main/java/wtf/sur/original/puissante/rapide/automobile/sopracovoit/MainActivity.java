@@ -16,6 +16,7 @@
 
 package wtf.sur.original.puissante.rapide.automobile.sopracovoit;
 
+import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.accounts.AccountManagerCallback;
 import android.accounts.AccountManagerFuture;
@@ -50,6 +51,7 @@ public class MainActivity extends BaseActivity implements LoaderManager.LoaderCa
     private DrawerLayout drawer_container;
     private DrawerManager drawerManager;
     private AccountManager mAccountManager;
+    private Account mConnectedAccount;
     private static final int CURRENT_USER_LOADER = 1;
 
     @Override protected void onCreate(Bundle savedInstanceState) {
@@ -65,7 +67,11 @@ public class MainActivity extends BaseActivity implements LoaderManager.LoaderCa
                     public void run(AccountManagerFuture<Bundle> future) {
                         try {
                             Log.d("Toto", "mAccountManager ok init loader");
-                            getLoaderManager().initLoader(MainActivity.CURRENT_USER_LOADER, future.getResult(), MainActivity.this);
+                            Bundle b = future.getResult();
+                            getLoaderManager().initLoader(MainActivity.CURRENT_USER_LOADER, b, MainActivity.this);
+                            if (!b.getString(AccountManager.KEY_AUTHTOKEN).equals("")) {
+                                mConnectedAccount = new Account(b.getString(AccountManager.KEY_ACCOUNT_NAME), AccountGeneral.ACCOUNT_TYPE);
+                            }
                         } catch (OperationCanceledException | IOException | AuthenticatorException e) {
                             e.printStackTrace();
                             //TODO manage exception
@@ -142,6 +148,10 @@ public class MainActivity extends BaseActivity implements LoaderManager.LoaderCa
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
         drawerManager.refreshUser("", "", "");
+    }
+
+    public Account getConnectedAccount() {
+        return mConnectedAccount;
     }
 
     /**

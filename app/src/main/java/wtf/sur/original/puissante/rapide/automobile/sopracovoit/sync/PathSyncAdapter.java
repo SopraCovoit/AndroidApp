@@ -25,6 +25,7 @@ import android.content.AbstractThreadedSyncAdapter;
 import android.content.ContentProviderClient;
 import android.content.ContentResolver;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SyncResult;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -34,6 +35,7 @@ import java.io.IOException;
 
 import wtf.sur.original.puissante.rapide.automobile.sopracovoit.R;
 import wtf.sur.original.puissante.rapide.automobile.sopracovoit.authenticator.AccountGeneral;
+import wtf.sur.original.puissante.rapide.automobile.sopracovoit.covoit.CovoitFragment;
 import wtf.sur.original.puissante.rapide.automobile.sopracovoit.data.CovoitContract;
 
 public class PathSyncAdapter extends AbstractThreadedSyncAdapter {
@@ -63,6 +65,9 @@ public class PathSyncAdapter extends AbstractThreadedSyncAdapter {
                 double _lon = cursor.getDouble(cursor.getColumnIndex(CovoitContract.PathEntry.COLUMN_LON));
                 Log.d(TAG, "Token : " + authToken + ", user : " + _userId + ", workplace : " + _workplaceId + ", lat : " + _lat + ", lon : " + _lon);
 
+                Intent i = new Intent(CovoitFragment.SYNC_FINISHED);
+                getContext().sendBroadcast(i);
+
             } else {
                 // No user for account
             }
@@ -75,10 +80,4 @@ public class PathSyncAdapter extends AbstractThreadedSyncAdapter {
         }
     }
 
-    public static void syncImmediately(Account a) {
-        Bundle bundle = new Bundle();
-        bundle.putBoolean(ContentResolver.SYNC_EXTRAS_EXPEDITED, true);
-        bundle.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);
-        ContentResolver.requestSync(a, AccountGeneral.ACCOUNT_TYPE, bundle);
-    }
 }
