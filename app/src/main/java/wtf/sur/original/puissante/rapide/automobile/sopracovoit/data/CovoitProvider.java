@@ -23,6 +23,7 @@ import android.content.UriMatcher;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteConstraintException;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 
@@ -40,6 +41,20 @@ public class CovoitProvider extends ContentProvider {
     private static final int USER_ID = 201;
     private static final int PATH = 300;
     private static final int PATH_ID = 301;
+    private static final int PATH_EMAIL = 302;
+
+    private static final SQLiteQueryBuilder sPathByEmailUserQueryBuilder;
+
+    static {
+        sPathByEmailUserQueryBuilder = new SQLiteQueryBuilder();
+        sPathByEmailUserQueryBuilder.setTables(
+                CovoitContract.PathEntry.TABLE_NAME + " INNER JOIN " +
+                        CovoitContract.UserEntry.TABLE_NAME +
+                        " ON " + CovoitContract.PathEntry.TABLE_NAME +
+                        "." + CovoitContract.PathEntry.COLUMN_USER_ID +
+                        " = " + CovoitContract.UserEntry.TABLE_NAME +
+                        "." + CovoitContract.UserEntry._ID);
+    }
 
     private static UriMatcher buildUriMatcher() {
         final UriMatcher matcher = new UriMatcher(UriMatcher.NO_MATCH);
@@ -49,9 +64,24 @@ public class CovoitProvider extends ContentProvider {
         matcher.addURI(authority, CovoitContract.PATH_WORKPLACE + "/#", WORKPLACE_ID);
         matcher.addURI(authority, CovoitContract.PATH_PATH, PATH);
         matcher.addURI(authority, CovoitContract.PATH_PATH + "/#", PATH_ID);
+        matcher.addURI(authority, CovoitContract.PATH_PATH + "/*", PATH_EMAIL);
         matcher.addURI(authority, CovoitContract.PATH_USER, USER);
         matcher.addURI(authority, CovoitContract.PATH_USER + "/#", USER_ID);
         return matcher;
+    }
+
+    private Cursor getPathByEmail(
+            Uri uri, String[] projection, String sortOrder) {
+        String email = CovoitContract.PathEntry.getEmailFromUri(uri);
+
+        return sPathByEmailUserQueryBuilder.query(mOpenHelper.getReadableDatabase(),
+                projection,
+                CovoitContract.UserEntry.TABLE_NAME + "." + CovoitContract.UserEntry.COLUMN_MAIL + " = ? ",
+                new String[]{email},
+                null,
+                null,
+                sortOrder
+        );
     }
 
     @Override
@@ -142,6 +172,11 @@ public class CovoitProvider extends ContentProvider {
                 );
                 break;
             }
+            // "path/*"
+            case PATH_EMAIL: {
+                retCursor = getPathByEmail(uri, projection, sortOrder);
+                break;
+            }
 
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
@@ -159,7 +194,13 @@ public class CovoitProvider extends ContentProvider {
         switch (match) {
             case WORKPLACE:
                 return CovoitContract.WorkplaceEntry.CONTENT_TYPE;
+            case WORKPLACE_ID:
+                return CovoitContract.WorkplaceEntry.CONTENT_ITEM_TYPE;
             case PATH:
+                return CovoitContract.PathEntry.CONTENT_TYPE;
+            case PATH_ID:
+                return CovoitContract.PathEntry.CONTENT_ITEM_TYPE;
+            case PATH_EMAIL:
                 return CovoitContract.PathEntry.CONTENT_TYPE;
             case USER:
                 return CovoitContract.UserEntry.CONTENT_TYPE;

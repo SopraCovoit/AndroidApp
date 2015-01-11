@@ -96,5 +96,13 @@ public class CovoitContract {
         public static Uri buildUri(long id) {
             return ContentUris.withAppendedId(CONTENT_URI, id);
         }
+
+        public static Uri buildEmail(String email) {
+            return CONTENT_URI.buildUpon().appendPath(email).build();
+        }
+
+        public static String getEmailFromUri(Uri uri) {
+            return uri.getPathSegments().get(1);
+        }
     }
 }

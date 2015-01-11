@@ -55,18 +55,14 @@ public class PathSyncAdapter extends AbstractThreadedSyncAdapter {
 
         try {
             String authToken = mAccountManager.blockingGetAuthToken(account, AccountGeneral.AUTHTOKEN_TYPE, true);
-            Cursor cUser = mContentResolver.query(CovoitContract.UserEntry.CONTENT_URI, null, CovoitContract.UserEntry.COLUMN_MAIL + " = '" + account.name + "'", null, null);
-            if (cUser.moveToFirst()) {
-                Integer _userId = cUser.getInt(cUser.getColumnIndex(CovoitContract.UserEntry._ID));
-                Integer _workplaceId = cUser.getInt(cUser.getColumnIndex(CovoitContract.UserEntry.COLUMN_WORKPLACE_ID));
-                Cursor cPath = mContentResolver.query(CovoitContract.PathEntry.CONTENT_URI, null, CovoitContract.PathEntry.COLUMN_USER_ID + " = '" + _userId + "' AND " + CovoitContract.PathEntry.COLUMN_WORKPLACE_ID + " = '" + _workplaceId + "'", null, null);
-                if (cPath.moveToFirst()) {
-                    double _lat = cPath.getDouble(cPath.getColumnIndex(CovoitContract.PathEntry.COLUMN_LAT));
-                    double _lon = cPath.getDouble(cPath.getColumnIndex(CovoitContract.PathEntry.COLUMN_LON));
-                    Log.d(TAG, "Token : " + authToken + ", user : " + _userId + ", workplace : " + _workplaceId + ", lat : " + _lat + ", lon : " + _lon);
-                } else {
-                    // No path for user
-                }
+            Cursor cursor = mContentResolver.query(CovoitContract.PathEntry.buildEmail(account.name), null, null, null, null);
+            if (cursor.moveToFirst()) {
+                int _userId = cursor.getInt(cursor.getColumnIndex(CovoitContract.UserEntry._ID));
+                int _workplaceId = cursor.getInt(cursor.getColumnIndex(CovoitContract.UserEntry.COLUMN_WORKPLACE_ID));
+                double _lat = cursor.getDouble(cursor.getColumnIndex(CovoitContract.PathEntry.COLUMN_LAT));
+                double _lon = cursor.getDouble(cursor.getColumnIndex(CovoitContract.PathEntry.COLUMN_LON));
+                Log.d(TAG, "Token : " + authToken + ", user : " + _userId + ", workplace : " + _workplaceId + ", lat : " + _lat + ", lon : " + _lon);
+
             } else {
                 // No user for account
             }
