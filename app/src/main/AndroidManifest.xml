@@ -42,7 +42,8 @@
         </activity>
         <activity
             android:name=".authenticator.AuthenticatorActivity"
-            android:label="Log in" />
+            android:label="Log in"
+            android:windowSoftInputMode="stateVisible" />
         <activity
             android:name=".authenticator.RegisterActivity"
             android:label="Register" />
