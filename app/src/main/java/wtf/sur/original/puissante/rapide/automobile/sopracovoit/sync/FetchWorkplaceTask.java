@@ -28,6 +28,7 @@ import java.util.List;
 
 import retrofit.RestAdapter;
 import wtf.sur.original.puissante.rapide.automobile.sopracovoit.data.CovoitContract;
+import wtf.sur.original.puissante.rapide.automobile.sopracovoit.data.CovoitProviderHelper;
 import wtf.sur.original.puissante.rapide.automobile.sopracovoit.model.Location;
 import wtf.sur.original.puissante.rapide.automobile.sopracovoit.model.Workplace;
 
@@ -41,20 +42,23 @@ public class FetchWorkplaceTask extends AsyncTask<String, Void, Void> {
 
     @Override
     protected Void doInBackground(String... params) {
-        RestAdapter restAdapter = new RestAdapter.Builder()
-                .setEndpoint("http://etud.insa-toulouse.fr/~livet")
-                .build();
+        List<Workplace> workplaces = CovoitServerAccessor.listWorkplace();
 
-        CovoitServerService service = restAdapter.create(CovoitServerService.class);
-        List<Workplace> workplaces = service.listWorkplaces();
-        ContentValues cv[] = new ContentValues[workplaces.size()];
+        StringBuilder ids = new StringBuilder();
+        ids.append('(');
         int i = 0;
         for (Workplace w : workplaces) {
-            cv[i] = w.getContentValues();
+            ids.append(w.getId());
+            if (i != workplaces.size() - 1)
+                ids.append(',');
             i++;
+
+            CovoitProviderHelper.insertOrUpdateWorkplace(mContext.getContentResolver(), w);
         }
-        mContext.getContentResolver().delete(CovoitContract.WorkplaceEntry.CONTENT_URI, null, null);
-        mContext.getContentResolver().bulkInsert(CovoitContract.WorkplaceEntry.CONTENT_URI, cv);
+        ids.append(')');
+
+        // Delete old workplace
+        mContext.getContentResolver().delete(CovoitContract.WorkplaceEntry.CONTENT_URI, CovoitContract.WorkplaceEntry._ID + " NOT IN " + ids.toString(), null);
 
         return null;
     }

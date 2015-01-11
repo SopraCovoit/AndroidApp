@@ -61,15 +61,18 @@ import wtf.sur.original.puissante.rapide.automobile.sopracovoit.data.CovoitContr
 import wtf.sur.original.puissante.rapide.automobile.sopracovoit.model.Path;
 import wtf.sur.original.puissante.rapide.automobile.sopracovoit.model.User;
 import wtf.sur.original.puissante.rapide.automobile.sopracovoit.model.Workplace;
+import wtf.sur.original.puissante.rapide.automobile.sopracovoit.sync.CovoitServerAccessor;
 import wtf.sur.original.puissante.rapide.automobile.sopracovoit.sync.CovoitServerService;
 import wtf.sur.original.puissante.rapide.automobile.sopracovoit.utils.PasswordHash;
 import wtf.sur.original.puissante.rapide.automobile.sopracovoit.utils.PlacesAutoCompleteAdapter;
+import wtf.sur.original.puissante.rapide.automobile.sopracovoit.utils.ValidatorInput;
 
 public class RegisterActivity extends BaseActivity implements LoaderManager.LoaderCallbacks<Cursor>, AdapterView.OnItemClickListener {
     private String mAccountType;
     private static final int WORKPLACE_LOADER = 0;
     private SimpleCursorAdapter mWorkplaceAdapter;
     private Spinner mWorkplaceSpinner;
+    private ValidatorInput validator;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -119,6 +122,8 @@ public class RegisterActivity extends BaseActivity implements LoaderManager.Load
                 }
             }
         });
+
+        validator = new ValidatorInput(this);
     }
 
     @Override
@@ -128,118 +133,94 @@ public class RegisterActivity extends BaseActivity implements LoaderManager.Load
 
     private void createAccount() {
 
-        new AsyncTask<String, Void, Intent>() {
+        final TextView name = ((TextView) findViewById(R.id.name));
+        final TextView surname = ((TextView) findViewById(R.id.surname));
+        final TextView mail = ((TextView) findViewById(R.id.email));
+        final TextView pass = ((TextView) findViewById(R.id.password));
+        final TextView phone = ((TextView) findViewById(R.id.phone));
+        final TextView city = ((TextView) findViewById(R.id.city));
+        final TextView departureHour = ((EditText) findViewById(R.id.departure_hour));
+        final TextView returnHour = ((EditText) findViewById(R.id.return_hour));
+        final Boolean driver = ((SwitchCompat) findViewById(R.id.driver)).isChecked();
 
-            String name = ((TextView) findViewById(R.id.name)).getText().toString().trim();
-            String surname = ((TextView) findViewById(R.id.surname)).getText().toString().trim();
-            String mail = ((TextView) findViewById(R.id.email)).getText().toString().trim();
-            String pass = PasswordHash.getHashSHA1(((TextView) findViewById(R.id.password)).getText().toString().trim());
-            String phone = ((TextView) findViewById(R.id.phone)).getText().toString().trim();
-            String city = ((TextView) findViewById(R.id.city)).getText().toString().trim();
-            String departureHour = ((EditText) findViewById(R.id.departure_hour)).getText().toString().trim();
-            String returnHour = ((EditText) findViewById(R.id.return_hour)).getText().toString().trim();
-            Boolean driver = ((SwitchCompat) findViewById(R.id.driver)).isChecked();
-            final String accountType = getIntent().getStringExtra(AuthenticatorActivity.ARG_ACCOUNT_TYPE);
+        boolean valid = validator.fieldRequired(name);
+        valid &= validator.fieldRequired(surname);
+        valid &= validator.fieldMail(mail);
+        valid &= validator.fieldRequired(pass);
+        valid &= validator.fieldPhone(phone);
+        valid &= validator.fieldRequired(city);
+        valid &= validator.fieldTime(departureHour);
+        valid &= validator.fieldTime(returnHour);
 
-            @Override
-            protected Intent doInBackground(String... params) {
-                SimpleDateFormat df = new SimpleDateFormat("HH:mm");
-                Calendar calendar = Calendar.getInstance();
-                Geocoder geocoder = new Geocoder(RegisterActivity.this);
+        if (valid) {
+            new AsyncTask<String, Void, Intent>() {
 
-                User register = new User();
-                register.setName(name);
-                register.setSurname(surname);
-                register.setMail(mail);
-                register.setPassword(pass);
-                register.setPhone(phone);
-                register.setDriver(driver);
 
-                Path path1 = new Path(Path.Direction.HOME);
-                Cursor c = (Cursor) mWorkplaceSpinner.getSelectedItem();
-                path1.setWorkplace(new Workplace(c.getInt(c.getColumnIndex(CovoitContract.WorkplaceEntry._ID))));
-                try {
-                    Date d = df.parse(departureHour);
-                    calendar.setTime(d);
-                    path1.setDepartureTime(calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE));
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
-                try {
-                    List<Address> list = geocoder.getFromLocationName(city, 1);
-                    Address address = list.get(0);
-                    path1.setLocation(address.getLatitude(), address.getLongitude());
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                @Override
+                protected Intent doInBackground(String... params) {
+                    SimpleDateFormat df = new SimpleDateFormat("HH:mm");
+                    Calendar calendar = Calendar.getInstance();
+                    Geocoder geocoder = new Geocoder(RegisterActivity.this);
 
-                Path path2 = new Path(Path.Direction.WP);
-                path2.setWorkplace(path1.getWorkplace());
-                path2.setLocation(path1.getLocation());
-                try {
-                    Date d = df.parse(returnHour);
-                    calendar.setTime(d);
-                    path2.setDepartureTime(calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE));
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
+                    // Set user info
+                    User register = new User();
+                    register.setName(name.getText().toString().trim());
+                    register.setSurname(surname.getText().toString().trim());
+                    register.setMail(mail.getText().toString().trim());
+                    register.setPassword(PasswordHash.getHashSHA1(pass.getText().toString().trim()));
+                    register.setPhone(phone.getText().toString().trim());
+                    register.setDriver(driver);
 
-                register.addPath(path1);
-                register.addPath(path2);
-
-                Bundle data = new Bundle();
-                try {
-                    RestAdapter restAdapter = new RestAdapter.Builder()
-                            .setEndpoint("http://etud.insa-toulouse.fr/~livet")
-                            .build();
-
-                    CovoitServerService service = restAdapter.create(CovoitServerService.class);
-
-                    User newUser = service.createUser(register);
-
-                    // Check if workplace exists
-                    c = getContentResolver().query(CovoitContract.WorkplaceEntry.buildUri(newUser.getWorkplace().getId()), null, null, null, null);
-                    if (c.getCount() == 0) {
-                        getContentResolver().insert(CovoitContract.WorkplaceEntry.CONTENT_URI, newUser.getWorkplace().getContentValues());
-                    } else {
-                        getContentResolver().update(CovoitContract.WorkplaceEntry.CONTENT_URI,
-                                newUser.getWorkplace().getContentValues(),
-                                CovoitContract.WorkplaceEntry._ID + " = " + newUser.getWorkplace().getId(), null);
+                    Path path1 = new Path(Path.Direction.HOME);
+                    Cursor c = (Cursor) mWorkplaceSpinner.getSelectedItem();
+                    path1.setWorkplace(new Workplace(c.getInt(c.getColumnIndex(CovoitContract.WorkplaceEntry._ID))));
+                    try {
+                        Date d = df.parse(departureHour.getText().toString().trim());
+                        calendar.setTime(d);
+                        path1.setDepartureTime(calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE));
+                    } catch (ParseException ignored) {
+                    } // Checked before
+                    try {
+                        List<Address> list = geocoder.getFromLocationName(city.getText().toString().trim(), 1);
+                        Address address = list.get(0);
+                        path1.setLocation(address.getLatitude(), address.getLongitude());
+                    } catch (Exception e) {
+                        final Intent res = new Intent();
+                        res.putExtra(AuthenticatorActivity.KEY_ERROR_MESSAGE, "Impossible to find location");
+                        return res;
                     }
 
-                    // Check if user exists
-                    c = getContentResolver().query(CovoitContract.UserEntry.buildUri(newUser.getId()), null, null, null, null);
-                    if (c.getCount() == 0) {
-                        getContentResolver().insert(CovoitContract.UserEntry.CONTENT_URI, newUser.getContentValues());
-                    } else {
-                        getContentResolver().update(CovoitContract.UserEntry.CONTENT_URI,
-                                newUser.getContentValues(),
-                                CovoitContract.UserEntry._ID + " = " + newUser.getId(), null);
+                    Path path2 = new Path(Path.Direction.WP);
+                    path2.setWorkplace(path1.getWorkplace());
+                    path2.setLocation(path1.getLocation());
+                    try {
+                        Date d = df.parse(returnHour.getText().toString().trim());
+                        calendar.setTime(d);
+                        path2.setDepartureTime(calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE));
+                    } catch (ParseException e) {
+                        e.printStackTrace();
                     }
 
-                    data.putString(AccountManager.KEY_ACCOUNT_NAME, newUser.getMail());
-                    data.putString(AccountManager.KEY_ACCOUNT_TYPE, accountType);
-                    data.putString(AccountManager.KEY_AUTHTOKEN, newUser.getToken());
-                    data.putString(AuthenticatorActivity.PARAM_USER_PASS, newUser.getPassword());
-                } catch (Exception e) {
-                    data.putString(AuthenticatorActivity.KEY_ERROR_MESSAGE, e.getMessage());
+                    register.addPath(path1);
+                    register.addPath(path2);
+
+                    // Create intent
+                    final Intent res = new Intent();
+                    res.putExtras(ServerAuthenticate.userSignUp(RegisterActivity.this, register));
+                    return res;
                 }
 
-                final Intent res = new Intent();
-                res.putExtras(data);
-                return res;
-            }
-
-            @Override
-            protected void onPostExecute(Intent intent) {
-                if (intent.hasExtra(AuthenticatorActivity.KEY_ERROR_MESSAGE)) {
-                    Toast.makeText(getBaseContext(), intent.getStringExtra(AuthenticatorActivity.KEY_ERROR_MESSAGE), Toast.LENGTH_SHORT).show();
-                } else {
-                    setResult(RESULT_OK, intent);
-                    finish();
+                @Override
+                protected void onPostExecute(Intent intent) {
+                    if (intent.hasExtra(AuthenticatorActivity.KEY_ERROR_MESSAGE)) {
+                        Toast.makeText(getBaseContext(), intent.getStringExtra(AuthenticatorActivity.KEY_ERROR_MESSAGE), Toast.LENGTH_SHORT).show();
+                    } else {
+                        setResult(RESULT_OK, intent);
+                        finish();
+                    }
                 }
-            }
-        }.execute();
+            }.execute();
+        }
     }
 
     @Override
@@ -273,13 +254,13 @@ public class RegisterActivity extends BaseActivity implements LoaderManager.Load
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu_registration,menu);
+        inflater.inflate(R.menu.menu_registration, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch(item.getItemId()) {
+        switch (item.getItemId()) {
             case android.R.id.home:
                 finish();
                 return true;

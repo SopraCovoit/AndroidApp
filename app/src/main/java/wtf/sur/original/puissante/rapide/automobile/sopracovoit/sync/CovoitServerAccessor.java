@@ -16,23 +16,31 @@
 
 package wtf.sur.original.puissante.rapide.automobile.sopracovoit.sync;
 
-
 import java.util.List;
 
-import retrofit.Callback;
-import retrofit.http.Body;
-import retrofit.http.GET;
-import retrofit.http.POST;
+import retrofit.RestAdapter;
 import wtf.sur.original.puissante.rapide.automobile.sopracovoit.model.User;
 import wtf.sur.original.puissante.rapide.automobile.sopracovoit.model.Workplace;
 
-public interface CovoitServerService {
-    @GET("/workplace.json")
-    List<Workplace> listWorkplaces();
+public class CovoitServerAccessor {
 
-    @GET("/connexion.json")
-    User connection();
+    private static final String URL = "http://etud.insa-toulouse.fr/~livet";
+    private static final RestAdapter restAdapter = new RestAdapter.Builder()
+            .setEndpoint(URL)
+            .build();
 
-    @POST("/newuser.php")
-    User createUser(@Body User user);
+    public static List<Workplace> listWorkplace() {
+        CovoitServerService service = restAdapter.create(CovoitServerService.class);
+        return service.listWorkplaces();
+    }
+
+    public static User createUser(User add) {
+        CovoitServerService service = restAdapter.create(CovoitServerService.class);
+        return service.createUser(add);
+    }
+
+    public static User connection() {
+        CovoitServerService service = restAdapter.create(CovoitServerService.class);
+        return service.connection();
+    }
 }

@@ -17,49 +17,59 @@
 package wtf.sur.original.puissante.rapide.automobile.sopracovoit.authenticator;
 
 
+import android.accounts.AccountManager;
 import android.content.Context;
 import android.database.Cursor;
+import android.os.Bundle;
 
 import retrofit.Callback;
 import retrofit.RestAdapter;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 import wtf.sur.original.puissante.rapide.automobile.sopracovoit.data.CovoitContract;
+import wtf.sur.original.puissante.rapide.automobile.sopracovoit.data.CovoitProvider;
+import wtf.sur.original.puissante.rapide.automobile.sopracovoit.data.CovoitProviderHelper;
+import wtf.sur.original.puissante.rapide.automobile.sopracovoit.model.Path;
 import wtf.sur.original.puissante.rapide.automobile.sopracovoit.model.User;
+import wtf.sur.original.puissante.rapide.automobile.sopracovoit.sync.CovoitServerAccessor;
 import wtf.sur.original.puissante.rapide.automobile.sopracovoit.sync.CovoitServerService;
 
 public class ServerAuthenticate {
 
-    public User userSignIn(Context context, String email, String pass) {
-        RestAdapter restAdapter = new RestAdapter.Builder()
-                .setEndpoint("http://etud.insa-toulouse.fr/~livet")
-                .build();
+    public static Bundle userSignIn(Context context, User login) {
+        User u = CovoitServerAccessor.connection();
+        u.setPassword(login.getPassword());
+        return finishLogin(context, u);
+    }
 
-        CovoitServerService service = restAdapter.create(CovoitServerService.class);
-        User u = service.connexion();
+    public static Bundle userSignUp(Context context, User register) {
+        User newUser = CovoitServerAccessor.createUser(register);
+        newUser.setPassword(register.getPassword());
+        return finishLogin(context, newUser);
+    }
 
+    private static Bundle finishLogin(Context context, User u) {
         assert (u.getWorkplace() != null);
 
-        // Check if workplace exists
-        Cursor c = context.getContentResolver().query(CovoitContract.WorkplaceEntry.buildUri(u.getWorkplace().getId()), null, null, null, null);
-        if (c.getCount() == 0) {
-            context.getContentResolver().insert(CovoitContract.WorkplaceEntry.CONTENT_URI, u.getWorkplace().getContentValues());
-        } else {
-            context.getContentResolver().update(CovoitContract.WorkplaceEntry.CONTENT_URI,
-                    u.getWorkplace().getContentValues(),
-                    CovoitContract.WorkplaceEntry._ID + " = " + u.getWorkplace().getId(), null);
+        // Check if workplace exists or add
+        CovoitProviderHelper.insertOrUpdateWorkplace(context.getContentResolver(), u.getWorkplace());
+
+        // Check if user exists or add
+        CovoitProviderHelper.insertOrUpdateUser(context.getContentResolver(), u);
+
+        // Check if path exists or add
+        for (Path p : u.getPath()) {
+            p.setUser(u);
+            CovoitProviderHelper.insertOrUpdateWorkplace(context.getContentResolver(), p.getWorkplace());
+            CovoitProviderHelper.insertOrUpdatePath(context.getContentResolver(), p);
         }
 
-        // Check if user exists
-        c = context.getContentResolver().query(CovoitContract.UserEntry.buildUri(u.getId()), null, null, null, null);
-        if (c.getCount() == 0) {
-            context.getContentResolver().insert(CovoitContract.UserEntry.CONTENT_URI, u.getContentValues());
-        } else {
-            context.getContentResolver().update(CovoitContract.UserEntry.CONTENT_URI,
-                    u.getContentValues(),
-                    CovoitContract.UserEntry._ID + " = " + u.getId(), null);
-        }
-
-        return u;
+        // Create bundle
+        Bundle data = new Bundle();
+        data.putString(AccountManager.KEY_ACCOUNT_NAME, u.getMail());
+        data.putString(AccountManager.KEY_ACCOUNT_TYPE, AccountGeneral.ACCOUNT_TYPE);
+        data.putString(AccountManager.KEY_AUTHTOKEN, u.getToken());
+        data.putString(AuthenticatorActivity.PARAM_USER_PASS, u.getPassword());
+        return data;
     }
 }

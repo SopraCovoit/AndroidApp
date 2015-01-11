@@ -30,9 +30,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import wtf.sur.original.puissante.rapide.automobile.sopracovoit.R;
+import wtf.sur.original.puissante.rapide.automobile.sopracovoit.data.CovoitDbHelper;
 import wtf.sur.original.puissante.rapide.automobile.sopracovoit.model.User;
 import wtf.sur.original.puissante.rapide.automobile.sopracovoit.sync.FetchWorkplaceTask;
 import wtf.sur.original.puissante.rapide.automobile.sopracovoit.sync.PathSyncAdapter;
+import wtf.sur.original.puissante.rapide.automobile.sopracovoit.utils.ValidatorInput;
 
 public class AuthenticatorActivity extends BaseAuthenticatorActivity {
     public final static String ARG_ACCOUNT_TYPE = "ACCOUNT_TYPE";
@@ -50,6 +52,7 @@ public class AuthenticatorActivity extends BaseAuthenticatorActivity {
     private final String TAG = this.getClass().getSimpleName();
 
     private AccountManager mAccountManager;
+    private ValidatorInput validator;
 
     /**
      * Called when the activity is first created.
@@ -81,7 +84,10 @@ public class AuthenticatorActivity extends BaseAuthenticatorActivity {
                 startActivityForResult(signup, REQ_SIGNUP);
             }
         });
+
         (new FetchWorkplaceTask(this)).execute();
+
+        validator = new ValidatorInput(this);
     }
 
     @Override
@@ -101,45 +107,37 @@ public class AuthenticatorActivity extends BaseAuthenticatorActivity {
 
     public void submit() {
 
-        final String userName = ((TextView) findViewById(R.id.accountName)).getText().toString();
-        final String userPass = ((TextView) findViewById(R.id.accountPassword)).getText().toString();
+        final TextView userName = ((TextView) findViewById(R.id.accountName));
+        final TextView userPass = ((TextView) findViewById(R.id.accountPassword));
 
-        final String accountType = getIntent().getStringExtra(ARG_ACCOUNT_TYPE);
+        boolean valid = validator.fieldRequired(userPass);
+        valid &= validator.fieldMail(userName);
+        if (valid) {
+            new AsyncTask<String, Void, Intent>() {
 
-        new AsyncTask<String, Void, Intent>() {
+                @Override
+                protected Intent doInBackground(String... params) {
+                    // Set User info
+                    User currentUser = new User();
+                    currentUser.setMail(userName.getText().toString());
+                    currentUser.setPassword(userPass.getText().toString());
 
-            @Override
-            protected Intent doInBackground(String... params) {
-
-                User currentUser = null;
-                Bundle data = new Bundle();
-                try {
-                    currentUser = AccountGeneral.sServerAuthenticate.userSignIn(AuthenticatorActivity.this, userPass, mAuthTokenType);
-
-                    data.putString(AccountManager.KEY_ACCOUNT_NAME, currentUser.getMail());
-                    data.putString(AccountManager.KEY_ACCOUNT_TYPE, accountType);
-                    data.putString(AccountManager.KEY_AUTHTOKEN, currentUser.getToken());
-                    data.putString(PARAM_USER_PASS, userPass);
-
-                } catch (Exception e) {
-                    data.putString(KEY_ERROR_MESSAGE, e.getMessage());
-                    e.printStackTrace();
+                    // Create intent
+                    final Intent res = new Intent();
+                    res.putExtras(ServerAuthenticate.userSignIn(AuthenticatorActivity.this, currentUser));
+                    return res;
                 }
 
-                final Intent res = new Intent();
-                res.putExtras(data);
-                return res;
-            }
-
-            @Override
-            protected void onPostExecute(Intent intent) {
-                if (intent.hasExtra(KEY_ERROR_MESSAGE)) {
-                    Toast.makeText(getBaseContext(), intent.getStringExtra(KEY_ERROR_MESSAGE), Toast.LENGTH_SHORT).show();
-                } else {
-                    finishLogin(intent);
+                @Override
+                protected void onPostExecute(Intent intent) {
+                    if (intent.hasExtra(KEY_ERROR_MESSAGE)) {
+                        Toast.makeText(getBaseContext(), intent.getStringExtra(KEY_ERROR_MESSAGE), Toast.LENGTH_SHORT).show();
+                    } else {
+                        finishLogin(intent);
+                    }
                 }
-            }
-        }.execute();
+            }.execute();
+        }
     }
 
     private void finishLogin(Intent intent) {

@@ -15,6 +15,7 @@
   ~    See the License for the specific language governing permissions and
   ~    limitations under the License.
   -->
+
 <resources>
 
     <string name="app_name">SopraCovoit</string>
@@ -46,6 +47,10 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="distance">%1$s m</string>
     <string name="time">Leaving around %1$s:%2$s</string>
+    <string name="field_required">This field is required !</string>
+    <string name="field_bad_email">This email is incorrect !</string>
+    <string name="field_bad_phone">This phone is bad !</string>
+    <string name="field_bad_time">This time is bad !</string>
     <string-array name="tabs_covoit">
         <item>To Sopra workplace</item>
         <item>To home</item>

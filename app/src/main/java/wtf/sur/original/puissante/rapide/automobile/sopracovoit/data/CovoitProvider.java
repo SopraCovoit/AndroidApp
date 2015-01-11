@@ -39,6 +39,7 @@ public class CovoitProvider extends ContentProvider {
     private static final int USER = 200;
     private static final int USER_ID = 201;
     private static final int PATH = 300;
+    private static final int PATH_ID = 301;
 
     private static UriMatcher buildUriMatcher() {
         final UriMatcher matcher = new UriMatcher(UriMatcher.NO_MATCH);
@@ -47,6 +48,7 @@ public class CovoitProvider extends ContentProvider {
         matcher.addURI(authority, CovoitContract.PATH_WORKPLACE, WORKPLACE);
         matcher.addURI(authority, CovoitContract.PATH_WORKPLACE + "/#", WORKPLACE_ID);
         matcher.addURI(authority, CovoitContract.PATH_PATH, PATH);
+        matcher.addURI(authority, CovoitContract.PATH_PATH + "/#", PATH_ID);
         matcher.addURI(authority, CovoitContract.PATH_USER, USER);
         matcher.addURI(authority, CovoitContract.PATH_USER + "/#", USER_ID);
         return matcher;
@@ -121,6 +123,19 @@ public class CovoitProvider extends ContentProvider {
                         projection,
                         selection,
                         selectionArgs,
+                        null,
+                        null,
+                        sortOrder
+                );
+                break;
+            }
+            // "path/#"
+            case PATH_ID: {
+                retCursor = mOpenHelper.getReadableDatabase().query(
+                        CovoitContract.PathEntry.TABLE_NAME,
+                        projection,
+                        CovoitContract.PathEntry._ID + " = '" + ContentUris.parseId(uri) + "'",
+                        null,
                         null,
                         null,
                         sortOrder
