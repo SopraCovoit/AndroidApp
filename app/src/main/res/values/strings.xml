@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <!--
   ~ Copyright 2015 Jérémie Boutoille, Jules Cantegril, Hugo Djemaa, Mickael Goubin, David Livet
   ~
@@ -22,7 +23,7 @@
     <string name="drawer_name_example">Ernesto Exposito</string>
     <string name="drawer_mail_example">eexposito@insa-toulouse.fr</string>
     <string name="drawer_item_example">Go somewhere</string>
-    <string name="provider_name">Toto</string>
+    <string name="provider_name">Server synchronize</string>
     <string name="email_hint">Email address</string>
     <string name="password_hint">Password</string>
     <string name="btn_singin">Sign in</string>
@@ -46,7 +47,7 @@
     <string name="distance">%1$s m</string>
     <string name="time">Leaving around %1$s:%2$s</string>
     <string-array name="tabs_covoit">
-        <item>Tarace1</item>
-        <item>Tarace2</item>
+        <item>To Sopra workplace</item>
+        <item>To home</item>
     </string-array>
 </resources>

@@ -19,7 +19,9 @@ package wtf.sur.original.puissante.rapide.automobile.sopracovoit.authenticator;
 
 import android.accounts.AccountManager;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.LoaderManager;
+import android.app.TimePickerDialog;
 import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.Loader;
@@ -40,6 +42,7 @@ import android.widget.SimpleCursorAdapter;
 import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import java.io.IOException;
@@ -85,6 +88,37 @@ public class RegisterActivity extends BaseActivity implements LoaderManager.Load
         autoCompView.setAdapter(new PlacesAutoCompleteAdapter(this, R.layout.list_item));
         autoCompView.setOnItemClickListener(this);
 
+        final EditText departureTime = (EditText) findViewById(R.id.departure_hour);
+        final TimePickerDialog departureTimePickerDialog = new TimePickerDialog(RegisterActivity.this, new TimePickerDialog.OnTimeSetListener() {
+            @Override
+            public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                departureTime.setText(String.format("%02d:%02d", hourOfDay, minute));
+            }
+        }, 8, 0, true);
+        departureTime.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus) {
+                    departureTimePickerDialog.show();
+                }
+            }
+        });
+
+        final EditText returnTime = (EditText) findViewById(R.id.return_hour);
+        final TimePickerDialog returnTimePickerDialog = new TimePickerDialog(RegisterActivity.this, new TimePickerDialog.OnTimeSetListener() {
+            @Override
+            public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                returnTime.setText(String.format("%02d:%02d", hourOfDay, minute));
+            }
+        }, 18, 0, true);
+        returnTime.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus) {
+                    returnTimePickerDialog.show();
+                }
+            }
+        });
     }
 
     @Override
