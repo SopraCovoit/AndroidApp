@@ -22,6 +22,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import wtf.sur.original.puissante.rapide.automobile.sopracovoit.R;
 
@@ -34,6 +35,13 @@ public class CovoitDetailedFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         View root = inflater.inflate(R.layout.covoit_detailed_fragment, container,false);
+        TextView name = (TextView) root.findViewById(R.id.TV_people_name);
+        TextView from = (TextView) root.findViewById(R.id.TV_from);
+        TextView to = (TextView) root.findViewById(R.id.TV_to);
+        TextView time = (TextView) root.findViewById(R.id.TV_time);
+        TextView contact_mail = (TextView) root.findViewById(R.id.email);
+        TextView contact_phone = (TextView) root.findViewById(R.id.phone);
         return root;
     }
+
 }
