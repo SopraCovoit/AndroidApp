@@ -28,7 +28,7 @@ import wtf.sur.original.puissante.rapide.automobile.sopracovoit.model.Workplace;
  */
 public class CovoitDbHelper extends SQLiteOpenHelper {
 
-    private static final int DATABASE_VERSION = 4;
+    private static final int DATABASE_VERSION = 5;
 
     public static final String DATABASE_NAME = "covoit.db";
 
@@ -63,6 +63,7 @@ public class CovoitDbHelper extends SQLiteOpenHelper {
                 PathEntry.COLUMN_LON + " REAL NOT NULL, " +
                 PathEntry.COLUMN_DIRECTION + " TEXT NOT NULL, " +
                 PathEntry.COLUMN_USER_ID + " INTEGER NOT NULL, " +
+                PathEntry.COLUMN_DISTANCE + " INTEGER NOT NULL, " +
                 PathEntry.COLUMN_WORKPLACE_ID + " INTEGER NOT NULL, " +
                 " FOREIGN KEY (" + PathEntry.COLUMN_USER_ID + ") REFERENCES " + UserEntry.TABLE_NAME + " (" + UserEntry._ID + ")," +
                 " FOREIGN KEY (" + PathEntry.COLUMN_WORKPLACE_ID + ") REFERENCES " + WorkplaceEntry.TABLE_NAME + " (" + WorkplaceEntry._ID + "));";

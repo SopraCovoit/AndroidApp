@@ -90,6 +90,7 @@ public class CovoitContract {
         public static final String COLUMN_LAT = "lat";
         public static final String COLUMN_LON = "lon";
         public static final String COLUMN_DIRECTION = "direction";
+        public static final String COLUMN_DISTANCE = "distance";
         public static final String COLUMN_USER_ID = "user_id";
         public static final String COLUMN_WORKPLACE_ID = "workplace_id";
 
@@ -101,8 +102,16 @@ public class CovoitContract {
             return CONTENT_URI.buildUpon().appendPath(email).build();
         }
 
+        public static Uri buildEmailAll(String email, String direction) {
+            return CONTENT_URI.buildUpon().appendPath(email).appendPath(direction).appendPath("all").build();
+        }
+
         public static String getEmailFromUri(Uri uri) {
             return uri.getPathSegments().get(1);
+        }
+
+        public static String getDirectionFromUri(Uri uri) {
+            return uri.getPathSegments().get(2);
         }
     }
 }

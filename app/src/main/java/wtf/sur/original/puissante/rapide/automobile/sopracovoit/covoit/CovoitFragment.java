@@ -65,6 +65,7 @@ public class CovoitFragment extends Fragment implements SwipeRefreshLayout.OnRef
         // Required empty public constructor
     }
 
+
     @Override
     public void onResume() {
         super.onResume();
@@ -81,9 +82,9 @@ public class CovoitFragment extends Fragment implements SwipeRefreshLayout.OnRef
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         this.rootView = (LinearLayout) inflater.inflate(R.layout.fragment_covoit,container,false);
-//        rootView.setOnRefreshListener(this);
+//       rootView.setOnRefreshListener(this);
         mPager = (ViewPager) rootView.findViewById(R.id.pager);
-        this.mPagerAdapter = new ChildNavigationAdapter(getChildFragmentManager(),getActivity());
+        this.mPagerAdapter = new ChildNavigationAdapter(getChildFragmentManager(), getActivity(), getArguments());
         mPager.setAdapter(mPagerAdapter);
         this.setupTabs(rootView);
         return rootView;

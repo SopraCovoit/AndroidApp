@@ -117,6 +117,7 @@ public class Path {
         cv.put(CovoitContract.PathEntry.COLUMN_DIRECTION, getDirectionString(this.getDirection()));
         cv.put(CovoitContract.PathEntry.COLUMN_HOUR, this.getDepartureHour());
         cv.put(CovoitContract.PathEntry.COLUMN_MIN, this.getDepartureMinute());
+        cv.put(CovoitContract.PathEntry.COLUMN_DISTANCE, this.getDistance());
         if (this.getUser() != null)
             cv.put(CovoitContract.PathEntry.COLUMN_USER_ID, this.getUser().getId());
         if (this.getWorkplace() != null)
@@ -129,9 +130,19 @@ public class Path {
         switch (d) {
             default:
             case HOME:
-                return "home";
+                return "HOME";
             case WP:
-                return "wp";
+                return "WP";
+        }
+    }
+
+    public static Direction getStringDirection(String d) {
+        switch (d) {
+            default:
+            case "HOME":
+                return Direction.HOME;
+            case "WP":
+                return Direction.WP;
         }
     }
 }

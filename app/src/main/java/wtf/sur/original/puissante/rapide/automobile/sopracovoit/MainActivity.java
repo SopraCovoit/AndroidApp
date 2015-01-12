@@ -52,11 +52,14 @@ public class MainActivity extends BaseActivity implements LoaderManager.LoaderCa
     private DrawerManager drawerManager;
     private AccountManager mAccountManager;
     private Account mConnectedAccount;
+    private String mAuthToken;
     private static final int CURRENT_USER_LOADER = 1;
 
-    @Override protected void onCreate(Bundle savedInstanceState) {
+    @Override
+    protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mAccountManager = AccountManager.get(this);
+        final CovoitFragment cf = new CovoitFragment();
 
         this.drawer_container = (DrawerLayout) this.findViewById(R.id.drawer_container);
         this.drawerManager = new DrawerManager(drawer_container,this);
@@ -71,7 +74,15 @@ public class MainActivity extends BaseActivity implements LoaderManager.LoaderCa
                             getLoaderManager().initLoader(MainActivity.CURRENT_USER_LOADER, b, MainActivity.this);
                             if (!b.getString(AccountManager.KEY_AUTHTOKEN).equals("")) {
                                 mConnectedAccount = new Account(b.getString(AccountManager.KEY_ACCOUNT_NAME), AccountGeneral.ACCOUNT_TYPE);
+                                mAuthToken = b.getString(AccountManager.KEY_AUTHTOKEN);
                             }
+                            if (savedInstanceState == null) {
+                                cf.setArguments(b);
+                                getSupportFragmentManager().beginTransaction()
+                                        .add(R.id.fragment_container, cf)
+                                        .commit();
+                            }
+
                         } catch (OperationCanceledException | IOException | AuthenticatorException e) {
                             e.printStackTrace();
                             //TODO manage exception
@@ -83,11 +94,6 @@ public class MainActivity extends BaseActivity implements LoaderManager.LoaderCa
 
         this.drawer_container = (DrawerLayout) this.findViewById(R.id.drawer_container);
         this.drawerManager = new DrawerManager(drawer_container, this);
-        if (savedInstanceState == null) {
-            getSupportFragmentManager().beginTransaction()
-                    .add(R.id.fragment_container, new CovoitFragment())
-                    .commit();
-        }
     }
 
 
@@ -142,6 +148,29 @@ public class MainActivity extends BaseActivity implements LoaderManager.LoaderCa
             String surname = data.getString(data.getColumnIndex(CovoitContract.UserEntry.COLUMN_SURNAME));
             String mail = data.getString(data.getColumnIndex(CovoitContract.UserEntry.COLUMN_MAIL));
             drawerManager.refreshUser(name, surname, mail);
+            data.close();
+        } else if (data.getCount() == 0) {
+            mAccountManager.invalidateAuthToken(AccountGeneral.ACCOUNT_TYPE, mAuthToken);
+            mAccountManager.getAuthTokenByFeatures(AccountGeneral.ACCOUNT_TYPE, AccountGeneral.AUTHTOKEN_TYPE, null, this, null, null,
+                    new AccountManagerCallback<Bundle>() {
+                        @Override
+                        public void run(AccountManagerFuture<Bundle> future) {
+                            try {
+                                Log.d("Toto", "mAccountManager ok restart loader");
+                                Bundle b = future.getResult();
+                                getLoaderManager().restartLoader(MainActivity.CURRENT_USER_LOADER, b, MainActivity.this);
+                                if (!b.getString(AccountManager.KEY_AUTHTOKEN).equals("")) {
+                                    mConnectedAccount = new Account(b.getString(AccountManager.KEY_ACCOUNT_NAME), AccountGeneral.ACCOUNT_TYPE);
+                                    mAuthToken = b.getString(AccountManager.KEY_AUTHTOKEN);
+                                }
+                            } catch (OperationCanceledException | IOException | AuthenticatorException e) {
+                                e.printStackTrace();
+                                //TODO manage exception
+                            }
+
+                        }
+                    }
+                    , null);
         }
     }
 

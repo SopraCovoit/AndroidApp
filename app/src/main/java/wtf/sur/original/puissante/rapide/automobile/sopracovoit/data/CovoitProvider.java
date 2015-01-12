@@ -21,7 +21,6 @@ import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.UriMatcher;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteConstraintException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
@@ -42,12 +41,13 @@ public class CovoitProvider extends ContentProvider {
     private static final int PATH = 300;
     private static final int PATH_ID = 301;
     private static final int PATH_EMAIL = 302;
+    private static final int PATH_EMAIL_ALL = 303;
 
-    private static final SQLiteQueryBuilder sPathByEmailUserQueryBuilder;
+    private static final SQLiteQueryBuilder sPathJoinUserQueryBuilder;
 
     static {
-        sPathByEmailUserQueryBuilder = new SQLiteQueryBuilder();
-        sPathByEmailUserQueryBuilder.setTables(
+        sPathJoinUserQueryBuilder = new SQLiteQueryBuilder();
+        sPathJoinUserQueryBuilder.setTables(
                 CovoitContract.PathEntry.TABLE_NAME + " INNER JOIN " +
                         CovoitContract.UserEntry.TABLE_NAME +
                         " ON " + CovoitContract.PathEntry.TABLE_NAME +
@@ -65,19 +65,38 @@ public class CovoitProvider extends ContentProvider {
         matcher.addURI(authority, CovoitContract.PATH_PATH, PATH);
         matcher.addURI(authority, CovoitContract.PATH_PATH + "/#", PATH_ID);
         matcher.addURI(authority, CovoitContract.PATH_PATH + "/*", PATH_EMAIL);
+        matcher.addURI(authority, CovoitContract.PATH_PATH + "/*/*/all", PATH_EMAIL_ALL);
         matcher.addURI(authority, CovoitContract.PATH_USER, USER);
         matcher.addURI(authority, CovoitContract.PATH_USER + "/#", USER_ID);
         return matcher;
     }
 
-    private Cursor getPathByEmail(
+    private Cursor getPathUserByEmail(
             Uri uri, String[] projection, String sortOrder) {
         String email = CovoitContract.PathEntry.getEmailFromUri(uri);
 
-        return sPathByEmailUserQueryBuilder.query(mOpenHelper.getReadableDatabase(),
+        return sPathJoinUserQueryBuilder.query(mOpenHelper.getReadableDatabase(),
                 projection,
                 CovoitContract.UserEntry.TABLE_NAME + "." + CovoitContract.UserEntry.COLUMN_MAIL + " = ? ",
                 new String[]{email},
+                null,
+                null,
+                sortOrder
+        );
+    }
+
+    private Cursor getPathUserByEmailAll(
+            Uri uri, String[] projection, String sortOrder) {
+        String email = CovoitContract.PathEntry.getEmailFromUri(uri);
+        String direction = CovoitContract.PathEntry.getDirectionFromUri(uri);
+
+        SQLiteQueryBuilder builder = new SQLiteQueryBuilder();
+        builder.setTables(CovoitContract.UserEntry.TABLE_NAME);
+        String innerQuery = builder.buildQuery(new String[]{CovoitContract.UserEntry.COLUMN_WORKPLACE_ID}, CovoitContract.UserEntry.COLUMN_MAIL + " = '" + email + "'", null, null, null, null);
+        return sPathJoinUserQueryBuilder.query(mOpenHelper.getReadableDatabase(),
+                projection,
+                CovoitContract.PathEntry.TABLE_NAME + "." + CovoitContract.PathEntry.COLUMN_WORKPLACE_ID + " IN (" + innerQuery + ") AND " + CovoitContract.PathEntry.COLUMN_DIRECTION + " = '" + direction + "'",
+                null,
                 null,
                 null,
                 sortOrder
@@ -174,7 +193,12 @@ public class CovoitProvider extends ContentProvider {
             }
             // "path/*"
             case PATH_EMAIL: {
-                retCursor = getPathByEmail(uri, projection, sortOrder);
+                retCursor = getPathUserByEmail(uri, projection, sortOrder);
+                break;
+            }
+            // "path/*/all"
+            case PATH_EMAIL_ALL: {
+                retCursor = getPathUserByEmailAll(uri, projection, sortOrder);
                 break;
             }
 
@@ -201,6 +225,8 @@ public class CovoitProvider extends ContentProvider {
             case PATH_ID:
                 return CovoitContract.PathEntry.CONTENT_ITEM_TYPE;
             case PATH_EMAIL:
+                return CovoitContract.PathEntry.CONTENT_TYPE;
+            case PATH_EMAIL_ALL:
                 return CovoitContract.PathEntry.CONTENT_TYPE;
             case USER:
                 return CovoitContract.UserEntry.CONTENT_TYPE;
@@ -311,12 +337,12 @@ public class CovoitProvider extends ContentProvider {
         switch (match) {
             case WORKPLACE:
                 int returnCount = 0;
-                    for (ContentValues value : values) {
-                        long _id = db.insert(CovoitContract.WorkplaceEntry.TABLE_NAME, null, value);
-                        if (_id != -1) {
-                            returnCount++;
-                        }
+                for (ContentValues value : values) {
+                    long _id = db.insert(CovoitContract.WorkplaceEntry.TABLE_NAME, null, value);
+                    if (_id != -1) {
+                        returnCount++;
                     }
+                }
                 getContext().getContentResolver().notifyChange(uri, null);
                 return returnCount;
             default:

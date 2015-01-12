@@ -17,13 +17,16 @@
 package wtf.sur.original.puissante.rapide.automobile.sopracovoit.covoit;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
+import android.util.Log;
 import android.util.SparseArray;
 import android.view.ViewGroup;
 
 import wtf.sur.original.puissante.rapide.automobile.sopracovoit.R;
+import wtf.sur.original.puissante.rapide.automobile.sopracovoit.model.Path;
 
 /**
  * Created by MagicMicky on 09/01/2015.
@@ -31,18 +34,27 @@ import wtf.sur.original.puissante.rapide.automobile.sopracovoit.R;
 public class ChildNavigationAdapter extends FragmentStatePagerAdapter {
     private final SparseArray<CovoitInnerFragment> mPages;
     private final String[] TITLES;
+    private Bundle mArgs;
 
-
-    public ChildNavigationAdapter(FragmentManager fm, Context c) {
+    public ChildNavigationAdapter(FragmentManager fm, Context c, Bundle args) {
         super(fm);
         mPages = new SparseArray<>();
         this.TITLES = c.getResources().getStringArray(R.array.tabs_covoit);
+        mArgs = args;
     }
 
 
     @Override
     public Fragment getItem(int position) {
         CovoitInnerFragment f = new CovoitInnerFragment();
+        Bundle b = new Bundle(mArgs);
+        if (position == 0)
+            b.putString(CovoitInnerFragment.ARG_DIRECTION, Path.getDirectionString(Path.Direction.WP));
+        else
+            b.putString(CovoitInnerFragment.ARG_DIRECTION, Path.getDirectionString(Path.Direction.HOME));
+        Log.d("Toto2", "Item " + position + " args " + b);
+        f.setArguments(b);
+        mPages.put(position, f);
         return f;
     }
     public Fragment getItemAt(int position) {
