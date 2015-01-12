@@ -102,19 +102,6 @@ public class CovoitFragment extends Fragment implements SwipeRefreshLayout.OnRef
 
             @Override
             public void onPageSelected(int i) {
-                /*for(int i=0; i <mPagerAdapter.getCount();i++){
-                    // Skip current item
-                    if (i == mPager.getCurrentItem()) {
-                        continue;
-                    }
-
-                    // Skip destroyed or not created item
-                    Fragment f = mPagerAdapter.getItemAt(i);
-                    if (f == null) {
-                        continue;
-                    }
-                }*/
-
             }
 
             @Override

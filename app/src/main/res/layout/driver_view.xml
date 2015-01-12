@@ -66,7 +66,6 @@
         android:layout_marginStart="@dimen/material_list_text_margin"
         android:layout_toLeftOf="@id/TV_distance"
         android:layout_toStartOf="@id/TV_distance"
-        android:paddingBottom="@dimen/material_double_separator"
 
         android:layout_below="@id/TV_people_name"
         android:ellipsize="end"

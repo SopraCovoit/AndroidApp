@@ -15,6 +15,44 @@
   ~    limitations under the License.
   -->
 
-<selector> <!-- ripple color -->
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:state_enabled="false">
+        <inset xmlns:android="http://schemas.android.com/apk/res/android">
+            <shape android:shape="rectangle">
+                <corners android:radius="@dimen/control_corner_material" />
+                <solid android:color="@android:color/darker_gray" />
+            </shape>
+        </inset></item>
+
+    <!-- pressed state -->
+    <item android:state_pressed="true">
+        <inset xmlns:android="http://schemas.android.com/apk/res/android">
+            <shape android:shape="rectangle">
+                <corners android:radius="@dimen/control_corner_material" />
+                <solid android:color="@android:color/darker_gray" />
+            </shape>
+        </inset>
+    </item>
+
+    <!-- focused state -->
+    <item android:state_focused="true">
+        <inset xmlns:android="http://schemas.android.com/apk/res/android">
+            <shape android:shape="rectangle">
+                <corners android:radius="@dimen/control_corner_material" />
+                <solid android:color="@android:color/darker_gray" />
+            </shape>
+        </inset>
+    </item>
+
+    <!-- normal state -->
+    <item>
+        <inset xmlns:android="http://schemas.android.com/apk/res/android">
+            <shape android:shape="rectangle">
+                <corners android:radius="@dimen/control_corner_material" />
+                    <solid android:color="@color/white" />
+            </shape>
+        </inset>
+    </item>
 
 </selector>

@@ -19,7 +19,8 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:background="@drawable/lego_bg">
-    <include layout="@layout/toolbar"/>
+    <include layout="@layout/toolbar"
+             android:elevation="@dimen/material_high_elevation"/>
     <EditText
         android:id="@+id/accountName"
         android:layout_marginLeft="@dimen/material_act_horizontal_padding"
