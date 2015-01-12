@@ -51,6 +51,11 @@
     <string name="field_bad_email">This email is incorrect !</string>
     <string name="field_bad_phone">This phone is bad !</string>
     <string name="field_bad_time">This time is bad !</string>
+    <string name="to_title">To</string>
+    <string name="from_title">From</string>
+    <string name="phone_title">Phone</string>
+    <string name="mail_title">Email</string>
+    <string name="contact_title">Contact him !</string>
     <string-array name="tabs_covoit">
         <item>To Sopra workplace</item>
         <item>To home</item>
