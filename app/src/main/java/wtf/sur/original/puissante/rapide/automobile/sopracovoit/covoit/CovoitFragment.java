@@ -60,6 +60,7 @@ public class CovoitFragment extends Fragment implements SwipeRefreshLayout.OnRef
     private SlidingTabLayout mSlidingTabLayout;
     private ViewPager mPager;
     private ChildNavigationAdapter mPagerAdapter;
+    private SwipeRefreshLayout swipeView;
 
     public CovoitFragment() {
         // Required empty public constructor
@@ -82,7 +83,8 @@ public class CovoitFragment extends Fragment implements SwipeRefreshLayout.OnRef
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         this.rootView = (LinearLayout) inflater.inflate(R.layout.fragment_covoit,container,false);
-//       rootView.setOnRefreshListener(this);
+        this.swipeView = ((SwipeRefreshLayout) rootView.findViewById(R.id.swipe_layout));
+        swipeView.setOnRefreshListener(this);
         mPager = (ViewPager) rootView.findViewById(R.id.pager);
         this.mPagerAdapter = new ChildNavigationAdapter(getChildFragmentManager(), getActivity(), getArguments());
         mPager.setAdapter(mPagerAdapter);
@@ -127,8 +129,8 @@ public class CovoitFragment extends Fragment implements SwipeRefreshLayout.OnRef
 
         @Override
         public void onReceive(Context context, Intent intent) {
-            //TODO sync finished
-            //CovoitFragment.this.rootView.setRefreshing(false);
+            //Todo: never in this state.
+            CovoitFragment.this.swipeView.setRefreshing(false);
             Log.d("Sync", "Finished");
         }
     };

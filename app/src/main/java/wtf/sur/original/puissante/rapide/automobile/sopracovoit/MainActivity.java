@@ -59,7 +59,6 @@ public class MainActivity extends BaseActivity implements LoaderManager.LoaderCa
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mAccountManager = AccountManager.get(this);
-        final CovoitFragment cf = new CovoitFragment();
 
         this.drawer_container = (DrawerLayout) this.findViewById(R.id.drawer_container);
         this.drawerManager = new DrawerManager(drawer_container,this);
@@ -77,6 +76,7 @@ public class MainActivity extends BaseActivity implements LoaderManager.LoaderCa
                                 mAuthToken = b.getString(AccountManager.KEY_AUTHTOKEN);
                             }
                             if (savedInstanceState == null) {
+                                CovoitFragment cf = new CovoitFragment();
                                 cf.setArguments(b);
                                 getSupportFragmentManager().beginTransaction()
                                         .add(R.id.fragment_container, cf)
