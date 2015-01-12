@@ -32,11 +32,14 @@ import android.os.Bundle;
 import android.util.Log;
 
 import java.io.IOException;
+import java.util.List;
 
 import wtf.sur.original.puissante.rapide.automobile.sopracovoit.R;
 import wtf.sur.original.puissante.rapide.automobile.sopracovoit.authenticator.AccountGeneral;
 import wtf.sur.original.puissante.rapide.automobile.sopracovoit.covoit.CovoitFragment;
 import wtf.sur.original.puissante.rapide.automobile.sopracovoit.data.CovoitContract;
+import wtf.sur.original.puissante.rapide.automobile.sopracovoit.data.CovoitProviderHelper;
+import wtf.sur.original.puissante.rapide.automobile.sopracovoit.model.Path;
 
 public class PathSyncAdapter extends AbstractThreadedSyncAdapter {
 
@@ -64,6 +67,19 @@ public class PathSyncAdapter extends AbstractThreadedSyncAdapter {
                 double _lat = cursor.getDouble(cursor.getColumnIndex(CovoitContract.PathEntry.COLUMN_LAT));
                 double _lon = cursor.getDouble(cursor.getColumnIndex(CovoitContract.PathEntry.COLUMN_LON));
                 Log.d(TAG, "Token : " + authToken + ", user : " + _userId + ", workplace : " + _workplaceId + ", lat : " + _lat + ", lon : " + _lon);
+
+                int _count = 0;
+                List<Path> pathList = CovoitServerAccessor.listPath();
+                for (Path p : pathList) {
+                    CovoitProviderHelper.insertOrUpdateWorkplace(getContext().getContentResolver(), p.getWorkplace());
+                    CovoitProviderHelper.insertOrUpdateWorkplace(getContext().getContentResolver(), p.getUser().getWorkplace());
+
+                    CovoitProviderHelper.insertOrUpdateUser(getContext().getContentResolver(), p.getUser());
+
+                    CovoitProviderHelper.insertOrUpdatePath(getContext().getContentResolver(), p);
+                    _count++;
+                }
+                Log.d(TAG, "Add path " + _count);
 
                 Intent i = new Intent(CovoitFragment.SYNC_FINISHED);
                 getContext().sendBroadcast(i);

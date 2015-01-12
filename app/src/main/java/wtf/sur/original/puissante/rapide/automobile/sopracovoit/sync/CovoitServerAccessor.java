@@ -19,6 +19,7 @@ package wtf.sur.original.puissante.rapide.automobile.sopracovoit.sync;
 import java.util.List;
 
 import retrofit.RestAdapter;
+import wtf.sur.original.puissante.rapide.automobile.sopracovoit.model.Path;
 import wtf.sur.original.puissante.rapide.automobile.sopracovoit.model.User;
 import wtf.sur.original.puissante.rapide.automobile.sopracovoit.model.Workplace;
 
@@ -42,5 +43,10 @@ public class CovoitServerAccessor {
     public static User connection() {
         CovoitServerService service = restAdapter.create(CovoitServerService.class);
         return service.connection();
+    }
+
+    public static List<Path> listPath() {
+        CovoitServerService service = restAdapter.create(CovoitServerService.class);
+        return service.listPath();
     }
 }
