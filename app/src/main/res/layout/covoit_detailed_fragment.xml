@@ -26,10 +26,10 @@
                     android:layout_marginLeft="@dimen/material_double_separator"
                     android:layout_marginRight="@dimen/material_double_separator">
         <FrameLayout
+            android:layout_marginTop="@dimen/material_minimal_separator"
             android:id="@+id/map"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:minHeight="@dimen/incremental_3"/>
+            android:layout_height="@dimen/incremental_3"/>
         <android.support.v7.widget.CardView
             android:id="@+id/user_card"
             android:layout_height="wrap_content"
@@ -51,6 +51,7 @@
                     tools:text="Jules"
                     style="@style/TextAppearance.AppCompat.Display1"/>
                 <TextView
+                    android:id="@+id/TV_looking_for"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/material_double_separator"
@@ -87,6 +88,7 @@
                     android:layout_toEndOf="@id/from_title"
                     android:layout_marginStart="@dimen/material_double_separator"
                     android:layout_marginLeft="@dimen/material_double_separator"
+                    android:singleLine="true"
                     tools:text="Villefranche"
                     android:textColor="@color/accent"
                     style="@style/TextAppearance.AppCompat.Display1"/>

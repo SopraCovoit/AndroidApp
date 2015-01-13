@@ -56,6 +56,8 @@
     <string name="phone_title">Phone</string>
     <string name="mail_title">Email</string>
     <string name="contact_title">Contact him !</string>
+    <string name="looking_pasengers">is looking for some passengers</string>
+    <string name="looking_driver">is looking for a driver</string>
     <string-array name="tabs_covoit">
         <item>To Sopra workplace</item>
         <item>To home</item>

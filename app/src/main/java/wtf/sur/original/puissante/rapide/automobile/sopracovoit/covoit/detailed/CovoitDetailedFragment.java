@@ -31,6 +31,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.SupportMapFragment;
+
 import java.io.IOException;
 
 import wtf.sur.original.puissante.rapide.automobile.sopracovoit.R;
@@ -47,12 +50,17 @@ public class CovoitDetailedFragment extends Fragment implements LoaderManager.Lo
     public static final String COVOIT_DET_TAG = "covoit_detailed";
     private static final int DETAIL_LOADER = 0;
     private long mId;
+
+    private GoogleMap mGoogleMap;
+
     private TextView mName;
     private TextView mFrom;
     private TextView mTo;
     private TextView mTime;
     private TextView mContactMail;
     private TextView mContactPhone;
+    private TextView mLookingFor;
+    private SupportMapFragment mMapFragment;
 
 
     @Override
@@ -71,17 +79,25 @@ public class CovoitDetailedFragment extends Fragment implements LoaderManager.Lo
         mTime = (TextView) root.findViewById(R.id.TV_time);
         mContactMail = (TextView) getActivity().findViewById(R.id.TV_email);
         mContactPhone = (TextView) getActivity().findViewById(R.id.TV_phone);
+        mLookingFor = (TextView) getActivity().findViewById(R.id.TV_looking_for);
+
+
         return root;
     }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
         Bundle arguments = getArguments();
         if (arguments != null) {
             getLoaderManager().initLoader(DETAIL_LOADER, null, this);
         }
+        mMapFragment = (SupportMapFragment) this.getChildFragmentManager().findFragmentById(R.id.map);
+        if(mMapFragment ==null) {
+            mMapFragment = SupportMapFragment.newInstance();
+            getChildFragmentManager().beginTransaction().replace(R.id.map,mMapFragment).commit();
+        }
+
     }
 
     @Override
@@ -90,6 +106,11 @@ public class CovoitDetailedFragment extends Fragment implements LoaderManager.Lo
         Bundle arguments = getArguments();
         if (arguments != null && arguments.containsKey(ID_PATH_KEY)) {
             getLoaderManager().restartLoader(DETAIL_LOADER, null, this);
+        }
+        if (mGoogleMap == null) {
+            mGoogleMap = mMapFragment.getMap();
+            mGoogleMap.setMyLocationEnabled(true);
+            mGoogleMap.getUiSettings().setZoomControlsEnabled(false);
         }
     }
 
