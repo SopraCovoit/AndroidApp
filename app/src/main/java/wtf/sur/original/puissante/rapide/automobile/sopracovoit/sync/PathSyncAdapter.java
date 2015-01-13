@@ -81,9 +81,6 @@ public class PathSyncAdapter extends AbstractThreadedSyncAdapter {
                 }
                 Log.d(TAG, "Add path " + _count);
 
-                Intent i = new Intent(CovoitFragment.SYNC_FINISHED);
-                getContext().sendBroadcast(i);
-
             } else {
                 // No user for account
             }
@@ -94,6 +91,8 @@ public class PathSyncAdapter extends AbstractThreadedSyncAdapter {
         } catch (AuthenticatorException e) {
             e.printStackTrace();
         }
+        Intent i = new Intent(CovoitFragment.SYNC_FINISHED);
+        getContext().sendBroadcast(i);
     }
 
 }

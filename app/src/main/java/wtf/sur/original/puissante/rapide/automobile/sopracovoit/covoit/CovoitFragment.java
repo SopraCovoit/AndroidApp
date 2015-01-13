@@ -121,7 +121,7 @@ public class CovoitFragment extends Fragment implements SwipeRefreshLayout.OnRef
             Bundle bundle = new Bundle();
             bundle.putBoolean(ContentResolver.SYNC_EXTRAS_EXPEDITED, true);
             bundle.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);
-            ContentResolver.requestSync(a, AccountGeneral.ACCOUNT_TYPE, bundle);
+            ContentResolver.requestSync(a, "wtf.sur.original.puissante.rapide.automobile.sopracovoit.app", bundle);
         }
     }
 
@@ -129,7 +129,6 @@ public class CovoitFragment extends Fragment implements SwipeRefreshLayout.OnRef
 
         @Override
         public void onReceive(Context context, Intent intent) {
-            //Todo: never in this state.
             CovoitFragment.this.swipeView.setRefreshing(false);
             Log.d("Sync", "Finished");
         }
