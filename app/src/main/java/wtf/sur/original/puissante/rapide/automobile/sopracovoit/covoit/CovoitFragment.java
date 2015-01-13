@@ -135,37 +135,6 @@ public class CovoitFragment extends Fragment implements SwipeRefreshLayout.OnRef
         }
     };
 
-    public List<Path> testData() {
-        List<Path> paths = new ArrayList<>();
-        User user = new User(1);
-        user.setDriver(false);
-        user.setName("Mme Djemaa");
-        user.setPhone("0612345678");
-        user.setMail("djemaa@fac.ile");
-        Path path = new Path(1, Path.Direction.HOME);
-        path.setDepartureTime(10,50);
-        path.setLocation(10, 10);
-        path.setUser(user);
-        path.setDistance(100);
-        paths.add(path);
-
-        user = new User(2);
-        user.setDriver(true);
-        user.setName("Test");
-        user.setPhone("phonetest");
-        user.setMail("mailtest");
-        path = new Path(2, Path.Direction.HOME);
-        path.setDepartureTime(11, 20);
-        path.setLocation(20, 20);
-        path.setUser(user);
-        path.setDistance(150);
-
-        paths.add(path);
-
-        return paths;
-    }
-
-
     public void notifyClickOnPath(long id) {
         ((MainActivity) this.getActivity()).openCovoitDetailed(id);
     }

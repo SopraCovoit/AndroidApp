@@ -175,7 +175,7 @@ public class CovoitDetailedFragment extends Fragment implements LoaderManager.Lo
 
                 @Override
                 protected void onPostExecute(Void aVoid) {
-                    mName.setText(surname + " " + name);
+                    mName.setText(surname);
 
                     TextView location;
                     TextView workplace;

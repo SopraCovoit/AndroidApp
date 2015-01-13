@@ -29,19 +29,19 @@
     <string name="password_hint">Password</string>
     <string name="btn_singin">Sign in</string>
     <string name="btn_newuser">New user?</string>
-    <string name="hint_name">Nom</string>
-    <string name="hint_surname">Prénom</string>
+    <string name="hint_name">name</string>
+    <string name="hint_surname">surname</string>
     <string name="hint_mail">Mail</string>
-    <string name="hint_password">Mot de passe</string>
-    <string name="hint_phone">Téléphone</string>
-    <string name="driver_title">Conducteur</string>
-    <string name="switch_driver_name">Conducteur</string>
-    <string name="Path_title">Trajet</string>
-    <string name="city_hint">Ville</string>
-    <string name="departure_hint">Aller</string>
-    <string name="return_hint">Retour</string>
+    <string name="hint_password">password</string>
+    <string name="hint_phone">phone</string>
+    <string name="driver_title">Driver</string>
+    <string name="switch_driver_name">Driver</string>
+    <string name="Path_title">Path</string>
+    <string name="city_hint">City</string>
+    <string name="departure_hint">Go</string>
+    <string name="return_hint">Return</string>
     <string name="ok">Ok</string>
-    <string name="title_info">Informations</string>
+    <string name="title_info">Information</string>
     <string name="action_register">OK</string>
     <string name="title_around">Around you</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
@@ -59,7 +59,7 @@
     <string name="looking_pasengers">is looking for some passengers</string>
     <string name="looking_driver">is looking for a driver</string>
     <string-array name="tabs_covoit">
-        <item>To Sopra workplace</item>
-        <item>To home</item>
+        <item>To Workplace</item>
+        <item>To Home</item>
     </string-array>
 </resources>
