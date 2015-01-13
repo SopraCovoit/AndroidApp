@@ -16,9 +16,11 @@
 
 package wtf.sur.original.puissante.rapide.automobile.sopracovoit.covoit.detailed;
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.location.Address;
 import android.location.Geocoder;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -32,8 +34,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.google.android.gms.maps.CameraUpdate;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.io.IOException;
 
@@ -108,8 +115,11 @@ public class CovoitDetailedFragment extends Fragment implements LoaderManager.Lo
         }
         if (mGoogleMap == null) {
             mGoogleMap = mMapFragment.getMap();
-            mGoogleMap.setMyLocationEnabled(true);
+            mGoogleMap.setMyLocationEnabled(false);
             mGoogleMap.getUiSettings().setZoomControlsEnabled(false);
+            mGoogleMap.getUiSettings().setAllGesturesEnabled(false);
+            mGoogleMap.getUiSettings().setMapToolbarEnabled(false);
+            mGoogleMap.setOnMarkerClickListener(null);
         }
     }
 
@@ -135,6 +145,8 @@ public class CovoitDetailedFragment extends Fragment implements LoaderManager.Lo
                 private int hour,minute,distance;
                 private Path.Direction dir;
                 private boolean isDriver;
+                public Location userLocation;
+                public LatLng workplaceLatLng;
 
                 @Override
                 protected Void doInBackground(Void... params) {
@@ -143,7 +155,8 @@ public class CovoitDetailedFragment extends Fragment implements LoaderManager.Lo
                     mail = data.getString(data.getColumnIndex(CovoitContract.UserEntry.COLUMN_MAIL));
                     phone = data.getString(data.getColumnIndex(CovoitContract.UserEntry.COLUMN_PHONE));
                     sworkplace = data.getString(data.getColumnIndex(CovoitContract.WorkplaceEntry.COLUMN_NAME));
-                    Location l = new Location(data.getDouble(data.getColumnIndex(CovoitContract.PathEntry.COLUMN_LAT)), data.getDouble(data.getColumnIndex(CovoitContract.PathEntry.COLUMN_LON)));
+                    this.workplaceLatLng = new LatLng(data.getDouble(data.getColumnIndex(CovoitContract.WorkplaceEntry.COLUMN_LAT)),data.getDouble(data.getColumnIndex(CovoitContract.WorkplaceEntry.COLUMN_LON)));
+                    userLocation = new Location(data.getDouble(data.getColumnIndex(CovoitContract.PathEntry.COLUMN_LAT)), data.getDouble(data.getColumnIndex(CovoitContract.PathEntry.COLUMN_LON)));
                     hour = data.getInt(data.getColumnIndex(CovoitContract.PathEntry.COLUMN_HOUR));
                     minute = data.getInt(data.getColumnIndex(CovoitContract.PathEntry.COLUMN_MIN));
                     distance = data.getInt(data.getColumnIndex(CovoitContract.PathEntry.COLUMN_DISTANCE));
@@ -151,7 +164,7 @@ public class CovoitDetailedFragment extends Fragment implements LoaderManager.Lo
                     dir = Path.getStringDirection(data.getString(data.getColumnIndex(CovoitContract.PathEntry.COLUMN_DIRECTION)));
                     Geocoder geocoder = new Geocoder(getActivity());
                     try {
-                        Address address = geocoder.getFromLocation(l.getLatitude(), l.getLongitude(), 1).get(0);
+                        Address address = geocoder.getFromLocation(userLocation.getLatitude(), userLocation.getLongitude(), 1).get(0);
                         addressText = address.getLocality();
                     } catch (IOException e) {
                         e.printStackTrace();
@@ -173,12 +186,44 @@ public class CovoitDetailedFragment extends Fragment implements LoaderManager.Lo
                         location = mFrom;
                         workplace = mTo;
                     }
-
+                    LatLng userLoc = new LatLng(userLocation.getLatitude(),userLocation.getLongitude());
+                    MarkerOptions marker = new MarkerOptions().position(userLoc);
+                    mGoogleMap.addMarker(marker);
+                    MarkerOptions marker2 = new MarkerOptions().position(workplaceLatLng);
+                    mGoogleMap.addMarker(marker2);
+                    LatLngBounds bounds = new LatLngBounds.Builder().include(userLoc).include(workplaceLatLng).build();
+                    CameraUpdate update = CameraUpdateFactory.newLatLngBounds(bounds,getResources().getDimensionPixelSize(R.dimen.incremental_1));
+                    mGoogleMap.animateCamera(update);
                     workplace.setText(sworkplace);
                     location.setText(addressText);
                     mContactMail.setText(mail);
                     mContactPhone.setText(phone);
-                    mTime.setText(hour + ":" + minute);
+                    mContactPhone.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent intent = new Intent(Intent.ACTION_DIAL);
+                            intent.setData(Uri.parse("tel:" + phone));
+                            startActivity(intent);
+                        }
+                    });
+                    mContactMail.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            final Intent emailIntent = new Intent(android.content.Intent.ACTION_SEND);
+                            emailIntent.setType("plain/text");
+                            emailIntent.putExtra(android.content.Intent.EXTRA_EMAIL, new String[]{mail});
+                            emailIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Carpooling to " + sworkplace);
+                            emailIntent.putExtra(android.content.Intent.EXTRA_TEXT, "Hi " + name +"! ");
+                            startActivity(emailIntent);
+
+                        }
+                    });
+                    mTime.setText(getString(R.string.time,hour,minute));
+                    if(isDriver) {
+                        mLookingFor.setText(R.string.looking_pasengers);
+                    } else {
+                        mLookingFor.setText(R.string.looking_driver);
+                    }
                 }
             }.execute();
         }
