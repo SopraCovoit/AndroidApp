@@ -71,7 +71,14 @@ public class PathSyncAdapter extends AbstractThreadedSyncAdapter {
 
                 int _count = 0;
                 List<Path> pathList = CovoitServerAccessor.listPath(_workplaceId, new Location(_lat, _lon), authToken);
+                StringBuilder ids = new StringBuilder();
+                ids.append('(');
                 for (Path p : pathList) {
+
+                    ids.append(p.getId());
+                    if (_count != pathList.size() - 1)
+                        ids.append(',');
+
                     CovoitProviderHelper.insertOrUpdateWorkplace(getContext().getContentResolver(), p.getWorkplace());
                     CovoitProviderHelper.insertOrUpdateWorkplace(getContext().getContentResolver(), p.getUser().getWorkplace());
 
@@ -80,6 +87,9 @@ public class PathSyncAdapter extends AbstractThreadedSyncAdapter {
                     CovoitProviderHelper.insertOrUpdatePath(getContext().getContentResolver(), p);
                     _count++;
                 }
+                ids.append(')');
+                getContext().getContentResolver().delete(CovoitContract.PathEntry.CONTENT_URI, CovoitContract.PathEntry._ID + " NOT IN " + ids.toString(), null);
+
                 Log.d(TAG, "Add path " + _count);
 
             } else {
