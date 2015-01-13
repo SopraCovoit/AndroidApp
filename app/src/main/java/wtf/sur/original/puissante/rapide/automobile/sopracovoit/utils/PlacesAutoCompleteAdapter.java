@@ -34,6 +34,8 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 
+import wtf.sur.original.puissante.rapide.automobile.sopracovoit.R;
+
 /**
  * Created by david on 10/01/15.
  */
@@ -44,8 +46,14 @@ public class PlacesAutoCompleteAdapter extends ArrayAdapter<String> implements F
     private static final String PLACES_API_BASE = "https://maps.googleapis.com/maps/api/place";
     private static final String TYPE_AUTOCOMPLETE = "/autocomplete";
     private static final String OUT_JSON = "/json";
+    private ArrayList<String> resultList;
 
-    private static final String API_KEY = "";
+    private final String API_KEY;
+
+    public PlacesAutoCompleteAdapter(Context context, int resource) {
+        super(context, resource);
+        this.API_KEY = context.getString(R.string.places_api_key);
+    }
 
     private ArrayList<String> autocomplete(String input) {
         ArrayList<String> resultList = null;
@@ -97,11 +105,8 @@ public class PlacesAutoCompleteAdapter extends ArrayAdapter<String> implements F
         return resultList;
     }
 
-    private ArrayList<String> resultList;
 
-    public PlacesAutoCompleteAdapter(Context context, int textViewResourceId) {
-        super(context, textViewResourceId);
-    }
+
 
     @Override
     public int getCount() {

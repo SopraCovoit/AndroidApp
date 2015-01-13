@@ -17,9 +17,6 @@
 package wtf.sur.original.puissante.rapide.automobile.sopracovoit.authenticator;
 
 
-import android.accounts.AccountManager;
-import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.LoaderManager;
 import android.app.TimePickerDialog;
 import android.content.CursorLoader;
@@ -40,29 +37,22 @@ import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.SimpleCursorAdapter;
 import android.widget.Spinner;
-import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
-import java.io.IOException;
-import java.net.PasswordAuthentication;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.List;
 
-import retrofit.RestAdapter;
 import wtf.sur.original.puissante.rapide.automobile.sopracovoit.BaseActivity;
 import wtf.sur.original.puissante.rapide.automobile.sopracovoit.R;
 import wtf.sur.original.puissante.rapide.automobile.sopracovoit.data.CovoitContract;
 import wtf.sur.original.puissante.rapide.automobile.sopracovoit.model.Path;
 import wtf.sur.original.puissante.rapide.automobile.sopracovoit.model.User;
 import wtf.sur.original.puissante.rapide.automobile.sopracovoit.model.Workplace;
-import wtf.sur.original.puissante.rapide.automobile.sopracovoit.sync.CovoitServerAccessor;
-import wtf.sur.original.puissante.rapide.automobile.sopracovoit.sync.CovoitServerService;
 import wtf.sur.original.puissante.rapide.automobile.sopracovoit.utils.PasswordHash;
 import wtf.sur.original.puissante.rapide.automobile.sopracovoit.utils.PlacesAutoCompleteAdapter;
 import wtf.sur.original.puissante.rapide.automobile.sopracovoit.utils.ValidatorInput;
