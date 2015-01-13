@@ -131,6 +131,7 @@
             android:layout_width="match_parent"
             android:layout_below="@id/path_card"
             android:layout_marginTop="@dimen/material_minimal_separator"
+            android:layout_marginBottom="@dimen/material_minimal_separator"
             android:layout_marginLeft="@dimen/material_double_separator"
             android:layout_marginRight="@dimen/material_double_separator">
             <RelativeLayout
@@ -163,7 +164,7 @@
                     android:drawablePadding="@dimen/material_minimal_separator"
                     android:minHeight="@dimen/incremental_1"
                     android:gravity="center_vertical"
-                    android:background="@drawable/gray_over_white_ripple"
+                    android:background="@drawable/gray_over_transparent_ripple"
                     tools:text="tar@ac.ce"
                     style="@style/TextAppearance.AppCompat.Body1"
                     />
@@ -179,7 +180,7 @@
                     android:drawablePadding="@dimen/material_minimal_separator"
                     android:minHeight="@dimen/incremental_1"
                     android:gravity="center_vertical"
-                    android:background="@drawable/gray_over_white_ripple"
+                    android:background="@drawable/gray_over_transparent_ripple"
                     tools:text="0650494949"
                     style="@style/TextAppearance.AppCompat.Body1"
                     />
