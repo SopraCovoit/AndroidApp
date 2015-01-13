@@ -40,6 +40,7 @@ public class CovoitProvider extends ContentProvider {
     private static final int USER_ID = 201;
     private static final int PATH = 300;
     private static final int PATH_ID = 301;
+    private static final int PATH_USER_ID = 304;
     private static final int PATH_EMAIL = 302;
     private static final int PATH_EMAIL_ALL = 303;
 
@@ -62,10 +63,13 @@ public class CovoitProvider extends ContentProvider {
 
         matcher.addURI(authority, CovoitContract.PATH_WORKPLACE, WORKPLACE);
         matcher.addURI(authority, CovoitContract.PATH_WORKPLACE + "/#", WORKPLACE_ID);
+
         matcher.addURI(authority, CovoitContract.PATH_PATH, PATH);
         matcher.addURI(authority, CovoitContract.PATH_PATH + "/#", PATH_ID);
         matcher.addURI(authority, CovoitContract.PATH_PATH + "/*", PATH_EMAIL);
+        matcher.addURI(authority, CovoitContract.PATH_PATH_USER + "/#", PATH_USER_ID);
         matcher.addURI(authority, CovoitContract.PATH_PATH + "/*/*/all", PATH_EMAIL_ALL);
+
         matcher.addURI(authority, CovoitContract.PATH_USER, USER);
         matcher.addURI(authority, CovoitContract.PATH_USER + "/#", USER_ID);
         return matcher;
@@ -184,6 +188,18 @@ public class CovoitProvider extends ContentProvider {
                         CovoitContract.PathEntry.TABLE_NAME,
                         projection,
                         CovoitContract.PathEntry._ID + " = '" + ContentUris.parseId(uri) + "'",
+                        null,
+                        null,
+                        null,
+                        sortOrder
+                );
+                break;
+            }
+            // "path_user/#"
+            case PATH_USER_ID: {
+                retCursor = sPathJoinUserQueryBuilder.query(mOpenHelper.getReadableDatabase(),
+                        projection,
+                        CovoitContract.PathEntry.TABLE_NAME + "." + CovoitContract.PathEntry._ID + " = '" + ContentUris.parseId(uri) + "'",
                         null,
                         null,
                         null,

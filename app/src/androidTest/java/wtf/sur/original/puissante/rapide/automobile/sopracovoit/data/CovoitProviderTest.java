@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Jérémie Boutoille, Jules Cantegril, Hugo Djemaa, Mickael Goubin, David Livet
+ * Copyright 2015 Jérémie Boutoille, Jules Cantegril, Hugo Djemaa, Mickael Goubin, David Livet
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -65,7 +65,6 @@ public class CovoitProviderTest extends AndroidTestCase {
         // Test insert User
         User u = new User(1);
         u.setDriver(true);
-        u.setHome(12.2, 23.4);
         u.setMail("toto@toto.fr");
         u.setName("Race");
         u.setSurname("Ta");
@@ -95,6 +94,8 @@ public class CovoitProviderTest extends AndroidTestCase {
         Path p = new Path(1, Path.Direction.HOME);
         p.setDepartureTime(12, 12);
         p.setLocation(02.2, 23.2);
+        p.setWorkplace(w1);
+        p.setDistance(0);
         p.setUser(u);
         testValues = p.getContentValues();
 
@@ -106,14 +107,14 @@ public class CovoitProviderTest extends AndroidTestCase {
 
         // Test query user
         cursor = mContext.getContentResolver().query(
-                CovoitContract.PathEntry.CONTENT_URI,
+                CovoitContract.PathEntry.buildUserId(1),
                 null,
                 null,
                 null,
                 null
         );
 
-        CovoitDbHelperTest.validateCursor(cursor, testValues);
+        assertEquals(cursor.getCount(), 1);
 
         dbHelper.close();
     }
