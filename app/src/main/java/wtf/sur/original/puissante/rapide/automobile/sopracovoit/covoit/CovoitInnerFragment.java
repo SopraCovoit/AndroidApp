@@ -109,7 +109,7 @@ public class CovoitInnerFragment extends Fragment implements LoaderManager.Loade
     @Override
     public void onItemClicked(View v) {
         long id = covoitAdapter.getIdFromPosition(recyclerView.getChildPosition(v));
-
+        ((CovoitFragment) getParentFragment()).notifyClickOnPath(id);
 //        Log.d("CovoitInner", "viewId=" + id);
     }
 }

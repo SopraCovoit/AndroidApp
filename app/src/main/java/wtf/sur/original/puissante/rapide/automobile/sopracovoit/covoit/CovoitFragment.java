@@ -56,6 +56,7 @@ public class CovoitFragment extends Fragment implements SwipeRefreshLayout.OnRef
 
 
     public static final String SYNC_FINISHED = "sync_finished";
+    public static final String COVOIT_TAG = "covoit_tag";
     private LinearLayout rootView;
     private SlidingTabLayout mSlidingTabLayout;
     private ViewPager mPager;
@@ -165,4 +166,7 @@ public class CovoitFragment extends Fragment implements SwipeRefreshLayout.OnRef
     }
 
 
+    public void notifyClickOnPath(long id) {
+        ((MainActivity) this.getActivity()).openCovoitDetailed(id);
+    }
 }

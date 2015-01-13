@@ -40,6 +40,7 @@ import wtf.sur.original.puissante.rapide.automobile.sopracovoit.model.Path;
 public class CovoitDetailedFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
     public static final String ID_PATH_KEY = "id_path_key";
+    public static final String COVOIT_DET_TAG = "covoit_detailed";
     private static final int DETAIL_LOADER = 0;
     private int mId;
     private TextView mName;
@@ -120,5 +121,13 @@ public class CovoitDetailedFragment extends Fragment implements LoaderManager.Lo
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
 
+    }
+
+    public static Fragment newInstance(long id) {
+        Fragment f = new CovoitDetailedFragment();
+        Bundle args = new Bundle();
+        args.putLong(ID_PATH_KEY, id);
+        f.setArguments(args);
+        return f;
     }
 }

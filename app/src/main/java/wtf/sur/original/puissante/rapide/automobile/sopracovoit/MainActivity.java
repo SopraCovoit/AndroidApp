@@ -28,6 +28,8 @@ import android.content.Loader;
 import android.database.Cursor;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
 import android.view.Gravity;
@@ -42,6 +44,7 @@ import java.io.IOException;
 
 import wtf.sur.original.puissante.rapide.automobile.sopracovoit.authenticator.AccountGeneral;
 import wtf.sur.original.puissante.rapide.automobile.sopracovoit.covoit.CovoitFragment;
+import wtf.sur.original.puissante.rapide.automobile.sopracovoit.covoit.detailed.CovoitDetailedFragment;
 import wtf.sur.original.puissante.rapide.automobile.sopracovoit.data.CovoitContract;
 import wtf.sur.original.puissante.rapide.automobile.sopracovoit.drawer.DrawerManager;
 
@@ -76,11 +79,12 @@ public class MainActivity extends BaseActivity implements LoaderManager.LoaderCa
                                 mAuthToken = b.getString(AccountManager.KEY_AUTHTOKEN);
                             }
                             if (savedInstanceState == null) {
-                                CovoitFragment cf = new CovoitFragment();
-                                cf.setArguments(b);
-                                getSupportFragmentManager().beginTransaction()
-                                        .add(R.id.fragment_container, cf)
-                                        .commit();
+//                                CovoitFragment cf = new CovoitFragment();
+//                                cf.setArguments(b);
+//                                getSupportFragmentManager().beginTransaction()
+//                                        .add(R.id.fragment_container, cf)
+//                                        .commit();
+                                openCovoit(b);
                             }
 
                         } catch (OperationCanceledException | IOException | AuthenticatorException e) {
@@ -196,6 +200,27 @@ public class MainActivity extends BaseActivity implements LoaderManager.LoaderCa
                                  Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_main, container, false);
             return rootView;
+        }
+    }
+    public void openCovoit(Bundle b) {
+        Fragment f = new CovoitFragment();
+        f.setArguments(b);
+        this.changeFragment(f,CovoitFragment.COVOIT_TAG, false);
+    }
+    public void openCovoitDetailed(long id) {
+        Fragment f = CovoitDetailedFragment.newInstance(id);
+        this.changeFragment(f, CovoitDetailedFragment.COVOIT_DET_TAG, true);
+    }
+
+    public void changeFragment(Fragment f, String tag, boolean shouldAddToBackstack) {
+        Fragment fragInStack = this.getSupportFragmentManager().findFragmentByTag(tag);
+        if(fragInStack != null) {
+            this.getSupportFragmentManager().popBackStack(tag, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+        } else {
+            FragmentTransaction ft = this.getSupportFragmentManager().beginTransaction();
+            if(shouldAddToBackstack)
+                ft.addToBackStack(tag);
+            ft.replace(R.id.fragment_container, f, tag).commit();
         }
     }
 }
