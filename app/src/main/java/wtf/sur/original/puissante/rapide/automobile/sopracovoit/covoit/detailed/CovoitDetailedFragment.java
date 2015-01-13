@@ -19,6 +19,7 @@ package wtf.sur.original.puissante.rapide.automobile.sopracovoit.covoit.detailed
 import android.database.Cursor;
 import android.location.Address;
 import android.location.Geocoder;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -107,50 +108,74 @@ public class CovoitDetailedFragment extends Fragment implements LoaderManager.Lo
     }
 
     @Override
-    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+    public void onLoadFinished(Loader<Cursor> loader, final Cursor data) {
         if (data != null && data.moveToFirst()) {
-            String name = data.getString(data.getColumnIndex(CovoitContract.UserEntry.COLUMN_NAME));
-            String surname = data.getString(data.getColumnIndex(CovoitContract.UserEntry.COLUMN_SURNAME));
-            String mail = data.getString(data.getColumnIndex(CovoitContract.UserEntry.COLUMN_MAIL));
-            String phone = data.getString(data.getColumnIndex(CovoitContract.UserEntry.COLUMN_PHONE));
-            String sworkplace = data.getString(data.getColumnIndex(CovoitContract.WorkplaceEntry.COLUMN_NAME));
-            Location l = new Location(data.getDouble(data.getColumnIndex(CovoitContract.PathEntry.COLUMN_LAT)), data.getDouble(data.getColumnIndex(CovoitContract.PathEntry.COLUMN_LON)));
-            int hour = data.getInt(data.getColumnIndex(CovoitContract.PathEntry.COLUMN_HOUR));
-            int minute = data.getInt(data.getColumnIndex(CovoitContract.PathEntry.COLUMN_MIN));
-            int distance = data.getInt(data.getColumnIndex(CovoitContract.PathEntry.COLUMN_DISTANCE));
-            Path.Direction dir = Path.getStringDirection(data.getString(data.getColumnIndex(CovoitContract.PathEntry.COLUMN_DIRECTION)));
-            mName.setText(surname + " " + name);
+            new AsyncTask<Void, Void, Void>() {
 
-            TextView location;
-            TextView workplace;
-            if (dir.equals(Path.Direction.HOME)) {
-                location = mTo;
-                workplace = mFrom;
-            } else {
-                location = mFrom;
-                workplace = mTo;
-            }
+                private String name
+                        ,
+                        surname
+                        ,
+                        mail
+                        ,
+                        phone
+                        ,
+                        sworkplace
+                        ,
+                        addressText;
+                private int hour
+                        ,
+                        minute
+                        ,
+                        distance;
+                private Path.Direction dir;
+                private boolean isDriver;
 
-            workplace.setText(sworkplace);
-            Geocoder geocoder = new Geocoder(getActivity());
-            try {
-                Address address = geocoder.getFromLocation(l.getLatitude(), l.getLongitude(), 1).get(0);
-                String addressText = String.format(
-                        "%s, %s, %s",
-                        // If there's a street address, add it
-                        address.getMaxAddressLineIndex() > 0 ?
-                                address.getAddressLine(0) : "",
-                        // Locality is usually a city
-                        address.getLocality(),
-                        // The country of the address
-                        address.getCountryName());
-                location.setText(addressText);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            mContactMail.setText(mail);
-            mContactPhone.setText(phone);
-            mTime.setText(hour + ":" + minute);
+                @Override
+                protected Void doInBackground(Void... params) {
+                    name = data.getString(data.getColumnIndex(CovoitContract.UserEntry.COLUMN_NAME));
+                    surname = data.getString(data.getColumnIndex(CovoitContract.UserEntry.COLUMN_SURNAME));
+                    mail = data.getString(data.getColumnIndex(CovoitContract.UserEntry.COLUMN_MAIL));
+                    phone = data.getString(data.getColumnIndex(CovoitContract.UserEntry.COLUMN_PHONE));
+                    sworkplace = data.getString(data.getColumnIndex(CovoitContract.WorkplaceEntry.COLUMN_NAME));
+                    Location l = new Location(data.getDouble(data.getColumnIndex(CovoitContract.PathEntry.COLUMN_LAT)), data.getDouble(data.getColumnIndex(CovoitContract.PathEntry.COLUMN_LON)));
+                    hour = data.getInt(data.getColumnIndex(CovoitContract.PathEntry.COLUMN_HOUR));
+                    minute = data.getInt(data.getColumnIndex(CovoitContract.PathEntry.COLUMN_MIN));
+                    distance = data.getInt(data.getColumnIndex(CovoitContract.PathEntry.COLUMN_DISTANCE));
+                    isDriver = data.getInt(data.getColumnIndex(CovoitContract.UserEntry.COLUMN_IS_DRIVE)) == 1;
+                    dir = Path.getStringDirection(data.getString(data.getColumnIndex(CovoitContract.PathEntry.COLUMN_DIRECTION)));
+                    Geocoder geocoder = new Geocoder(getActivity());
+                    try {
+                        Address address = geocoder.getFromLocation(l.getLatitude(), l.getLongitude(), 1).get(0);
+                        addressText = address.getLocality();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
+                    return null;
+                }
+
+                @Override
+                protected void onPostExecute(Void aVoid) {
+                    mName.setText(surname + " " + name);
+
+                    TextView location;
+                    TextView workplace;
+                    if (dir.equals(Path.Direction.HOME)) {
+                        location = mTo;
+                        workplace = mFrom;
+                    } else {
+                        location = mFrom;
+                        workplace = mTo;
+                    }
+
+                    workplace.setText(sworkplace);
+                    location.setText(addressText);
+                    mContactMail.setText(mail);
+                    mContactPhone.setText(phone);
+                    mTime.setText(hour + ":" + minute);
+                }
+            }.execute();
         }
     }
 
