@@ -22,6 +22,9 @@ import android.content.Loader;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v7.widget.SwitchCompat;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.widget.EditText;
 import android.widget.SimpleCursorAdapter;
 import android.widget.Spinner;
@@ -57,6 +60,26 @@ public class UpdatePathActivity extends BaseActivity implements LoaderManager.Lo
         this.return_hour = (EditText) findViewById(R.id.return_hour);
         this.isDriver = (SwitchCompat) findViewById(R.id.driver);
         getLoaderManager().initLoader(WORKPLACE_LOADER, null, this);
+    }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_registration, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                return true;
+            case R.id.action_register:
+                //TODO
+                return true;
+            default:
+        }
+        return super.onContextItemSelected(item);
     }
 
     @Override

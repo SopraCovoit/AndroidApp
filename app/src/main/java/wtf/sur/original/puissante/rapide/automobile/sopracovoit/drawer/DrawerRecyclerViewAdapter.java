@@ -16,7 +16,9 @@
 
 package wtf.sur.original.puissante.rapide.automobile.sopracovoit.drawer;
 
+import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -59,6 +61,15 @@ public class DrawerRecyclerViewAdapter extends RecyclerView.Adapter<DrawerRecycl
     @Override
     public void onBindViewHolder(DrawerViewHolder holder, int position) {
         holder.textView.setText(mData[position]);
+        if(position==0) {
+            Drawable d = holder.textView.getResources().getDrawable(R.drawable.ic_duck_grey600_24dp);
+            holder.textView.setCompoundDrawablesWithIntrinsicBounds(d,null,null,null);
+        } else if(position == 1) {
+            holder.textView.setCompoundDrawablesWithIntrinsicBounds(holder.textView.getResources().getDrawable(R.drawable.ic_account_grey600_24dp),null,null,null);
+        } else {
+            holder.textView.setCompoundDrawablesWithIntrinsicBounds(holder.textView.getResources().getDrawable(R.drawable.ic_google_maps_grey600_24dp),null,null,null);
+
+        }
 
     }
 

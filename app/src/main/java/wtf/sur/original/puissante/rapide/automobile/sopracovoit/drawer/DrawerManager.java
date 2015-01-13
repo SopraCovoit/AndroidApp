@@ -69,10 +69,12 @@ public class DrawerManager implements OnChildClickedListener {
             case 1:
                 Intent intent = new Intent(mContext, UpdateProfileActivity.class);
                 mContext.startActivity(intent);
+                this.drawerLayout.closeDrawers();
                 break;
             case 2:
                 Intent intent2 = new Intent(mContext, UpdatePathActivity.class);
                 mContext.startActivity(intent2);
+                this.drawerLayout.closeDrawers();
                 break;
 
         }

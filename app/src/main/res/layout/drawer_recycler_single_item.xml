@@ -21,6 +21,8 @@
     android:layout_width="match_parent"
     android:gravity="center_vertical"
     android:drawablePadding="@dimen/drawer_horizontal_margin"
+    android:paddingLeft="@dimen/material_double_separator"
+    android:paddingRight="@dimen/material_double_separator"
     android:drawableLeft="@android:drawable/alert_dark_frame"
     android:drawableStart="@android:drawable/alert_dark_frame"
     android:layout_height="@dimen/drawer_list_item"

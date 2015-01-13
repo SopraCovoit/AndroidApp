@@ -18,6 +18,9 @@ package wtf.sur.original.puissante.rapide.automobile.sopracovoit.user;
 
 import android.os.Bundle;
 import android.os.PersistableBundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -43,6 +46,27 @@ public class UpdateProfileActivity extends BaseActivity {
         this.mail = (EditText) findViewById(R.id.email);
         this.phone = (EditText) findViewById(R.id.phone);
         this.password = (EditText) findViewById(R.id.password);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_registration, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                return true;
+            case R.id.action_register:
+                //TODO
+                return true;
+            default:
+        }
+        return super.onContextItemSelected(item);
     }
 
     @Override
