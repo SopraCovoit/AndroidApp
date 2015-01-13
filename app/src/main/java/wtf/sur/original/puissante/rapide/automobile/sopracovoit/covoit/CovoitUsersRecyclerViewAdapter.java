@@ -34,11 +34,12 @@ import wtf.sur.original.puissante.rapide.automobile.sopracovoit.R;
 import wtf.sur.original.puissante.rapide.automobile.sopracovoit.data.CovoitContract;
 import wtf.sur.original.puissante.rapide.automobile.sopracovoit.model.Path;
 import wtf.sur.original.puissante.rapide.automobile.sopracovoit.model.User;
+import wtf.sur.original.puissante.rapide.automobile.sopracovoit.utils.OnChildClickedListener;
 
 /**
  * Created by MagicMicky on 08/01/2015.
  */
-public class CovoitUsersRecyclerViewAdapter extends RecyclerView.Adapter {
+public class CovoitUsersRecyclerViewAdapter extends RecyclerView.Adapter implements View.OnClickListener {
     private static int HEADER_TYPE=1;
     private static int DATA_TYPE =2;
     private Context mContext;
@@ -50,6 +51,8 @@ public class CovoitUsersRecyclerViewAdapter extends RecyclerView.Adapter {
     private int mRowIdColumn;
 
     private DataSetObserver mDataSetObserver;
+    private OnChildClickedListener onChildClickedListener;
+
 
     public static class CovoitViewHolder extends RecyclerView.ViewHolder {
 
@@ -100,7 +103,7 @@ public class CovoitUsersRecyclerViewAdapter extends RecyclerView.Adapter {
             return new HeaderViewHolder(v);
         }
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.driver_view, parent, false);
-
+        v.setOnClickListener(this);
         return new CovoitViewHolder(v);
     }
 
@@ -116,6 +119,17 @@ public class CovoitUsersRecyclerViewAdapter extends RecyclerView.Adapter {
             return mCursor.getLong(mRowIdColumn);
         }
         return 0;
+    }
+
+    public long getIdFromPosition(int pos) {
+        if(mCursor.moveToPosition(pos-1)){
+
+            return mCursor.getLong(0);
+        }
+        return -1;
+    }
+    public void setOnChildClickedListener(OnChildClickedListener onChildClickedListener) {
+        this.onChildClickedListener = onChildClickedListener;
     }
 
     @Override
@@ -149,6 +163,13 @@ public class CovoitUsersRecyclerViewAdapter extends RecyclerView.Adapter {
 
     }
 
+
+    @Override
+    public void onClick(View v) {
+        if(this.onChildClickedListener!=null) {
+            this.onChildClickedListener.onItemClicked(v);
+        }
+    }
 
     /**
      * Change the underlying cursor to a new cursor. If there is an existing cursor it will be

@@ -26,6 +26,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import wtf.sur.original.puissante.rapide.automobile.sopracovoit.R;
+import wtf.sur.original.puissante.rapide.automobile.sopracovoit.utils.OnChildClickedListener;
 
 /**
  * Created by MagicMicky on 19/12/2014.

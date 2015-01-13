@@ -16,17 +16,14 @@
 
 package wtf.sur.original.puissante.rapide.automobile.sopracovoit.drawer;
 
-import android.content.DialogInterface;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import java.util.List;
-
 import wtf.sur.original.puissante.rapide.automobile.sopracovoit.R;
+import wtf.sur.original.puissante.rapide.automobile.sopracovoit.utils.OnChildClickedListener;
 
 /**
  * Created by MagicMicky on 19/12/2014.

@@ -45,15 +45,17 @@ import wtf.sur.original.puissante.rapide.automobile.sopracovoit.R;
 import wtf.sur.original.puissante.rapide.automobile.sopracovoit.authenticator.AccountGeneral;
 import wtf.sur.original.puissante.rapide.automobile.sopracovoit.data.CovoitContract;
 import wtf.sur.original.puissante.rapide.automobile.sopracovoit.model.Path;
+import wtf.sur.original.puissante.rapide.automobile.sopracovoit.utils.OnChildClickedListener;
 
 /**
  * Created by MagicMicky on 09/01/2015.
  */
-public class CovoitInnerFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
+public class CovoitInnerFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>,OnChildClickedListener {
     public static final java.lang.String ARG_DIRECTION = "direction";
     private CovoitUsersRecyclerViewAdapter covoitAdapter;
     private View root;
     private static final int PATH_LOADER = 1;
+    private RecyclerView recyclerView;
 
     public CovoitInnerFragment() {
     }
@@ -70,10 +72,11 @@ public class CovoitInnerFragment extends Fragment implements LoaderManager.Loade
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        RecyclerView recyclerView = (RecyclerView) root.findViewById(R.id.recycler_view);
+        recyclerView = (RecyclerView) root.findViewById(R.id.recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         this.covoitAdapter = new CovoitUsersRecyclerViewAdapter(getActivity(), null);
         recyclerView.setAdapter(covoitAdapter);
+        this.covoitAdapter.setOnChildClickedListener(this);
         Log.d("Toto2", "Args : " + getArguments());
         getLoaderManager().initLoader(PATH_LOADER, getArguments(), CovoitInnerFragment.this);
     }
@@ -101,5 +104,12 @@ public class CovoitInnerFragment extends Fragment implements LoaderManager.Loade
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
         covoitAdapter.changeCursor(null);
+    }
+
+    @Override
+    public void onItemClicked(View v) {
+        long id = covoitAdapter.getIdFromPosition(recyclerView.getChildPosition(v));
+
+//        Log.d("CovoitInner", "viewId=" + id);
     }
 }

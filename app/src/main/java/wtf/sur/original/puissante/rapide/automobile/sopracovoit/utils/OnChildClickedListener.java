@@ -14,7 +14,7 @@
  *    limitations under the License.
  */
 
-package wtf.sur.original.puissante.rapide.automobile.sopracovoit.drawer;
+package wtf.sur.original.puissante.rapide.automobile.sopracovoit.utils;
 
 import android.view.View;
 
