@@ -28,11 +28,11 @@ import wtf.sur.original.puissante.rapide.automobile.sopracovoit.model.User;
 import wtf.sur.original.puissante.rapide.automobile.sopracovoit.model.Workplace;
 
 public interface CovoitServerService {
-    @GET("/workplace.json")
+    @GET("/workplace")
     List<Workplace> listWorkplaces();
 
-    @GET("/connexion.json")
-    User connection();
+    @GET("/user/token")
+    User connection(@retrofit.http.Path("mail") String mail, @retrofit.http.Path("password") String password);
 
     @POST("/newuser.php")
     User createUser(@Body User user);

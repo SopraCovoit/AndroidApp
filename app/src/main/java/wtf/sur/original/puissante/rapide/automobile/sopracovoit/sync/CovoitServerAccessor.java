@@ -18,14 +18,16 @@ package wtf.sur.original.puissante.rapide.automobile.sopracovoit.sync;
 
 import java.util.List;
 
+import retrofit.ErrorHandler;
 import retrofit.RestAdapter;
+import retrofit.RetrofitError;
 import wtf.sur.original.puissante.rapide.automobile.sopracovoit.model.Path;
 import wtf.sur.original.puissante.rapide.automobile.sopracovoit.model.User;
 import wtf.sur.original.puissante.rapide.automobile.sopracovoit.model.Workplace;
 
 public class CovoitServerAccessor {
 
-    private static final String URL = "http://etud.insa-toulouse.fr/~livet";
+    private static final String URL = "http://192.168.1.6:8080/api";
     private static final RestAdapter restAdapter = new RestAdapter.Builder()
             .setEndpoint(URL)
             .build();
@@ -40,9 +42,9 @@ public class CovoitServerAccessor {
         return service.createUser(add);
     }
 
-    public static User connection() {
+    public static User connection(User connect) {
         CovoitServerService service = restAdapter.create(CovoitServerService.class);
-        return service.connection();
+        return service.connection(connect.getMail(), connect.getPassword());
     }
 
     public static List<Path> listPath() {

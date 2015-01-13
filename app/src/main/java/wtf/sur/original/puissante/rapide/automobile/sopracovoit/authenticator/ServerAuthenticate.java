@@ -37,7 +37,7 @@ import wtf.sur.original.puissante.rapide.automobile.sopracovoit.sync.CovoitServe
 public class ServerAuthenticate {
 
     public static Bundle userSignIn(Context context, User login) {
-        User u = CovoitServerAccessor.connection();
+        User u = CovoitServerAccessor.connection(login);
         u.setPassword(login.getPassword());
         return finishLogin(context, u);
     }

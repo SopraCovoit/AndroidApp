@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import wtf.sur.original.puissante.rapide.automobile.sopracovoit.data.CovoitContract;
+import wtf.sur.original.puissante.rapide.automobile.sopracovoit.utils.PasswordHash;
 
 /**
  * User class
@@ -126,7 +127,7 @@ public class User {
     }
 
     public void setPassword(String password) {
-        this.password = password;
+        this.password = PasswordHash.getHashSHA1(password);
     }
 
     public List<Path> getPath() {

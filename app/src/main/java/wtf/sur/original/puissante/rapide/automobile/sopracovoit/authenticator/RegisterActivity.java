@@ -157,7 +157,7 @@ public class RegisterActivity extends BaseActivity implements LoaderManager.Load
                     register.setName(name.getText().toString().trim());
                     register.setSurname(surname.getText().toString().trim());
                     register.setMail(mail.getText().toString().trim());
-                    register.setPassword(PasswordHash.getHashSHA1(pass.getText().toString().trim()));
+                    register.setPassword(pass.getText().toString().trim());
                     register.setPhone(phone.getText().toString().trim());
                     register.setDriver(driver);
 
