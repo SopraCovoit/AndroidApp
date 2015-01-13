@@ -124,7 +124,7 @@ public class CovoitUsersRecyclerViewAdapter extends RecyclerView.Adapter impleme
     public long getIdFromPosition(int pos) {
         if(mCursor.moveToPosition(pos-1)){
 
-            return mCursor.getLong(0);
+            return mCursor.getLong(mCursor.getColumnIndex(CovoitContract.PathEntry._ID));
         }
         return -1;
     }

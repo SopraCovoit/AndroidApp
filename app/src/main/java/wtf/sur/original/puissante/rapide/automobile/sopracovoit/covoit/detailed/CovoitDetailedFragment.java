@@ -42,7 +42,7 @@ public class CovoitDetailedFragment extends Fragment implements LoaderManager.Lo
     public static final String ID_PATH_KEY = "id_path_key";
     public static final String COVOIT_DET_TAG = "covoit_detailed";
     private static final int DETAIL_LOADER = 0;
-    private int mId;
+    private long mId;
     private TextView mName;
     private TextView mFrom;
     private TextView mTo;
@@ -57,7 +57,7 @@ public class CovoitDetailedFragment extends Fragment implements LoaderManager.Lo
 
         Bundle arguments = getArguments();
         if (arguments != null) {
-            mId = arguments.getInt(ID_PATH_KEY);
+            mId = arguments.getLong(ID_PATH_KEY);
         }
 
         View root = inflater.inflate(R.layout.covoit_detailed_fragment, container,false);
