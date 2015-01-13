@@ -65,9 +65,9 @@ public class DrawerRecyclerViewAdapter extends RecyclerView.Adapter<DrawerRecycl
             Drawable d = holder.textView.getResources().getDrawable(R.drawable.ic_duck_grey600_24dp);
             holder.textView.setCompoundDrawablesWithIntrinsicBounds(d,null,null,null);
         } else if(position == 1) {
-            holder.textView.setCompoundDrawablesWithIntrinsicBounds(holder.textView.getResources().getDrawable(R.drawable.ic_account_grey600_24dp),null,null,null);
-        } else {
             holder.textView.setCompoundDrawablesWithIntrinsicBounds(holder.textView.getResources().getDrawable(R.drawable.ic_google_maps_grey600_24dp),null,null,null);
+        } else {
+            holder.textView.setCompoundDrawablesWithIntrinsicBounds(holder.textView.getResources().getDrawable(R.drawable.ic_account_grey600_24dp),null,null,null);
 
         }
 
