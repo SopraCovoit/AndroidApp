@@ -17,6 +17,8 @@
 package wtf.sur.original.puissante.rapide.automobile.sopracovoit.covoit.detailed;
 
 import android.database.Cursor;
+import android.location.Address;
+import android.location.Geocoder;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -28,6 +30,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import java.io.IOException;
 
 import wtf.sur.original.puissante.rapide.automobile.sopracovoit.R;
 import wtf.sur.original.puissante.rapide.automobile.sopracovoit.data.CovoitContract;
@@ -65,8 +69,8 @@ public class CovoitDetailedFragment extends Fragment implements LoaderManager.Lo
         mFrom = (TextView) root.findViewById(R.id.TV_from);
         mTo = (TextView) root.findViewById(R.id.TV_to);
         mTime = (TextView) root.findViewById(R.id.TV_time);
-        mContactMail = (TextView) root.findViewById(R.id.email);
-        mContactPhone = (TextView) root.findViewById(R.id.phone);
+        mContactMail = (TextView) getActivity().findViewById(R.id.TV_email);
+        mContactPhone = (TextView) getActivity().findViewById(R.id.TV_phone);
         return root;
     }
 
@@ -109,12 +113,44 @@ public class CovoitDetailedFragment extends Fragment implements LoaderManager.Lo
             String surname = data.getString(data.getColumnIndex(CovoitContract.UserEntry.COLUMN_SURNAME));
             String mail = data.getString(data.getColumnIndex(CovoitContract.UserEntry.COLUMN_MAIL));
             String phone = data.getString(data.getColumnIndex(CovoitContract.UserEntry.COLUMN_PHONE));
+            String sworkplace = data.getString(data.getColumnIndex(CovoitContract.WorkplaceEntry.COLUMN_NAME));
             Location l = new Location(data.getDouble(data.getColumnIndex(CovoitContract.PathEntry.COLUMN_LAT)), data.getDouble(data.getColumnIndex(CovoitContract.PathEntry.COLUMN_LON)));
             int hour = data.getInt(data.getColumnIndex(CovoitContract.PathEntry.COLUMN_HOUR));
             int minute = data.getInt(data.getColumnIndex(CovoitContract.PathEntry.COLUMN_MIN));
             int distance = data.getInt(data.getColumnIndex(CovoitContract.PathEntry.COLUMN_DISTANCE));
             Path.Direction dir = Path.getStringDirection(data.getString(data.getColumnIndex(CovoitContract.PathEntry.COLUMN_DIRECTION)));
-            // TODO set TextField with values
+            mName.setText(surname + " " + name);
+
+            TextView location;
+            TextView workplace;
+            if (dir.equals(Path.Direction.HOME)) {
+                location = mTo;
+                workplace = mFrom;
+            } else {
+                location = mFrom;
+                workplace = mTo;
+            }
+
+            workplace.setText(sworkplace);
+            Geocoder geocoder = new Geocoder(getActivity());
+            try {
+                Address address = geocoder.getFromLocation(l.getLatitude(), l.getLongitude(), 1).get(0);
+                String addressText = String.format(
+                        "%s, %s, %s",
+                        // If there's a street address, add it
+                        address.getMaxAddressLineIndex() > 0 ?
+                                address.getAddressLine(0) : "",
+                        // Locality is usually a city
+                        address.getLocality(),
+                        // The country of the address
+                        address.getCountryName());
+                location.setText(addressText);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            mContactMail.setText(mail);
+            //mContactPhone.setText(phone);
+            mTime.setText(hour + ":" + minute);
         }
     }
 

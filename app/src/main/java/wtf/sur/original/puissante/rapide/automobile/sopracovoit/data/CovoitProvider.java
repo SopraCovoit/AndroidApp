@@ -45,6 +45,7 @@ public class CovoitProvider extends ContentProvider {
     private static final int PATH_EMAIL_ALL = 303;
 
     private static final SQLiteQueryBuilder sPathJoinUserQueryBuilder;
+    private static final SQLiteQueryBuilder sPathJoinUserJoinWorkplaceQueryBuilder;
 
     static {
         sPathJoinUserQueryBuilder = new SQLiteQueryBuilder();
@@ -55,6 +56,20 @@ public class CovoitProvider extends ContentProvider {
                         "." + CovoitContract.PathEntry.COLUMN_USER_ID +
                         " = " + CovoitContract.UserEntry.TABLE_NAME +
                         "." + CovoitContract.UserEntry._ID);
+
+        sPathJoinUserJoinWorkplaceQueryBuilder = new SQLiteQueryBuilder();
+        sPathJoinUserJoinWorkplaceQueryBuilder.setTables(
+                CovoitContract.PathEntry.TABLE_NAME + " INNER JOIN " +
+                        CovoitContract.UserEntry.TABLE_NAME +
+                        " ON " + CovoitContract.PathEntry.TABLE_NAME +
+                        "." + CovoitContract.PathEntry.COLUMN_USER_ID +
+                        " = " + CovoitContract.UserEntry.TABLE_NAME +
+                        "." + CovoitContract.UserEntry._ID +
+                        " INNER JOIN " + CovoitContract.WorkplaceEntry.TABLE_NAME +
+                        " ON " + CovoitContract.PathEntry.TABLE_NAME +
+                        "." + CovoitContract.PathEntry.COLUMN_WORKPLACE_ID +
+                        " = " + CovoitContract.WorkplaceEntry.TABLE_NAME +
+                        "." + CovoitContract.WorkplaceEntry._ID);
     }
 
     private static UriMatcher buildUriMatcher() {
@@ -197,7 +212,7 @@ public class CovoitProvider extends ContentProvider {
             }
             // "path_user/#"
             case PATH_USER_ID: {
-                retCursor = sPathJoinUserQueryBuilder.query(mOpenHelper.getReadableDatabase(),
+                retCursor = sPathJoinUserJoinWorkplaceQueryBuilder.query(mOpenHelper.getReadableDatabase(),
                         projection,
                         CovoitContract.PathEntry.TABLE_NAME + "." + CovoitContract.PathEntry._ID + " = '" + ContentUris.parseId(uri) + "'",
                         null,
