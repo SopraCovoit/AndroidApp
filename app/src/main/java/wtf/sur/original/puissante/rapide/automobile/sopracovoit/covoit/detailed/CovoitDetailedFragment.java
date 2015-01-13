@@ -16,32 +16,109 @@
 
 package wtf.sur.original.puissante.rapide.automobile.sopracovoit.covoit.detailed;
 
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import wtf.sur.original.puissante.rapide.automobile.sopracovoit.R;
+import wtf.sur.original.puissante.rapide.automobile.sopracovoit.data.CovoitContract;
+import wtf.sur.original.puissante.rapide.automobile.sopracovoit.model.Location;
+import wtf.sur.original.puissante.rapide.automobile.sopracovoit.model.Path;
 
 /**
  * Created by MagicMicky on 12/01/2015.
  */
-public class CovoitDetailedFragment extends Fragment {
+public class CovoitDetailedFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
+
+    public static final String ID_PATH_KEY = "id_path_key";
+    private static final int DETAIL_LOADER = 0;
+    private int mId;
+    private TextView mName;
+    private TextView mFrom;
+    private TextView mTo;
+    private TextView mTime;
+    private TextView mContactMail;
+    private TextView mContactPhone;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
+
+        Bundle arguments = getArguments();
+        if (arguments != null) {
+            mId = arguments.getInt(ID_PATH_KEY);
+        }
+
         View root = inflater.inflate(R.layout.covoit_detailed_fragment, container,false);
-        TextView name = (TextView) root.findViewById(R.id.TV_people_name);
-        TextView from = (TextView) root.findViewById(R.id.TV_from);
-        TextView to = (TextView) root.findViewById(R.id.TV_to);
-        TextView time = (TextView) root.findViewById(R.id.TV_time);
-        TextView contact_mail = (TextView) root.findViewById(R.id.email);
-        TextView contact_phone = (TextView) root.findViewById(R.id.phone);
+        mName = (TextView) root.findViewById(R.id.TV_people_name);
+        mFrom = (TextView) root.findViewById(R.id.TV_from);
+        mTo = (TextView) root.findViewById(R.id.TV_to);
+        mTime = (TextView) root.findViewById(R.id.TV_time);
+        mContactMail = (TextView) root.findViewById(R.id.email);
+        mContactPhone = (TextView) root.findViewById(R.id.phone);
         return root;
     }
 
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        Bundle arguments = getArguments();
+        if (arguments != null) {
+            getLoaderManager().initLoader(DETAIL_LOADER, null, this);
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Bundle arguments = getArguments();
+        if (arguments != null && arguments.containsKey(ID_PATH_KEY)) {
+            getLoaderManager().restartLoader(DETAIL_LOADER, null, this);
+        }
+    }
+
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+
+        return new CursorLoader(
+                getActivity(),
+                CovoitContract.PathEntry.buildUserId(mId),
+                null,
+                null,
+                null,
+                null
+        );
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        if (data != null && data.moveToFirst()) {
+            String name = data.getString(data.getColumnIndex(CovoitContract.UserEntry.COLUMN_NAME));
+            String surname = data.getString(data.getColumnIndex(CovoitContract.UserEntry.COLUMN_SURNAME));
+            String mail = data.getString(data.getColumnIndex(CovoitContract.UserEntry.COLUMN_MAIL));
+            String phone = data.getString(data.getColumnIndex(CovoitContract.UserEntry.COLUMN_PHONE));
+            Location l = new Location(data.getDouble(data.getColumnIndex(CovoitContract.PathEntry.COLUMN_LAT)), data.getDouble(data.getColumnIndex(CovoitContract.PathEntry.COLUMN_LON)));
+            int hour = data.getInt(data.getColumnIndex(CovoitContract.PathEntry.COLUMN_HOUR));
+            int minute = data.getInt(data.getColumnIndex(CovoitContract.PathEntry.COLUMN_MIN));
+            int distance = data.getInt(data.getColumnIndex(CovoitContract.PathEntry.COLUMN_DISTANCE));
+            Path.Direction dir = Path.getStringDirection(data.getString(data.getColumnIndex(CovoitContract.PathEntry.COLUMN_DIRECTION)));
+            // TODO set TextField with values
+        }
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+
+    }
 }

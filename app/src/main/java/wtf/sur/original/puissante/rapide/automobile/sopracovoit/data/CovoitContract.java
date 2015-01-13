@@ -31,6 +31,7 @@ public class CovoitContract {
     public static final String PATH_WORKPLACE = "workplace";
     public static final String PATH_USER = "user";
     public static final String PATH_PATH = "path";
+    public static final String PATH_PATH_USER = "path_user";
 
 
     public static final class WorkplaceEntry implements BaseColumns {
@@ -78,6 +79,8 @@ public class CovoitContract {
     public static final class PathEntry implements BaseColumns {
         public static final Uri CONTENT_URI =
                 BASE_CONTENT_URI.buildUpon().appendPath(PATH_PATH).build();
+        public static final Uri CONTENT_URI2 =
+                BASE_CONTENT_URI.buildUpon().appendPath(PATH_PATH_USER).build();
 
         public static final String CONTENT_TYPE =
                 "vnd.android.cursor.dir/" + CONTENT_AUTHORITY + "/" + PATH_PATH;
@@ -100,6 +103,10 @@ public class CovoitContract {
 
         public static Uri buildEmail(String email) {
             return CONTENT_URI.buildUpon().appendPath(email).build();
+        }
+
+        public static Uri buildUserId(long id) {
+            return ContentUris.withAppendedId(CONTENT_URI2, id);
         }
 
         public static Uri buildEmailAll(String email, String direction) {
