@@ -47,7 +47,12 @@
         <activity
             android:name=".authenticator.RegisterActivity"
             android:label="Register" />
-
+        <activity
+            android:name=".user.UpdatePathActivity"
+            android:label="Update Path"/>
+        <activity
+            android:name=".user.UpdateProfileActivity"
+            android:label="Update Profile"/>
         <provider
             android:exported="false"
             android:syncable="true"

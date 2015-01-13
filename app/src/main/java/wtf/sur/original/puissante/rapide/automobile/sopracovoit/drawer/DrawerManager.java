@@ -17,6 +17,7 @@
 package wtf.sur.original.puissante.rapide.automobile.sopracovoit.drawer;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -26,6 +27,8 @@ import android.view.View;
 import android.widget.TextView;
 
 import wtf.sur.original.puissante.rapide.automobile.sopracovoit.R;
+import wtf.sur.original.puissante.rapide.automobile.sopracovoit.user.UpdatePathActivity;
+import wtf.sur.original.puissante.rapide.automobile.sopracovoit.user.UpdateProfileActivity;
 import wtf.sur.original.puissante.rapide.automobile.sopracovoit.utils.OnChildClickedListener;
 
 /**
@@ -62,6 +65,17 @@ public class DrawerManager implements OnChildClickedListener {
     public void onItemClicked(View v) {
         int position = this.recyclerView.getChildPosition(v);
         Log.d("Tag", "Clicked on position "+ position);
+        switch(position) {
+            case 1:
+                Intent intent = new Intent(mContext, UpdateProfileActivity.class);
+                mContext.startActivity(intent);
+                break;
+            case 2:
+                Intent intent2 = new Intent(mContext, UpdatePathActivity.class);
+                mContext.startActivity(intent2);
+                break;
+
+        }
 
     }
 
