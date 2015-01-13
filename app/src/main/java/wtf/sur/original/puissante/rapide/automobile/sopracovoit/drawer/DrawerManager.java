@@ -16,6 +16,7 @@
 
 package wtf.sur.original.puissante.rapide.automobile.sopracovoit.drawer;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.widget.DrawerLayout;
@@ -26,6 +27,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
+import wtf.sur.original.puissante.rapide.automobile.sopracovoit.MainActivity;
 import wtf.sur.original.puissante.rapide.automobile.sopracovoit.R;
 import wtf.sur.original.puissante.rapide.automobile.sopracovoit.user.UpdatePathActivity;
 import wtf.sur.original.puissante.rapide.automobile.sopracovoit.user.UpdateProfileActivity;
@@ -38,15 +40,15 @@ public class DrawerManager implements OnChildClickedListener {
 
     private final DrawerLayout drawerLayout;
     private final RecyclerView recyclerView;
-    private final Context mContext;
+    private final MainActivity mContext;
     private final RecyclerView.LayoutManager mLayoutManager;
     private final DrawerRecyclerViewAdapter mAdapter;
     private static final String[] strings = {"Recherche de copains","Modification trajets", "Modification compte"};
     private final TextView mName;
     private final TextView mMail;
 
-    public DrawerManager(DrawerLayout drawerLayout, Context context) {
-        this.mContext = context;
+    public DrawerManager(DrawerLayout drawerLayout, MainActivity act) {
+        this.mContext = act;
         this.drawerLayout = drawerLayout;
         this.recyclerView = (RecyclerView) drawerLayout.findViewById(R.id.recycler_view);
         this.mLayoutManager = new LinearLayoutManager(mContext);
@@ -66,6 +68,10 @@ public class DrawerManager implements OnChildClickedListener {
         int position = this.recyclerView.getChildPosition(v);
         Log.d("Tag", "Clicked on position "+ position);
         switch(position) {
+            case 0:
+                mContext.reopenCovoit();
+                this.drawerLayout.closeDrawers();
+                break;
             case 1:
                 Intent intent = new Intent(mContext, UpdateProfileActivity.class);
                 mContext.startActivity(intent);

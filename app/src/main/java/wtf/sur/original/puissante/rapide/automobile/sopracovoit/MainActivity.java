@@ -207,6 +207,10 @@ public class MainActivity extends BaseActivity implements LoaderManager.LoaderCa
         f.setArguments(b);
         this.changeFragment(f,CovoitFragment.COVOIT_TAG, false);
     }
+    public void reopenCovoit() {
+        if(getSupportFragmentManager().getBackStackEntryCount()>0)
+            getSupportFragmentManager().popBackStack();
+    }
     public void openCovoitDetailed(long id) {
         Fragment f = CovoitDetailedFragment.newInstance(id);
         this.changeFragment(f, CovoitDetailedFragment.COVOIT_DET_TAG, true);
