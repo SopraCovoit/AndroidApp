@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright 2014 Jérémie Boutoille, Jules Cantegril, Hugo Djemaa, Mickael Goubin, David Livet
+  ~
+  ~    Licensed under the Apache License, Version 2.0 (the "License");
+  ~    you may not use this file except in compliance with the License.
+  ~    You may obtain a copy of the License at
+  ~
+  ~        http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~    Unless required by applicable law or agreed to in writing, software
+  ~    distributed under the License is distributed on an "AS IS" BASIS,
+  ~    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~    See the License for the specific language governing permissions and
+  ~    limitations under the License.
+  -->
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="@dimen/drawer_size"
+              android:layout_height="match_parent"
+              android:background="?android:windowBackground">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?colorPrimary"
+        android:paddingLeft="@dimen/drawer_horizontal_margin"
+        android:paddingRight="@dimen/drawer_horizontal_margin"
+        android:paddingTop="@dimen/drawer_vertical_margin"
+        android:paddingBottom="@dimen/drawer_vertical_margin">
+        <wtf.sur.original.puissante.rapide.automobile.sopracovoit.utils.RoundedImageView
+            android:id="@+id/IV_user"
+            android:layout_width="@dimen/user_pic_size"
+            android:layout_marginBottom="@dimen/separator"
+            android:layout_height="@dimen/user_pic_size"
+            android:src="@drawable/photo"/>
+        <TextView
+            android:id="@+id/TV_username"
+            android:layout_below="@id/IV_user"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/drawer_name_example"
+            style="@style/AppTheme.Dark.Text.Important"/>
+        <TextView
+            android:id="@+id/TV_email"
+            android:layout_below="@id/TV_username"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/drawer_mail_example"
+            style="@style/AppTheme.Dark.Text"/>
+    </RelativeLayout>
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+</LinearLayout>
