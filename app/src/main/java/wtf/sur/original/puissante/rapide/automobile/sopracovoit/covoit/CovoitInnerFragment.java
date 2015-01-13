@@ -88,7 +88,14 @@ public class CovoitInnerFragment extends Fragment implements LoaderManager.Loade
         return new CursorLoader(
                 getActivity(),
                 CovoitContract.PathEntry.buildEmailAll(args.getString(AccountManager.KEY_ACCOUNT_NAME), args.getString(ARG_DIRECTION)),
-                null,
+                new String[]{CovoitContract.PathEntry.TABLE_NAME + "." + CovoitContract.PathEntry._ID,
+                        CovoitContract.PathEntry.COLUMN_DISTANCE,
+                        CovoitContract.PathEntry.COLUMN_HOUR,
+                        CovoitContract.PathEntry.COLUMN_MIN,
+                        CovoitContract.PathEntry.COLUMN_DISTANCE,
+                        CovoitContract.UserEntry.COLUMN_NAME,
+                        CovoitContract.UserEntry.COLUMN_IS_DRIVE,
+                        CovoitContract.UserEntry.COLUMN_SURNAME},
                 null,
                 null,
                 null
