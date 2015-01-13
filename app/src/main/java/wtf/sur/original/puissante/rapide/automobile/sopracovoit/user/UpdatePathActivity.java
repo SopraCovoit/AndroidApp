@@ -16,19 +16,27 @@
 
 package wtf.sur.original.puissante.rapide.automobile.sopracovoit.user;
 
+import android.app.LoaderManager;
+import android.content.CursorLoader;
+import android.content.Loader;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v7.widget.SwitchCompat;
 import android.widget.EditText;
+import android.widget.SimpleCursorAdapter;
 import android.widget.Spinner;
 
 import wtf.sur.original.puissante.rapide.automobile.sopracovoit.BaseActivity;
 import wtf.sur.original.puissante.rapide.automobile.sopracovoit.R;
+import wtf.sur.original.puissante.rapide.automobile.sopracovoit.data.CovoitContract;
 
 /**
  * Created by MagicMicky on 13/01/2015.
  */
-public class UpdatePathActivity extends BaseActivity {
+public class UpdatePathActivity extends BaseActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
+    private static final int WORKPLACE_LOADER = 0;
+    private SimpleCursorAdapter mWorkplaceAdapter;
     private EditText city;
     private Spinner sopralist;
     private EditText return_hour;
@@ -39,14 +47,50 @@ public class UpdatePathActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.city = (EditText) findViewById(R.id.city);
-        this.sopralist = (Spinner) findViewById(R.id.sopralist);
+
+        sopralist = (Spinner) findViewById(R.id.sopralist);
+        sopralist.setEnabled(false);
+        mWorkplaceAdapter = new SimpleCursorAdapter(this, R.layout.simple_text_view, null, new String[]{CovoitContract.WorkplaceEntry.COLUMN_NAME}, new int[]{R.id.textView}, 0);
+        sopralist.setAdapter(mWorkplaceAdapter);
+
         this.departure_hour = (EditText) findViewById(R.id.departure_hour);
         this.return_hour = (EditText) findViewById(R.id.return_hour);
         this.isDriver = (SwitchCompat) findViewById(R.id.driver);
+        getLoaderManager().initLoader(WORKPLACE_LOADER, null, this);
     }
+
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        return new CursorLoader(
+                this,
+                CovoitContract.WorkplaceEntry.CONTENT_URI,
+                null,
+                null,
+                null,
+                CovoitContract.WorkplaceEntry.COLUMN_NAME + " ASC"
+        );
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        mWorkplaceAdapter.swapCursor(data);
+        if (data.getCount() > 0) {
+            sopralist.setEnabled(true);
+        } else {
+            sopralist.setEnabled(false);
+        }
+    }
+
 
     @Override
     protected int getLayoutResource() {
         return R.layout.activity_update_path;
     }
+
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+        mWorkplaceAdapter.swapCursor(null);
+    }
+
 }
