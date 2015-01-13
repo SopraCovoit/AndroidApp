@@ -69,8 +69,8 @@ public class CovoitDetailedFragment extends Fragment implements LoaderManager.Lo
         mFrom = (TextView) root.findViewById(R.id.TV_from);
         mTo = (TextView) root.findViewById(R.id.TV_to);
         mTime = (TextView) root.findViewById(R.id.TV_time);
-        mContactMail = (TextView) getActivity().findViewById(R.id.TV_email);
-        mContactPhone = (TextView) getActivity().findViewById(R.id.TV_phone);
+        mContactMail = (TextView) root.findViewById(R.id.TV_mail);
+        mContactPhone = (TextView) root.findViewById(R.id.TV_phone);
         return root;
     }
 
@@ -149,7 +149,7 @@ public class CovoitDetailedFragment extends Fragment implements LoaderManager.Lo
                 e.printStackTrace();
             }
             mContactMail.setText(mail);
-            //mContactPhone.setText(phone);
+            mContactPhone.setText(phone);
             mTime.setText(hour + ":" + minute);
         }
     }
