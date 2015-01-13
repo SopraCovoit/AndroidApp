@@ -28,7 +28,7 @@ import wtf.sur.original.puissante.rapide.automobile.sopracovoit.model.Workplace;
 
 public class CovoitServerAccessor {
 
-    private static final String URL = "http://192.168.1.6:8080/api";
+    private static final String URL = "http://188.165.245.229:21780/Server_war/api";
     private static final RestAdapter restAdapter = new RestAdapter.Builder()
             .setEndpoint(URL)
             .build();
