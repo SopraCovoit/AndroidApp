@@ -163,7 +163,9 @@ public class RegisterActivity extends BaseActivity implements LoaderManager.Load
 
                     Path path1 = new Path(Path.Direction.HOME);
                     Cursor c = (Cursor) mWorkplaceSpinner.getSelectedItem();
-                    path1.setWorkplace(new Workplace(c.getInt(c.getColumnIndex(CovoitContract.WorkplaceEntry._ID))));
+                    register.setWorkplace(new Workplace(c.getInt(c.getColumnIndex(CovoitContract.WorkplaceEntry._ID))));
+                    path1.setWorkplace(register.getWorkplace());
+
                     try {
                         Date d = df.parse(departureHour.getText().toString().trim());
                         calendar.setTime(d);

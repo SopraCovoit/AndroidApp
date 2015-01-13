@@ -22,6 +22,8 @@ import com.google.gson.Gson;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
@@ -40,6 +42,7 @@ public class Path {
     private int distance;
     private Workplace workplace;
     private int hour, minute;
+    private String departure_hour;
 
     public Path(int id, Direction direction) {
         this(direction);
@@ -66,18 +69,23 @@ public class Path {
         this.location = new Location(lat, lon);
     }
 
-
-    public int getDepartureHour() {
-        return hour;
-    }
-
-    public int getDepartureMinute() {
-        return minute;
+    public void setDeparture_hour(String hour) {
+        departure_hour = hour;
+        Calendar c = Calendar.getInstance();
+        SimpleDateFormat s = new SimpleDateFormat("HH:mm");
+        try {
+            c.setTime(s.parse(hour));
+            this.hour = c.get(Calendar.HOUR_OF_DAY);
+            this.minute = c.get(Calendar.MINUTE);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
     }
 
     public void setDepartureTime(int hour, int minute) {
         this.hour = hour;
         this.minute = minute;
+        departure_hour = hour + ":" + minute;
     }
 
     public Direction getDirection() {
@@ -115,8 +123,8 @@ public class Path {
         cv.put(CovoitContract.PathEntry.COLUMN_LAT, this.location.getLatitude());
         cv.put(CovoitContract.PathEntry.COLUMN_LON, this.location.getLongitude());
         cv.put(CovoitContract.PathEntry.COLUMN_DIRECTION, getDirectionString(this.getDirection()));
-        cv.put(CovoitContract.PathEntry.COLUMN_HOUR, this.getDepartureHour());
-        cv.put(CovoitContract.PathEntry.COLUMN_MIN, this.getDepartureMinute());
+        cv.put(CovoitContract.PathEntry.COLUMN_HOUR, this.hour);
+        cv.put(CovoitContract.PathEntry.COLUMN_MIN, this.minute);
         cv.put(CovoitContract.PathEntry.COLUMN_DISTANCE, this.getDistance());
         if (this.getUser() != null)
             cv.put(CovoitContract.PathEntry.COLUMN_USER_ID, this.getUser().getId());

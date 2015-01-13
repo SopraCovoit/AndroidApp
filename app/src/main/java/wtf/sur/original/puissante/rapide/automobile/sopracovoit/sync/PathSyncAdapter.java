@@ -39,6 +39,7 @@ import wtf.sur.original.puissante.rapide.automobile.sopracovoit.authenticator.Ac
 import wtf.sur.original.puissante.rapide.automobile.sopracovoit.covoit.CovoitFragment;
 import wtf.sur.original.puissante.rapide.automobile.sopracovoit.data.CovoitContract;
 import wtf.sur.original.puissante.rapide.automobile.sopracovoit.data.CovoitProviderHelper;
+import wtf.sur.original.puissante.rapide.automobile.sopracovoit.model.Location;
 import wtf.sur.original.puissante.rapide.automobile.sopracovoit.model.Path;
 
 public class PathSyncAdapter extends AbstractThreadedSyncAdapter {
@@ -69,7 +70,7 @@ public class PathSyncAdapter extends AbstractThreadedSyncAdapter {
                 Log.d(TAG, "Token : " + authToken + ", user : " + _userId + ", workplace : " + _workplaceId + ", lat : " + _lat + ", lon : " + _lon);
 
                 int _count = 0;
-                List<Path> pathList = CovoitServerAccessor.listPath();
+                List<Path> pathList = CovoitServerAccessor.listPath(_workplaceId, new Location(_lat, _lon), authToken);
                 for (Path p : pathList) {
                     CovoitProviderHelper.insertOrUpdateWorkplace(getContext().getContentResolver(), p.getWorkplace());
                     CovoitProviderHelper.insertOrUpdateWorkplace(getContext().getContentResolver(), p.getUser().getWorkplace());

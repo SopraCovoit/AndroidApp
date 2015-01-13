@@ -29,6 +29,7 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import retrofit.RetrofitError;
 import wtf.sur.original.puissante.rapide.automobile.sopracovoit.R;
 import wtf.sur.original.puissante.rapide.automobile.sopracovoit.data.CovoitDbHelper;
 import wtf.sur.original.puissante.rapide.automobile.sopracovoit.model.User;
@@ -124,7 +125,11 @@ public class AuthenticatorActivity extends BaseAuthenticatorActivity {
 
                     // Create intent
                     final Intent res = new Intent();
-                    res.putExtras(ServerAuthenticate.userSignIn(AuthenticatorActivity.this, currentUser));
+                    try {
+                        res.putExtras(ServerAuthenticate.userSignIn(AuthenticatorActivity.this, currentUser));
+                    } catch (RetrofitError e) {
+                        res.putExtra(KEY_ERROR_MESSAGE, e.getLocalizedMessage());
+                    }
                     return res;
                 }
 

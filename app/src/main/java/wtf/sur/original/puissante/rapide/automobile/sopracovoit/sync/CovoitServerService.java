@@ -23,6 +23,7 @@ import retrofit.Callback;
 import retrofit.http.Body;
 import retrofit.http.GET;
 import retrofit.http.POST;
+import retrofit.http.Query;
 import wtf.sur.original.puissante.rapide.automobile.sopracovoit.model.Path;
 import wtf.sur.original.puissante.rapide.automobile.sopracovoit.model.User;
 import wtf.sur.original.puissante.rapide.automobile.sopracovoit.model.Workplace;
@@ -32,11 +33,11 @@ public interface CovoitServerService {
     List<Workplace> listWorkplaces();
 
     @GET("/user/token")
-    User connection(@retrofit.http.Path("mail") String mail, @retrofit.http.Path("password") String password);
+    User connection(@Query("mail") String mail, @Query("password") String password);
 
-    @POST("/newuser.php")
+    @POST("/user")
     User createUser(@Body User user);
 
-    @GET("/path.json")
-    List<Path> listPath();
+    @GET("/path")
+    List<Path> listPath(@Query("workplace") long workplace, @Query("latitude") double lat, @Query("longitude") double lng, @Query("token") String token);
 }

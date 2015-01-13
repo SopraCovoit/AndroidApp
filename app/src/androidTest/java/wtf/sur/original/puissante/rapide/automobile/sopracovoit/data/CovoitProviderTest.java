@@ -26,6 +26,7 @@ import wtf.sur.original.puissante.rapide.automobile.sopracovoit.model.Location;
 import wtf.sur.original.puissante.rapide.automobile.sopracovoit.model.Path;
 import wtf.sur.original.puissante.rapide.automobile.sopracovoit.model.User;
 import wtf.sur.original.puissante.rapide.automobile.sopracovoit.model.Workplace;
+import wtf.sur.original.puissante.rapide.automobile.sopracovoit.utils.PasswordHash;
 
 public class CovoitProviderTest extends AndroidTestCase {
     public static final String LOG_TAG = CovoitProviderTest.class.getSimpleName();
@@ -117,6 +118,8 @@ public class CovoitProviderTest extends AndroidTestCase {
         assertEquals(cursor.getCount(), 1);
 
         dbHelper.close();
+
+        System.out.println(PasswordHash.getHashSHA1("david"));
     }
 
     public void testGetType() {

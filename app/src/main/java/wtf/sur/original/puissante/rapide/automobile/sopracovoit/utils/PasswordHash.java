@@ -36,7 +36,8 @@ public class PasswordHash {
             mdSha1 = MessageDigest.getInstance("SHA-1");
             mdSha1.update(password.getBytes("ASCII"));
             byte[] data = mdSha1.digest();
-            return Base64.encodeToString(data, 0, data.length, 0);
+            Log.d("Pass", Base64.encodeToString(data, 0, data.length, 0));
+            return Base64.encodeToString(data, 0, data.length, 0).replaceAll("\n", "");
 
         } catch (NoSuchAlgorithmException e1) {
             Log.e(TAG, "Error initializing SHA1 message digest");

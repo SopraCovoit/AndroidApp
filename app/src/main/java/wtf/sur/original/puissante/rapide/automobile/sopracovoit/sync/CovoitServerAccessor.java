@@ -21,6 +21,7 @@ import java.util.List;
 import retrofit.ErrorHandler;
 import retrofit.RestAdapter;
 import retrofit.RetrofitError;
+import wtf.sur.original.puissante.rapide.automobile.sopracovoit.model.Location;
 import wtf.sur.original.puissante.rapide.automobile.sopracovoit.model.Path;
 import wtf.sur.original.puissante.rapide.automobile.sopracovoit.model.User;
 import wtf.sur.original.puissante.rapide.automobile.sopracovoit.model.Workplace;
@@ -47,8 +48,8 @@ public class CovoitServerAccessor {
         return service.connection(connect.getMail(), connect.getPassword());
     }
 
-    public static List<Path> listPath() {
+    public static List<Path> listPath(long workplaceId, Location l, String token) {
         CovoitServerService service = restAdapter.create(CovoitServerService.class);
-        return service.listPath();
+        return service.listPath(workplaceId, l.getLatitude(), l.getLongitude(), token);
     }
 }
