@@ -118,6 +118,16 @@ public class Path {
     }
 
     public ContentValues getContentValues() {
+        Calendar c = Calendar.getInstance();
+        SimpleDateFormat s = new SimpleDateFormat("HH:mm");
+        try {
+            c.setTime(s.parse(departure_hour));
+            this.hour = c.get(Calendar.HOUR_OF_DAY);
+            this.minute = c.get(Calendar.MINUTE);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
         ContentValues cv = new ContentValues();
         cv.put(CovoitContract.PathEntry._ID, this.getId());
         cv.put(CovoitContract.PathEntry.COLUMN_LAT, this.location.getLatitude());
