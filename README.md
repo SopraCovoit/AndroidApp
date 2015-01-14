@@ -12,3 +12,13 @@ and an [admin page](https://github.com/SopraCovoit/SiteWeb) developped using Ang
 
 The application targets API14+, with simple optimisation for Lollipop (styles, ripples,...). It is supposed to respect the 
 Material Design guidelines as much as we could, in the short timeframe we had.
+
+You can either import the application in your ide, or download the apk given as a release.
+
+## Screenshots
+<a href="https://raw.githubusercontent.com/SopraCovoit/AndroidApp/master/screenshots/1.home.png"><img src="https://raw.githubusercontent.com/SopraCovoit/AndroidApp/master/screenshots/1.home.png" height="400"/></a>
+<a href="https://raw.githubusercontent.com/SopraCovoit/AndroidApp/master/screenshots/2.account_creation.png"><img src="https://raw.githubusercontent.com/SopraCovoit/AndroidApp/master/screenshots/2.account_creation.png" height="400"/></a>
+<a href="https://raw.githubusercontent.com/SopraCovoit/AndroidApp/master/screenshots/3.user_list.png"><img src="https://raw.githubusercontent.com/SopraCovoit/AndroidApp/master/screenshots/3.user_list.png" height="400"/></a>
+<a href="https://raw.githubusercontent.com/SopraCovoit/AndroidApp/master/screenshots/4.drawer.png"><img src="https://raw.githubusercontent.com/SopraCovoit/AndroidApp/master/screenshots/4.drawer.png" height="400"/></a>
+<a href="https://raw.githubusercontent.com/SopraCovoit/AndroidApp/master/screenshots/5.details.png"><img src="https://raw.githubusercontent.com/SopraCovoit/AndroidApp/master/screenshots/5.details.png" height="400"/></a> 
+
