@@ -13,6 +13,8 @@ and an [admin page](https://github.com/SopraCovoit/SiteWeb) developped using Ang
 The application targets API14+, with simple optimisation for Lollipop (styles, ripples,...). It is supposed to respect the 
 Material Design guidelines as much as we could, in the short timeframe we had.
 
+It also uses some of the recommended features and tools from Google (SyncAdapters, AccountManager...)
+
 You can either import the application in your ide, or download the apk given as a release.
 
 ## Screenshots
